@@ -1,0 +1,153 @@
+
+
+
+body {
+	width: 100%;
+	margin: 0;
+}
+
+nav {
+	display: flex;
+	position: fixed;
+	z-index: 1;
+	background-color: white;
+	top: 0;
+	width: 100%;
+	justify-content: space-between;
+	border-bottom: 2px solid black;
+	
+}
+
+
+a {
+	cursor: pointer;
+	color: black;
+	text-decoration: none;
+}
+
+a:hover {
+	color: lightblue;
+}
+
+.navleft {
+	margin-left: 14px;
+}
+
+.navright {
+	display: flex;
+	justify-content: end;
+	margin-right: 14px;
+}
+
+.navright h3 {
+	margin-left: 10px;
+}
+
+.drop-down {
+	padding-left: 20px;
+}
+
+.drop-down-content {
+	position: absolute;
+	display: none;
+	align-items: center;
+	background-color: white;
+	width: 300px;
+	height: 50px;
+	right: 10px;
+	text-align: center;
+}
+
+.drop-down:hover .drop-down-content {
+	display: flex;
+}
+
+.login {
+	margin-left: auto;
+	margin-right: auto;
+	height: 30px;
+	width: 150px;
+}
+
+
+
+.herobackground {
+	
+	height: 100vh;
+	position: relative;
+	width: 100vw;
+
+	
+}
+
+
+.herobackground::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	filter: brightness(90%);
+	background-image: url(../images/reflect.jpg);
+	height: 100%;
+	width: 100%;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+	background-attachment: fixed;
+}
+
+.herocontent {
+	position: relative;
+	top: 68vh;
+	color: white;
+	text-shadow: black;
+	text-shadow: -3px 3px black;
+}
+
+.reflect {
+	position: relative;
+	bottom: 40vh;
+	left: 71vw;
+	font-size: 5vh;
+	font-family: "Parisienne";
+	width: 50px;
+}
+
+.words {
+	position: relative;
+	left: 3vw;
+	font-family: "Caveat";
+	width: 32%;
+	font-size: 4.5vh;
+}
+
+.quote {
+	font-size: 2.2vh;
+}
+
+.container {
+	display: flex;
+	justify-content: center;
+	height: 100vh;
+	
+}
+
+article {
+	font-size: 18px;
+	margin-left: 10%;
+	margin-right: 10%;
+	text-align: center;
+}
+
+.background {
+	background-image: url(../images/Free_Wood_Texture_09.jpg);
+	background-size: contain;
+	height: 100vh;
+	width: 100%;
+	top: 100vh;
+	position: absolute;
+		
+}
+
+
+
