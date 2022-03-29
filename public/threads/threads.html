@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Reflect</title>
+        <link rel="stylesheet" type="text/css" href="http://localhost:5000/resources/css/threads.css">         
+        <link rel="stylesheet" type="text/css" href="../resources/css/threads.css">
+    </head>
+    <body>
+        <nav>
+            <div class="navleft">	
+                <a href="/"><h3>Reflect</h3></a>
+            </div>
+            <div class="navright">	
+                <a href="/forums"><h3>Community</h3></a>
+                <div class="drop-down">
+                    <a href=""><h3>Account</h3></a>
+                    <div class="drop-down-content">
+                        <button>Login</button>
+                    </div>
+                </div>
+            </div>	
+        </nav>
+        <main>
+            <div class="background">               
+                <h1 class="main-header">Forums</h1>
+                <div class="top-bar">
+                    <div class="site-location">
+                        <h3 class=""><a href="/forums">Home</a> > <span class="forumNav"></span> > All</h3>
+                    </div>
+                    <div class="search">
+                        <form action="" method="POST">
+                            <input class="search-input" type="text" placeholder=" Search...." name="search">
+                            <button class="search-button" type="submit">SEARCH</button>
+                        </form>
+                    </div>			
+                </div>
+                <div class="column-container">  
+                    <h3 class="new-thread"><a href="/forums/new-thread">New Thread</a></h3>  
+                    <div >                       
+                        <a href="/forums/threads/posts"><h2>Introduce yourself</h2></a>
+                    </div>
+                    
+                </div>
+            </div>
+        </main> 
+        <script type="module" src="../resources/js/change-nav.js"></script> 
+        <script type="module" src="../resources/js/display-threads.js"></script>         
+    </body>  
+</html>
