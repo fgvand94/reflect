@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Reflect</title>
+    <link rel="stylesheet" type="text/css" href="http://localhost:5000/resources/css/threads.css">         
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">     
+</head>
+<body>
+    <nav>
+        <div class="navleft">	
+            <a href="/"><h3>Reflect</h3></a>
+        </div>
+        <div class="navright">	
+            <a href="/forums"><h3>Community</h3></a>
+            <div class="drop-down">
+                <h3><a href="">Account</a></h3>
+                <div class="drop-down-content">
+                {{#if obj.isLoggedIn}}
+                <h3><a href="/login" class="login">{{obj.person}}</a></h3>
+                {{else}}
+                <a href="/login" class="login"><button class="button">Login</button></a>
+                {{/if}}
+                </div>
+            </div>
+        </div>	
+    </nav>
+    <main>
+        <div class="background"></div>               
+        <h1 class="main-header">Forums</h1>
+        <div class="top-bar">
+            <div class="site-location">
+                <h3 class=""><a href="/forums">Home</a> > <span class="forumNav">{{forum}}</span> > All</h3>
+            </div>
+            <div class="search">
+                <form action="" method="POST">
+                    <input class="search-input" type="text" placeholder=" Search...." name="search">
+                    <button class="search-button" type="submit">SEARCH</button>
+                </form>
+            </div>			
+        </div>
+        <div class="column-container">  
+            <h3 class="new-thread"><a href="" class="newthread">New Thread</a></h3>  
+            <div class="threads">                       
+                <h2 class="thread"><a href="" class="thread1">Introduce yourself</a></h2>
+            </div>         
+            <div class="threads">
+                <h2 class="thread"><a class="thread">{{obj.thread.one}}</a></h2> 
+                <h4 class="user"><a>{{obj.user.one}}</a></h4>
+            </div>
+            <div class="threads">
+                <h2 class="thread"><a class="thread">{{obj.thread.two}}</a></h2> 
+                <h4 class="user"><a>{{obj.user.two}}</a></h4>
+            </div>
+            <div class="threads">
+                <h2 class="thread"><a class="thread">{{obj.thread.three}}</a></h2> 
+                <h4 class="user"><a>{{obj.user.three}}</a></h4>
+            </div>
+            <div class="threads">
+                <h2 class="thread"><a class="thread">{{obj.thread.four}}</a></h2> 
+                <h4 class="user"><a>{{obj.user.four}}</a></h4>
+            </div>                                                           
+        </div>       
+    </main> 
+    <script  src="http://localhost:5000/resources/js/threads.js"></script> 
+            
+</body>  
+</html>

@@ -1,5 +1,6 @@
 
 
+
 body {
 	margin: 0;
 }
@@ -17,7 +18,7 @@ nav {
 
 a {
 	cursor: pointer;
-	color: black;
+	color: rgb(20%, 20%, 20%);
 	text-decoration: none;
 }
 
@@ -58,7 +59,7 @@ a:hover {
 	display: flex;
 }
 
-button {
+.login {
 	margin-left: auto;
 	margin-right: auto;
 	height: 30px;
@@ -68,18 +69,29 @@ button {
 
 
 .main-header {
-	margin-top: 80px;
+	padding-top: 50px;	
 }
 
 
 .background {
-	background-image: url(../images/Free_Wood_Texture_09.jpg);
-	background-size: contain;
+	
+	
 	height: 100vh;
 	width: 100%;
 	position: fixed;
-	z-index: -1;	
+	z-index: -1;
+	
 }
+
+.background::before {
+	content: "";
+	background-image: url(../images/Free_Wood_Texture_09.jpg);
+	background-size: contain;
+	height: 100%;
+	width: 100%;
+	position: absolute;	
+}
+
 
 
 .top-bar {
@@ -102,7 +114,7 @@ button {
 .column {
 	width: 400px;
 	
-	background-color: gray;
+	/* background-color: gray; */
 
 }
 
@@ -113,15 +125,41 @@ button {
 
 .column-header {
 	text-align: center;
+	border-bottom: 1px solid black;
 }
 
 .column-block {
 	width: 100%;
 	height: 100px;
-	background-color: white;
+	/* background-color: white; */
 	margin-top: 20px;
+	border-bottom: 1px solid black;
+}
+
+h2 {
+	font-family: "Caveat";
+	font-size: 30px;
+}
+h4 {
+	font-family: "Caveat";
+	font-style: italic;
 }
 
 .search-input, .search-button {
 	display: inline;
+}
+
+.signed-in {
+	position: absolute;
+	display: none;
+	align-items: center;
+	background-color: white;
+	width: 300px;
+	height: 50px;
+	right: 10px;
+	text-align: center;
+}
+
+.signed-in:hover .signed-in {
+	display: flex;
 }

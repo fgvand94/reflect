@@ -58,7 +58,7 @@ a:hover {
 	display: flex;
 }
 
-button {
+.login {
 	margin-left: auto;
 	margin-right: auto;
 	height: 30px;
@@ -66,17 +66,30 @@ button {
 }
 
 .main-header {
-	margin-top: 80px;
+	padding-top: 50px;
 }
 
 
 .background {
-	background-image: url(../images/Free_Wood_Texture_09.jpg);
-	background-size: contain;
+	
+	
 	height: 100vh;
 	width: 100%;
 	position: fixed;
-	z-index: -1;	
+	z-index: -1;
+	
+}
+
+.background::before {
+	content: "";
+	background-image: url(../images/Free_Wood_Texture_09.jpg);
+	background-size: contain;
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	z-index: -1;
+	filter: brightness(95%);
+	
 }
 
 

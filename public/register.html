@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Reflect</title>
+	<link rel="stylesheet" type="text/css" href="http://localhost:5000/resources/css/login.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet">
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">
+</head>
+<body>
+	<main>
+		<div class="background">		
+            <div class="form-container">
+			<!--need to add authentication, need to block the password and redirect
+			to the forum page or the users new page. also need to send a confirmation
+		email and add a regex that makes it so you have to pick a strong enough password
+	maybe just to have that feature. -->
+                <form class="register">
+                    <input type="text" placeholder="User Name" class="user-name"> <br>
+                    <input type="text" placeholder="Email" class="email"> <br>
+                    <input type="password" placeholder="Password" class="password"> <br>
+                    <button type="submit">Create Account</button>
+                </form>          
+            </div>       
+		</div>
+	</main>
+	<script src="./resources/js/register.js"></script>
+</body>
+</html>

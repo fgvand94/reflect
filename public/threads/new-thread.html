@@ -16,37 +16,37 @@
             <div class="drop-down">
                 <a href=""><h3>Account</h3></a>
                 <div class="drop-down-content">
-                    <button>Login</button>
+                    <a href="/login" class="login"><button class="button">Login</button></a>
                 </div>
             </div>
         </div>	
     </nav>
     <main>
-        <div class="background">               
-            <h1 class="main-header">Forums</h1>
-            <div class="top-bar">
-                <div class="site-location">
-                    <h3><a href="/forums">Home</a> > <a href="/forums/threads" class="forum">Camping</a> > <span class="thread-name"></span></h3>
-                </div>
-                <div class="search">
-                    <form action="" method="POST">
-                        <input class="search-input" type="text" placeholder=" Search...." name="search">
-                        <button class="search-button" type="submit">SEARCH</button>
-                    </form>
-                </div>			
+        <div class="background"></div>              
+        <h1 class="main-header">Forums</h1>
+        <div class="top-bar">
+            <div class="site-location">
+                <h3><a href="/forums">Home</a> > <a href="/forums/threads" class="forum">Camping</a> > <span class="thread-name"></span></h3>
             </div>
-            <div class="column-container">
-                <div class="new-post-container">
-                    <form class="new-thread">
-                        <input placeholder="Thread title" type="text" name="new-thread" id="thread-title"> <br>
-                        <textarea placeholder="" type="text" name="message-input" id="message-input" cols="40" rows="10"></textarea> <br>
-                        <button type="submit" value="submit">POST</button>
-                    </form>
-                </div>
-            </div>
+            <div class="search">
+                <form action="" method="POST">
+                    <input class="search-input" type="text" placeholder=" Search...." name="search">
+                    <button class="search-button" type="submit">SEARCH</button>
+                </form>
+            </div>			
         </div>
+        <div class="column-container">
+            <div class="new-post-container">
+                <form class="new-thread">
+                    <input placeholder="Thread title" type="text" name="new-thread" id="thread-title"> <br>
+                    <textarea placeholder="" type="text" name="message-input" id="message-input" cols="40" rows="10"></textarea> <br>
+                    <button type="submit" value="submit">POST</button>
+                </form>
+            </div>
+        </div>       
     </main> 
     <script type="module" src="../resources/js/new-thread.js"></script>
-    <script src="../resources/js/posts.js"></script>     
+    <script src="http://localhost:5000/resources/js/posts.js"></script>   
+	<script src="../resources/js/nav-change.js"></script>
 </body>
 </html>
