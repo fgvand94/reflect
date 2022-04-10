@@ -4,7 +4,7 @@
     <meta charset='utf-8'>
     <title>Reflect</title>
     <link rel='stylesheet' type='text/css' media='screen' href='http://localhost:5000/resources/css/new-thread.css'>
-    <link rel="stylesheet" type="text/css" href="../resources/css/new-thread.css">
+
 </head>
 <body>
     <nav>
@@ -37,16 +37,21 @@
         </div>
         <div class="column-container">
             <div class="new-post-container">
+                {{#if obj.isLoggedIn}}
                 <form class="new-thread">
-                    <input placeholder="Thread title" type="text" name="new-thread" id="thread-title"> <br>
-                    <textarea placeholder="" type="text" name="message-input" id="message-input" cols="40" rows="10"></textarea> <br>
+                    <input placeholder="Thread title" type="text" name="thread" id="thread"> <br>
+                    <textarea placeholder="" type="text" name="message" id="message" cols="40" rows="10"></textarea> <br>
                     <button type="submit" value="submit">POST</button>
                 </form>
+                {{else}}
+                <div class="new-thread">
+                    <h2>Loggin to post</h2>
+                </div>
+                {{/if}}
             </div>
         </div>       
     </main> 
-    <script type="module" src="../resources/js/new-thread.js"></script>
+    <script src="http://localhost:5000/resources/js/new-thread.js"></script>
     <script src="http://localhost:5000/resources/js/posts.js"></script>   
-	<script src="../resources/js/nav-change.js"></script>
 </body>
 </html>

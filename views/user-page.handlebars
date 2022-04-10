@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>Reflect</title>
-	<link rel="stylesheet" type="text/css" href="http://localhost:5000/resources/css/login.css">
+	<link rel="stylesheet" type="text/css" href="http://localhost:5000/resources/css/user-page.css">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet">
@@ -14,13 +14,16 @@
 </head>
 <body>
 	<main>
-		<div class="background">		
-        <div class="form-container">
-            <h1>User name</h1>
-        </div>
+		<div class="background"></div>		
+        <div class="username">
+            <img src="{{obj.photo}}" class="user-photo">
+			<h1>{{obj.person}}</h1>			
+		</div>
+		<div class="info">
+			<h3>bio</h3>
+			<h3>add pictures</h3>
+			<h3>some other stuff</h3>
 		</div>
 	</main>
-	<script  src="./resources/js/login.js"></script>
-	<script src="./resources/js/nav-change.js"></script>
 </body>
 </html>

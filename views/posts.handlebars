@@ -10,15 +10,19 @@
             <div class="navleft">	
                 <a href="/"><h3>Reflect</h3></a>
             </div>
-            <div class="navright">	
-                <a href="/forums"><h3>Community</h3></a>
-                <div class="drop-down">
-                    <a href=""><h3>Account</h3></a>
-                    <div class="drop-down-content">
-                        <a href="/login" class="login"><button class="button">Login</button></a>
-                    </div>
+        <div class="navright">	
+            <a href="/forums"><h3>Community</h3></a>
+            <div class="drop-down">
+                <h3><a href="">Account</a></h3>
+                <div class="drop-down-content">
+                {{#if obj.isLoggedIn}}
+                <h3><a href="/user-{{obj.person}}" class="user">{{obj.person}}</a></h3>
+                {{else}}
+                <a href="/login" class="login"><button class="button">Login</button></a>
+                {{/if}}
                 </div>
-            </div>	
+            </div>
+        </div>
         </nav>
         <main>
             <div class="background"></div>               
@@ -35,18 +39,22 @@
                 </div>			
             </div>
             <div class="column-container">
+                <h3><a class="new-post">Add a post</a></h3>               
+                {{#each obj.view}}               
                 <div class="post-container">
                     <div class="image-container">
-                        <img src="../../resources/images/reflect.jpg" class="user-photo">
+                        <img src="{{this.photo}}" class="user-photo">
                     </div>                      
                     <div class="post">
-                        <h4>User name</h4>
-                        <h4>Post content</h4>
+                        <h4><a href="/user-{{this.name}}">{{this.name}}</a></h4>
+                        
+                        <h4>{{this.content}}</h4>
+                        
                     </div>
                 </div>
+                {{/each}}                              
             </div>          
         </main>  
-        <script src="http://localhost:5000/resources/js/posts.js"></script> 
-        <script src="../../resources/js/nav-change.js"></script>    
+        <script src="http://localhost:5000/resources/js/posts.js"></script>    
     </body>
 </html>

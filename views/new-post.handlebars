@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title>Reflect</title>
+    <link rel='stylesheet' type='text/css' media='screen' href='http://localhost:5000/resources/css/new-thread.css'>
+
+</head>
+<body>
+    <nav>
+        <div class="navleft">	
+            <a href="/"><h3>Reflect</h3></a>
+        </div>
+        <div class="navright">	
+            <a href="/forums"><h3>Community</h3></a>
+            <div class="drop-down">
+                <a href=""><h3>Account</h3></a>
+                <div class="drop-down-content">
+                    <a href="/login" class="login"><button class="button">Login</button></a>
+                </div>
+            </div>
+        </div>	
+    </nav>
+    <main>
+        <div class="background"></div>              
+        <h1 class="main-header">Forums</h1>
+        <div class="top-bar">
+            <div class="site-location">
+                <h3><a href="/forums">Home</a> > <a href="/forums/threads" class="forum">Camping</a> > <a class="thread-name"></a> > <span>Add a post</span></h3>
+            </div>
+            <div class="search">
+                <form action="" method="POST">
+                    <input class="search-input" type="text" placeholder=" Search...." name="search">
+                    <button class="search-button" type="submit">SEARCH</button>
+                </form>
+            </div>			
+        </div>
+        <div class="column-container">
+            <div class="new-post-container">
+                {{#if obj.isLoggedIn}}
+                <form class="new-post">
+                    <textarea placeholder="" type="text" name="message" id="message" cols="40" rows="10"></textarea> <br>
+                    <button type="submit" value="submit">POST</button>
+                </form>
+                {{else}}
+                <div class="new-thread">
+                    <h2>Loggin to post</h2>
+                </div>
+                {{/if}}
+            </div>
+        </div>       
+    </main> 
+    <script src="http://localhost:5000/resources/js/new-post.js"></script>
+    {{!-- <script src="http://localhost:5000/resources/js/posts.js"></script>    --}}
+</body>
+</html>

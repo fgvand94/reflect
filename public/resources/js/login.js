@@ -18,8 +18,9 @@ form.addEventListener('submit', (e) => {
     xhr.onload = function() {       
         email.value = '';
         password.value = '';
-        window.location = 'http://localhost:5000/forums';
-        console.log(this.response);
+        if (this.responseText === 'success') {
+            window.location = 'http://localhost:5000/forums';
+        };
         return;   
     };
     xhr.send(JSON.stringify(body));

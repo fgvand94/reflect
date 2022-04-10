@@ -9,15 +9,35 @@
     right: 0;
     filter: brightness(90%);	
 }
-body {
+
+main, body, html {
     height: 100%;
+    margin: 0px;
 }
-.form-container {
-    height: 100%;
+
+main {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+/*I could just put a blank container above that fills the space down to where the
+center of the container would be positioned half but I like this more. grid maybe
+or I could relative postion and then position it down by whatever percentage would
+make the center be centered. The height would have to be a percentage which it is
+*/
+.username {
+    height: 10%;
+    width: 50%;
+    display: flex;
+    justify-content: left;
+    border-bottom: 1px solid black
+}
+
+.info {
+    height: 40%;
+    width: 50%;
+    text-align: left;
 }
 
 form { 
@@ -50,4 +70,8 @@ a:hover {
     color: blue;
 }
 
-
+.user-photo {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+}

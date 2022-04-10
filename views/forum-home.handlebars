@@ -18,15 +18,19 @@
 		<div class="navleft">	
 			<a href="/"><h3>Reflect</h3></a>
 		</div>
-		<div class="navright">	
-			<a href="/forums"><h3>Community</h3></a>
-			<div class="drop-down">
-				<a href=""><h3>Account</h3></a>
-				<div class="drop-down-content">
-					<a href="/login" class="login"><button class="login button">Login</button></a>
-				</div>
-			</div>
-		</div>	
+        <div class="navright">	
+            <a href="/forums"><h3>Community</h3></a>
+            <div class="drop-down">
+                <h3><a href="">Account</a></h3>
+                <div class="drop-down-content">
+                {{#if obj.isLoggedIn}}
+                <h3><a href="/user-{{obj.person}}" class="user">{{obj.person}}</a></h3>
+                {{else}}
+                <a href="/login" class="login"><button class="button">Login</button></a>
+                {{/if}}
+                </div>
+            </div>
+        </div>	
 	</nav>
 	<main>
 		<div class="background"></div>
@@ -47,55 +51,54 @@
 					<div class="general column">
 						<h1 class="column-header">General</h1>
 						<div class="camping column-block">
-							<h2 class="forum camping"><a href="/forums/camping">Camping</a></h2>
+							<h2 class="forum camping"><a href="/forums/camping_pg1">Camping</a></h2>
 							<a><h4>Top posts</h4></a>
 						</div>
 						<div class="hikin column-block">
-							<h2 class="forum hiking"><a href="/forums/hiking">Hiking</a></h2>
+							<h2 class="forum hiking"><a href="/forums/hiking_pg1">Hiking</a></h2>
 							<a><h4>Top posts</h4></a>
 						</div>
 						<div class="backpacking column-block">
-							<h2 class="forum"><a href="/forums/backpacking">Backpacking</a></h2>
+							<h2 class="forum"><a href="/forums/backpacking_pg1">Backpacking</a></h2>
 							<a><h4>Top posts</h4></a>
 						</div>
 					</div>
 					<div class="wildlife column">
 						<h1 class="column-header">Wildlife</h1>
 						<div class="fish column-block">
-							<h2 class="forum"><a href="/forums/fish">Fish</a></h2>
+							<h2 class="forum"><a href="/forums/fish_pg1">Fish</a></h2>
 							<a ><h4>Top posts</h4></a>
 						</div>
 						<div class="mammals column-block">
-							<h2 class="forum"><a href="/forums/mammals">Mammals</a></h2>
+							<h2 class="forum"><a href="/forums/mammals_pg1">Mammals</a></h2>
 							<a><h4>Top posts</h4></a>
 						</div>
 						<div class="reptiles column-block">
-							<h2 class="forum"><a href="/forums/reptiles">Reptiles</a></h2>
+							<h2 class="forum"><a href="/forums/reptiles_pg1">Reptiles</a></h2>
 							<a><h4>Top posts</h4></a>
 						</div>
 					</div>
 					<div class="environment column">
 						<h1 class="column-header">Plants</h1>
 						<div class="column-block trees">
-							<h2 class="forum"><a href="/forums/trees">Trees</a></h2>
+							<h2 class="forum"><a href="/forums/trees_pg1">Trees</a></h2>
 							<a><h4>Top posts</h4></a>
 						</div>
 						<div class="column-block vegitation">
-							<h2 class="forum"><a href="/forums/vegitation">Vegitation</a></h2>	
+							<h2 class="forum"><a href="/forums/vegitation_pg1">Vegitation</a></h2>	
 							<a><h4>Top posts</h4></a>			
 						</div>
 						<div class="column-block flowers">
-							<h2 class="forum"><a href="/forums/flowers">Flowers</a></h2>
+							<h2 class="forum"><a href="/forums/flowers_pg1">Flowers</a></h2>
 							<a><h4>Top posts</h4></a>			
 						</div>
 						<div class="column-block mushrooms">
-							<h2 class="forum"><a href="/forums/mushrooms">Mushrooms</a></h2>
+							<h2 class="forum"><a href="/forums/mushrooms_pg1">Mushrooms</a></h2>
 							<a><h4>Top posts</h4></a>
 						</div>
 					</div>
 				</div>
 			</div>		
 	</main>
-	<script src="./resources/js/nav-change.js"></script>
 </body>
 </html>

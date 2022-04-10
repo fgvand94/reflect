@@ -139,3 +139,13 @@ then comming up with js to give class names to these things. */
 	margin-top: 0px;
 	margin-bottom: 0px;
 }
+
+.page-container {
+	display: flex;
+	justify-content: center;
+	
+}
+
+.pages {
+	margin-right: 5px;
+}
