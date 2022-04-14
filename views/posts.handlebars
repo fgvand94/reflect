@@ -17,8 +17,9 @@
                 <div class="drop-down-content">
                 {{#if obj.isLoggedIn}}
                 <h3><a href="/user-{{obj.person}}" class="user">{{obj.person}}</a></h3>
+                <h3><a href="/logout">Logout</a></h3>
                 {{else}}
-                <a href="/login" class="login"><button class="button">Login</button></a>
+                <a href="/login" class="login"><button class="button user">Login</button></a>
                 {{/if}}
                 </div>
             </div>
@@ -46,13 +47,31 @@
                         <img src="{{this.photo}}" class="user-photo">
                     </div>                      
                     <div class="post">
-                        <h4><a href="/user-{{this.name}}">{{this.name}}</a></h4>
-                        
-                        <h4>{{this.content}}</h4>
-                        
+                        <h4><a href="/user-{{this.name}}" class="post-user posts{{@index}}" data-id="{{@last}}">{{this.name}}</a></h4>                      
+                        <h4 class="content content{{@index}}">{{this.content}}</h4> 
+                        {{#if this.match}}
+                        <h5 class="update-post update-post{{@index}}" href="">Update</h5>                    
+                        {{/if}}
+                        {{!-- The update isn't exactly behaving how I want. Everything updates fine but
+                        if you try to press enter or something to create paragraphs it doesn't seem to notice
+                        when you update it. also if you press tab it doesn't 5 space the form it just brings your highlite
+                        down to the next post. I'm thinking I could maybe write some js that would put a
+                        break whenever you hit enter but I'm thinking there's probably something built int
+                        that does that. also I'd have to remove it everytime you go up a line.
+                        also I need to look up how to take of the adjustable size for the text area--}}
+                        <form action="" method="PUT" class="update-form update-form{{@index}}" data-id="{{this.id}}">
+                            <textarea id="update-text{{@index}}" class="update-text{{@index}}" type="text" placeholder="" name="search"></textarea> <br>
+                            <h4 class="update-button{{@index}} update-button">Update</h4>
+                            <h4 class="update-cancel{{@index}} update-cancel">Cancel</h4>
+                        </form>                          
                     </div>
                 </div>
                 {{/each}}                              
+            </div>
+            <div class="page-container">
+                {{#each obj.pageArray}}
+                <h4 class="pages"><a href="/forums/_pg{{this}}">{{this}}</a></h4>
+                {{/each}}
             </div>          
         </main>  
         <script src="http://localhost:5000/resources/js/posts.js"></script>    

@@ -24,7 +24,7 @@ let thread = category1.substring(category1.lastIndexOf('/') + 1);
 let categoryUpper = category.charAt(0).toUpperCase() + category.slice(1);
 
 forum.innerHTML = categoryUpper;
-forum.href = `/forums/${category}`;
+forum.href = `/forums/${category}_pg1`;
 navPost.innerHTML = thread.slice(0, thread.lastIndexOf('-'));
 navPost.href = `/forums/${category}/${thread}`;
 

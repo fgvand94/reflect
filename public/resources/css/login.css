@@ -11,6 +11,7 @@
 }
 body {
     height: 100%;
+    margin-top: 0px;
 }
 .form-container {
     height: 100%;
@@ -48,6 +49,17 @@ a {
 
 a:hover {
     color: blue;
+}
+
+.password2 {
+    display: none;
+}
+/* i'm going to see if I can find another solution to the password container
+jumping up when match becomes visible just to have more ways of doing things */
+.match {
+    margin-top: 0px;
+    position: absolute;
+    bottom: 30%;
 }
 
 

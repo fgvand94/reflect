@@ -8,7 +8,7 @@ let pg = document.querySelector('.pages');
 // let newthread = doucment.querySelector('.newthread');
 
 console.log(navUpper);
-forumNav.innerHTML = navUpper;
+forumNav.innerHTML = navUpper.slice(0, navUpper.lastIndexOf('_'));
 
 
 let threadList = document.querySelector('.column-container');
@@ -25,17 +25,19 @@ const getForumName = (e) => {
 
     let urlEnd = e.target.innerHTML.replace(/\s+/g, '-');
     let id = e.target.getAttribute('data-id');
-    e.target.href = `${navAll}/${urlEnd}-${id}`;
-          
+    if (id !== null) {
+    e.target.href = `${navAll.slice(0, navAll.lastIndexOf('_'))}/${urlEnd}-${id}_pg1`;
+    }
     console.log(e.target.href);    
 };
 
-// const getPage = (e) => {
-//     // e.target.href = `/forums/${nav}`;
-//     e.target.setAttribute('data-page', e.target.innerHTML);
-//     console.log(e.target.getAttribute('data-page'));
-// }
+const getPage = (e) => {
+
+    e.target.setAttribute('data-page', e.target.innerHTML);
+    e.target.href = navAll.slice(0, navAll.lastIndexOf('_')) + '_pg' + e.target.getAttribute('data-page');
+    console.log(e.target.href);
+}
 
 threadList.addEventListener('mouseover', getForumName);
-// page.addEventListener('mouseover', getPage);
+page.addEventListener('mouseover', getPage);
 

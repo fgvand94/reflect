@@ -12,10 +12,7 @@
   "dependencies": {
     "express": "^4.17.3",
     "express-handlebars": "^6.0.3",
+    "nodemailer": "^6.7.3",
     "pg": "^8.7.3"
-  },
-  "devDependencies": {
-    "eslint-plugin-jsx-a11y": "^6.5.1",
-    "eslint-plugin-react": "^7.29.4"
   }
 }

@@ -25,7 +25,8 @@
                 <div class="drop-down-content">
                 {{#if obj.isLoggedIn}}
                 <h3><a href="/user-{{obj.person}}" class="user">{{obj.person}}</a></h3>
-                {{else}}
+                <h3><a href="/logout">Logout</a></h3>
+				{{else}}
                 <a href="/login" class="login"><button class="button">Login</button></a>
                 {{/if}}
                 </div>

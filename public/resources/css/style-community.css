@@ -2,7 +2,7 @@
 
 
 body {
-	margin: 0;
+	margin: 0px;
 }
 
 
@@ -162,4 +162,9 @@ h4 {
 
 .signed-in:hover .signed-in {
 	display: flex;
+}
+
+.user {
+	margin-left: 120px;
+	margin-right: 20px;
 }

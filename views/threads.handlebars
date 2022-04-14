@@ -23,7 +23,8 @@
                 <h3><a href="">Account</a></h3>
                 <div class="drop-down-content">
                 {{#if obj.isLoggedIn}}
-                <h3><a href="/user-{{obj.person}}" class="user">{{obj.person}}</a></h3>
+                <h3><a href="/user-{{obj.person}}" class="current-user">{{obj.person}}</a></h3>
+                <h3><a href="/logout">Logout</a></h3>
                 {{else}}
                 <a href="/login" class="login"><button class="button">Login</button></a>
                 {{/if}}
@@ -46,50 +47,27 @@
             </div>			
         </div>
         <div class="column-container">  
+            {{!-- I should probably put these in the database. Or atleast the introduce
+            yourself one. I don't know if I even want to keep the introduce yoursel
+            thread though. they're throwing an error from the js file becase posts[i] isn't
+            defined in them. it's not a big deal but I could fix it by moving everything to
+            the back end like I was thinking. Or I could just create a value in the object
+            put it on a data piece in something above the loop and use that as in if this
+            in the js file to negate the whole thing if it is on of these two threads. 
+            New thread doesn't really need to be moved
+            to the database but If I keep introduce yourself it will cause people will
+            have to post. I also want to get rid of the page number and the id on newthread
+            but I'm not to worried about it right now. shouldn't be to hard to fix. If I want
+            to keep a thread at the top though I could just put it as its own thing
+            in the obj and them place it in manually at the top or loop through the top
+            threads that I have and keep them seperate.  a lot of the threads don't
+            work when you click on them but that's just becausse I never created a post
+            when I made them which no thread is going to be created without a post of
+            somekind in it so I don't think I really even need to address that. --}}
             <h3 class="new-thread"><a href="" data-id="0" class="newthread">New Thread</a></h3>  
             <div class="threads">                       
                 <h2 class="thread"><a href="" data-id="0" class="thread1">Introduce yourself</a></h2>
-            </div>         
-            {{!-- <div class="threads">
-                <h2 class="thread"><a class="thread" data-id="{{obj.url.one}}" href="">{{obj.thread.one}}</a></h2> 
-                <h4 class="user"><a href="/user-{{obj.user.one}}">{{obj.user.one}}</a></h4>
-            </div>
-            <div class="threads">
-                <h2 class="thread"><a class="thread" data-id="{{obj.url.two}}">{{obj.thread.two}}</a></h2> 
-                <h4 class="user"><a href="/user-{{obj.user.two}}">{{obj.user.two}}</a></h4>
-            </div>
-            <div class="threads">
-                <h2 class="thread"><a class="thread" data-id="{{obj.url.three}}">{{obj.thread.three}}</a></h2> 
-                <h4 class="user"><a href="/user-{{obj.user.three}}">{{obj.user.three}}</a></h4>
-            </div>
-            <div class="threads">
-                <h2 class="thread"><a class="thread" data-id="{{obj.url.four}}">{{obj.thread.four}}</a></h2> 
-                <h4 class="user"><a href="/user-{{obj.user.four}}">{{obj.user.four}}</a></h4>
-            </div>
-            <div class="threads">
-                <h2 class="thread"><a class="thread" data-id="{{obj.url.five}}">{{obj.thread.five}}</a></h2> 
-                <h4 class="user"><a href="/user-{{obj.user.five}}">{{obj.user.five}}</a></h4>
-            </div> 
-            <div class="threads">
-                <h2 class="thread"><a class="thread" data-id="{{obj.url.six}}">{{obj.thread.six}}</a></h2> 
-                <h4 class="user"><a href="/user-{{obj.user.six}}">{{obj.user.six}}</a></h4>
-            </div> 
-            <div class="threads">
-                <h2 class="thread"><a class="thread" data-id="{{obj.url.seven}}">{{obj.thread.seven}}</a></h2> 
-                <h4 class="user"><a href="/user-{{obj.user.seven}}">{{obj.user.seven}}</a></h4>
-            </div>
-            <div class="threads">
-                <h2 class="thread"><a class="thread" data-id="{{obj.url.eigth}}">{{obj.thread.eight}}</a></h2> 
-                <h4 class="user"><a href="/user-{{obj.user.eight}}">{{obj.user.eight}}</a></h4>
-            </div>
-            <div class="threads">
-                <h2 class="thread"><a class="thread" data-id="{{obj.url.nine}}">{{obj.thread.nine}}</a></h2> 
-                <h4 class="user"><a href="/user-{{obj.user.nine}}">{{obj.user.nine}}</a></h4>
-            </div>
-            <div class="threads">
-                <h2 class="thread"><a class="thread" data-id="{{obj.url.ten}}">{{obj.thread.ten}}</a></h2> 
-                <h4 class="user"><a href="/user-{{obj.user.ten}}">{{obj.user.ten}}</a></h4>
-            </div>                                                             --}}
+            </div>                                                                   
             {{#each obj.view}}
             <div class="threads">
                 <h2 class="thread"><a class="thread" data-id="{{this.id}}">{{this.thread}}</a></h2> 
@@ -99,11 +77,10 @@
         </div>    
         <div class="page-container">
             {{#each obj.pageArray}}
-            <h4 class="pages"><a href="/forums/{{obj.category}}_pg{{this}}">{{this}}</a></h4>
+            <h4 class="pages"><a href="/forums/_pg{{this}}">{{this}}</a></h4>
             {{/each}}
         </div>   
     </main> 
-    <script  src="http://localhost:5000/resources/js/threads.js"></script> 
-            
+    <script  src="http://localhost:5000/resources/js/threads.js"></script>           
 </body>  
 </html>

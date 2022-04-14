@@ -103,11 +103,18 @@ a:hover {
 }
 
 .column-container {
-  
 	width: 1240px;
 	margin-left: auto;
-	margin-right: auto;
-	
+	margin-right: auto;	
+}
+
+
+
+.image-container {
+	display: flex;
+	align-items: flex-start;
+	margin-top: 10px;
+	height: 100%;
 }
 
 .user-photo {
@@ -120,10 +127,29 @@ a:hover {
     width: 100%;
     display: flex;
     justify-content: left;
-	align-items: center;
+	align-items: flex-start;
 	border-top: 1px solid black;
 	border-bottom: 1px solid black;
 }
 
+.page-container {
+	text-align: center;
+}
 
+.user {
+	margin-left: 120px;
+	margin-right: 20px;
+}
 
+.update-form {
+	display: none;
+}
+
+.update-button, .update-cancel {
+	display: inline;
+	margin-right: 10px;
+}
+
+.update-post:hover, .update-cancel:hover, .update-button:hover {
+	cursor: pointer;
+}

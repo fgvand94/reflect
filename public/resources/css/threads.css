@@ -138,6 +138,7 @@ then comming up with js to give class names to these things. */
 .user {
 	margin-top: 0px;
 	margin-bottom: 0px;
+
 }
 
 .page-container {
@@ -148,4 +149,9 @@ then comming up with js to give class names to these things. */
 
 .pages {
 	margin-right: 5px;
+}
+
+.current-user {
+	margin-left: 120px;
+	margin-right: 20px;
 }

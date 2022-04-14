@@ -16,12 +16,30 @@
 	<main>
 		<div class="background">		
         <div class="form-container">
+			{{#if obj.confirm}}
+            <form class="form">
+                <input type="text" placeholder="Email" class="email"> <br>
+				<input type="password" placeholder="Password" class="password"> <br>
+				<input type="password" placeholder="Confirm Password" class="password2"> <br>
+                <button type="submit">Send reset email</button>
+            </form>
+			{{else if obj.reset}}
+			<form class="form">
+				<input type="text" placeholder="Email" class="email"> <br>
+                <input type="password" placeholder="Password" class="password"> <br>
+				<input type="password" placeholder="Confirm Password" class="password2"> <br>
+                <button type="submit">Login</button>
+			</form>
+			{{else}}
             <form class="form">
                 <input type="text" placeholder="Email" class="email"> <br>
                 <input type="password" placeholder="Password" class="password"> <br>
+				<input type="password" placeholder="Confirm Password" class="password2"> <br>
                 <button type="submit">Login</button>
             </form>
+			<h4><a href="/confirm-email">Forgot password</a></h4>
             <h3 class="register" ><a href="/register">Register</a></h3>
+			{{/if}}
         </div>
 		</div>
 	</main>

@@ -27,11 +27,12 @@ or I could relative postion and then position it down by whatever percentage wou
 make the center be centered. The height would have to be a percentage which it is
 */
 .username {
-    height: 10%;
+    height: 80px;
     width: 50%;
     display: flex;
     justify-content: left;
-    border-bottom: 1px solid black
+    align-items: center;
+    border-bottom: 1px solid black;
 }
 
 .info {
@@ -71,7 +72,95 @@ a:hover {
 }
 
 .user-photo {
-    width: 50px;
-    height: 50px;
+    width: 80px;
+    height: 80px;
     margin-right: 10px;
+}
+
+.photos {
+    width: 100px;
+    height: 100px;
+    margin-right: 10px;
+}
+
+.bio-form {
+    display: none;
+}
+
+.bio-button {
+    width: 100px;
+    display: inline;
+    margin-right: 20px;
+}
+
+.bio-cancel {
+    display: inline;
+}
+
+
+.photo-upload, .photo-cancel {
+    display: inline;
+    margin-right: 20px;
+}
+/* paint order??? */
+a:hover {
+    cursor: pointer;
+}
+
+.photo-form {
+    display: none;
+}
+
+
+
+.image-enlarge {
+   /*background-color: darkgray;
+    filter: opacity(50%); */
+    display: none;
+    position: absolute;
+    height: 60%;
+    width: 60%;
+    top: 20%;
+    left: 20%;
+}
+
+.image-enlarge::after {
+    content: '';
+    top: 0%;
+    left: 0%; 
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: darkgray;
+    filter: opacity(50%);
+}
+
+.set-picture {
+    display: inline;
+    left: 82%;
+    top: 92%;
+    filter: opacity(100%);
+    position: absolute;
+    color: black;
+    z-index: 2;
+}
+
+.exit {   
+    left: 98%;
+    top: 0%;
+    position: absolute;
+    z-index: 2; 
+}
+
+.enlarged-image {
+    left: 10%;
+    top: 10%;
+    position: absolute;
+    width: 80%;
+    height: 80%;
+    z-index: 2;
+}
+
+.photos:hover {
+    cursor: pointer;
 }
