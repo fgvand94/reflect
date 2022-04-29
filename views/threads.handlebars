@@ -37,12 +37,12 @@
         <h1 class="main-header">Forums</h1>
         <div class="top-bar">
             <div class="site-location">
-                <h3 class=""><a href="/forums">Home</a> > <span class="forumNav">{{forum}}</span> > All</h3>
+                <h3 class=""><a href="/forums">Home</a> > <span class="forumNav"></span> > All</h3>
             </div>
             <div class="search">
-                <form action="" method="POST">
+                <form method="GET" action="/forums/{{obj.category}}/search-results">
                     <input class="search-input" type="text" placeholder=" Search...." name="search">
-                    <button class="search-button" type="submit">SEARCH</button>
+                    <button class="search-button" >SEARCH</button>
                 </form>
             </div>			
         </div>
@@ -64,21 +64,31 @@
             work when you click on them but that's just becausse I never created a post
             when I made them which no thread is going to be created without a post of
             somekind in it so I don't think I really even need to address that. --}}
-            <h3 class="new-thread"><a href="" data-id="0" class="newthread">New Thread</a></h3>  
+            <h3 class="new-thread"><a href="/forums/{{obj.category}}/new-thread" data-id="0" class="newthread">New Thread</a></h3>  
             <div class="threads">                       
-                <h2 class="thread"><a href="" data-id="0" class="thread1">Introduce yourself</a></h2>
+                <h2 class="thread"><a href="/forums/{{obj.category}}/Introduce-yourself" data-id="0" class="thread1">Introduce yourself</a></h2>
             </div>                                                                   
             {{#each obj.view}}
             <div class="threads">
-                <h2 class="thread"><a class="thread" data-id="{{this.id}}">{{this.thread}}</a></h2> 
-                <h4 class="user"><a href="/user-{{this.user}}">{{this.user}}</a></h4>
+                <div class="thread-info">
+                    {{!-- <h2 class="thread"><a class="thread" data-id="{{this.id}}" >{{this.thread}}</a></h2>  --}}
+
+                    <h2 class="thread"><a class="thread" data-id="{{this.id}}" href="/forums/{{../obj.category}}/{{this.threadReplace}}-{{this.id}}_pg1">{{this.thread}}</a></h2> 
+                    <h4 class="user"><a href="/user-{{this.user}}">{{this.user}}</a></h4>
+                </div>
+                <div class="post-info">
+                    <h2 class="post-count">Posts: {{this.postCount}}</h2>
+                    <h4 class="user-post">Recent: <a href="/user-{{this.userPost}}">{{this.userPost}}</a></h4>
+                </div>
             </div>
             {{/each}}
         </div>    
         <div class="page-container">
+            <h4 class="page-end"><a href="/forums/{{obj.category}}_pg1">First</a></h4>
             {{#each obj.pageArray}}
-            <h4 class="pages"><a href="/forums/_pg{{this}}">{{this}}</a></h4>
+            <h4 class="pages"><a href="/forums/{{../obj.category}}_pg{{this}}">{{this}}</a></h4>
             {{/each}}
+            <h4 class="page-end"><a href="/forums/{{obj.category}}_pg{{obj.pageTotal}}">Last</a></h4>
         </div>   
     </main> 
     <script  src="http://localhost:5000/resources/js/threads.js"></script>           

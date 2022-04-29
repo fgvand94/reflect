@@ -25,7 +25,7 @@ let categoryUpper = category.charAt(0).toUpperCase() + category.slice(1);
 
 forum.innerHTML = categoryUpper;
 forum.href = `/forums/${category}_pg1`;
-navPost.innerHTML = thread.slice(0, thread.lastIndexOf('-'));
+navPost.innerHTML = thread.slice(0, thread.lastIndexOf('-')).replaceAll('-', ' ');
 navPost.href = `/forums/${category}/${thread}`;
 
 
@@ -46,19 +46,29 @@ newPost.addEventListener('submit', (e) => {
     //     },
     //     post: message.value
     // };
+ 
     const lastSlash = windowFull.lastIndexOf('/');
     const lastSlashSlice = window.location.href.slice(0, windowFull.lastIndexOf('/'));
     const nextLastSlash = lastSlashSlice.lastIndexOf('/');
     const category = window.location.href.substring(29, nextLastSlash);
     const thread = windowFull.slice(nextLastSlash + 1, lastSlash);
-    console.log(category);
+    const threadId = thread.slice(thread.lastIndexOf('-') + 1, thread.lastIndexOf('_'));
+    console.log(thread);
+    console.log(threadId);
+    // console.log(category);
+    let body = {
+        threadId: threadId
+    }
 
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', `/forums/${category}/${thread}/add-a-post?message=${message.value}`);
+    xhr.open('POST', `/forums/${category}/${thread}/add-a-post?message=${message.value.replace(/\n/g, '<br>')}`);
     xhr.setRequestHeader('content-type', 'application/json');
-
+    xhr.onload = function () {
+        window.location.href = `/forums/${category}/${thread}`;   
+    }
   
-    xhr.send();
+    xhr.send(JSON.stringify(body));
+   
     
 })
 

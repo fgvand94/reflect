@@ -17,6 +17,11 @@ let exit = document.querySelector('.exit');
 let enlargedImage = document.querySelector('.enlarged-image');
 let setPicture = document.querySelector('.set-picture');
 
+let newConversation = document.querySelector('.submit');
+let conversationUser = document.querySelector('.user');
+let conversationTitle = document.querySelector('.title');
+let conversationContent = document.querySelector('.message');
+
 const showBioForm = (e) => {
     bioForm.style.display = 'block';
 }
@@ -115,5 +120,26 @@ setPicture.addEventListener('click', () => {
             location.reload();  
         }
     };
+    xhr.send(JSON.stringify(body));
+})
+
+newConversation.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    body = {
+        user: conversationUser.value,
+        title: conversationTitle.value,
+        message: conversationContent.value
+    }
+    console.log(body);
+    let xhr = new XMLHttpRequest();
+
+    xhr.open('POST', '/new-conversation');
+    xhr.setRequestHeader('content-type', 'application/json');
+    xhr.onload = function () {
+        if (this.responseText === 'success') {
+            location.reload();
+        }
+    }
     xhr.send(JSON.stringify(body));
 })

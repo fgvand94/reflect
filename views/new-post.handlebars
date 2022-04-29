@@ -38,7 +38,7 @@
         <div class="column-container">
             <div class="new-post-container">
                 {{#if obj.isLoggedIn}}
-                <form class="new-post">
+                <form class="new-post" method="PUT">
                     <textarea placeholder="" type="text" name="message" id="message" cols="40" rows="10"></textarea> <br>
                     <button type="submit" value="submit">POST</button>
                 </form>

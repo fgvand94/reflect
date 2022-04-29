@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <title>Reflect</title>
-        <link rel="stylesheet" type="text/css" href="http://localhost:5000/resources/css/posts.css">
+        <link rel="stylesheet" type="text/css" href="http://localhost:5000/resources/css/conversation.css">
     </head>
     <body>
         <nav>
@@ -30,7 +30,7 @@
             <h1 class="main-header">Forums</h1>
             <div class="top-bar">
                 <div class="site-location">
-                    <h3><a href="/forums">Home</a> > <a href="/forums/threads" class="forum">Camping</a> > <a class="thread-name"></a></h3>
+                    <h3>Conversations </h3>
                 </div>
                 <div class="search">
                     <form action="" method="POST">
@@ -39,8 +39,7 @@
                     </form>
                 </div>			
             </div>
-            <div class="column-container">
-                <h3><a class="new-post">Add a post</a></h3>               
+            <div class="column-container">              
                 {{#each obj.view}}               
                 <div class="post-container">
                     <div class="image-container">
@@ -52,34 +51,30 @@
                         It doesn't retain the h4 tag that it's in though still registers anchor tags
                         and any class name but for some reason the size from the hx doesn't stay.--}}
                         <pre><h4 class="content content{{@index}}">{{{this.content}}}</h4></pre>
-                        {{#if this.match}}
-                        <h5 class="update-post update-post{{@index}}">Update</h5>                    
-                        {{/if}}
+
                         {{!-- The update isn't exactly behaving how I want. Everything updates fine but
                         if you try to press enter or something to create paragraphs it doesn't seem to notice
                         when you update it. also if you press tab it doesn't 5 space the form it just brings your highlite
                         down to the next post. I'm thinking I could maybe write some js that would put a
                         break whenever you hit enter but I'm thinking there's probably something built int
                         that does that. also I'd have to remove it everytime you go up a line.
-                        also I need to look up how to take of the adjustable size for the text area--}}
-
-
-                        <form method="PUT" class="update-form update-form{{@index}}" data-id="{{this.id}}">
-                            <textarea id="update-text{{@index}}" class="update-text{{@index}} update-text" type="text" placeholder="" name="search" cols="50" rows="10"></textarea> <br>
-                            {{!-- <pre><div  contenteditable="" class="update-text{{@index}} update-text"></div></pre> --}}
-                            <h4 class="update-button{{@index}} update-button">Update</h4>
-                            <h4 class="update-cancel{{@index}} update-cancel">Cancel</h4>
-                        </form>                          
+                        also I need to look up how to take of the adjustable size for the text area--}}                     
                     </div>
                 </div>
-                {{/each}}                              
+                {{/each}} 
+            <form action="" method="PUT" class="add-post add-post{{@index}}" data-id="{{this.id}}">
+                <textarea id="post-text{{@index}}" class="post-text{{@index}} post-text" type="text" placeholder="" name="search" cols="50" rows="10"></textarea> <br>
+                {{!-- <pre><div  contenteditable="" class="update-text{{@index}} update-text"></div></pre> --}}
+                <h4 class="add-button{{@index}} add-button">Add post</h4>
+              
+            </form>                             
             </div>
             <div class="page-container">
                 {{#each obj.pageArray}}
-                <h4 class="pages"><a href="/forums/{{@root.obj.category}}/{{../obj.threadName}}-{{../obj.threadId}}_pg{{this}}">{{this}}</a></h4>
+                <h4 class="pages"><a href="/conversation/{{../obj.conversationName}}-{{../obj.conversationId}}_pg{{this}}">{{this}}</a></h4>
                 {{/each}}
             </div>          
         </main>  
-        <script src="http://localhost:5000/resources/js/posts.js"></script>    
+      <script src="http://localhost:5000/resources/js/conversation.js"></script>       
     </body>
 </html>

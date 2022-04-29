@@ -25,9 +25,13 @@ form.addEventListener('submit', (e) => {
     console.log(category);
 
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', `/forums/${category}/New-Thread-0?thread=${title.value}&message=${message.value}`);
+    xhr.open('POST', `/forums/${category}/new-thread?thread=${title.value}&message=${message.value.replace(/\n/g, '<br>')}`);
     xhr.setRequestHeader('content-type', 'application/json');
-
+    xhr.onload = function () {
+        if (this.responseText === 'success') {
+            window.location.href = `/forums/${category}`;
+        }
+    }
   
     xhr.send();
     

@@ -162,12 +162,6 @@ textarea {
 	font-size: 14px;
 }
 
-.page-container {
-	display: flex;
-	justify-content: center;
-	margin: 10px;
-}
-
-.pages {
-	margin: 3px;
+.add-button:hover {
+    cursor: pointer;
 }

@@ -51,7 +51,37 @@
 				<h3 class="photo-upload"><a>Upload</a></h3>
 				<h3 class="photo-cancel"><a>Cancel</a></h3>
 			</div>
-			<h2 class="update">some other stuff:</h2>
+			<div class="message-container">
+				<div class="header-container">
+					<h3 class="header-words">Conversations</h3>
+					
+				</div>
+				{{#each obj.conversation}}
+				<div class="content-container">
+					<img class="comment-picture" src="{{this.photo}}">
+					<div class="title-info">
+						<h3 ><a href="/conversation/{{this.url}}-{{this.id}}_pg1">{{this.title}}</a></h3>
+						<h4><a href="user-{{this.user1}}">{{this.user1}}</a>, <a href="user-{{this.user2}}">{{this.user2}}</a></h4>
+					</div>
+					<div class="other-info">
+						<h3>Replies: {{this.replies}}</h3>
+						{{!--  --}}
+						<h4><a href="/user-{{this.replyUser}}">{{this.replyUser}}</a> {{this.replyDate}}</h4>
+					</div>					
+				</div>
+				{{/each}}
+			</div>
+			<h3>Start a conversation</h3>
+			<form>
+				<input class="user" type="text" placeholder="users name">
+				<input class="title" type="text" placeholder="subject"> <br>
+				{{!-- one forum I looked at used a content editable for there
+				form so you got to be able to change the fact that it extends. 
+				I'm going to go back and look cause they had certain attributes on
+				there that I've not used --}}
+				<textarea  name="message" type="text" class="message" rows="10" cols="50"></textarea>
+				<h3 class="submit"><a href="/new-conversation">Create</a></h3>
+			</form>
 		</div>
 		{{else}}
 		<div class="info">

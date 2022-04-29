@@ -6,10 +6,14 @@ let thread = window.location.href.lastIndexOf('/');
 let post = windowFull.slice(thread + 1);
 let allPosts = document.querySelector('.column-container');
 let currentUser = document.querySelector('.user');
-
 let threadid = post.lastIndexOf('-');
-navPost.innerHTML = post.substring(0, threadid).replaceAll('-', ' ');
-console.log
+if (post === 'new-thread' || post === 'Introduce-yourself') {
+    navPost.innerHTML = post.replaceAll('-', ' ');
+} else {
+    navPost.innerHTML = post.substring(0, threadid).replaceAll('-', ' ');
+}
+// navPost.innerHTML = post.substring(0, threadid).replaceAll('-', ' ');
+console.log(post);
 
 let nav = windowFull.replace("http://localhost:5000/forums/", "");
 let category = nav.substring(0, nav.lastIndexOf('/'));
@@ -46,24 +50,67 @@ allPosts.addEventListener('click', (e) => {
         document.querySelector(`.update-post${e.target.className.slice(23)}`).style.display = 'none';
         document.querySelector(`.update-form${e.target.className.slice(23)}`).style.display = 'block'; 
 
-        //apperantly innerHTML doesn't 'escape' the values you put in so it can lead
-        //to xss atacks. innertext and textcontent will escape. textcontent doesn't
-        //parse as html so apperently it has better performance whatever that means
-        //in this context. 
-        document.querySelector(`.update-text${e.target.className.slice(23)}`).innerText 
+        // document.querySelector(`.update-text${e.target.className.slice(23)}`).addEventListener('keydown', (event) => {
+        //     if (event.key == 'Tab') {
+        //         event.preventDefault();
+
+        //         var start = event.target.selectionStart;
+        //         var end = event.target.selectionEnd;
+
+        //         function getLineNumber() {
+
+        //             return event.target.value.substr(0, event.target.selectionStart) // get the substring of the textarea's value up to the cursor position
+        //               .split("\n") // split on explicit line breaks
+        //               .map((line) => 1 + Math.floor(line.length / event.target.cols)) // count the number of line wraps for each split and add 1 for the explicit line break
+        //               .reduce((a, b) => a + b, 0); // add all of these together
+        //           };
+
+
+
+
+
+              
+        //         console.log(start/getLineNumber(), event.target.cols, getLineNumber())
+
+        //         // if (start / getLineNumber() >= event.target.cols) {
+        //         //     console.log('if');
+        //         //     event.target.selectionStart =
+        //         //     event.target.selectionEnd = (50 * (getLineNumber() - 1)) + 1;
+        //         // } else {
+
+                  
+        //             console.log('else');
+        //             event.target.value = event.target.value.substring(0, start) +
+        //             '     ' + event.target.value.substring(end);
+        //             // event.target.value.substring(50 * (getLineNumber() - 1) + 1, 50 * (getLineNumber() + 1))
+        //             // = '     ' + event.target.value.substring(50 * (getLineNumber() - 1) + 1, 50 * (getLineNumber() + 1));
+        //             event.target.selectionStart =
+        //             event.target.selectionEnd = start + 5;
+        //         // }    
+        //     }
+        // })
+
+        document.querySelector(`.update-text${e.target.className.slice(23)}`).value 
         = document.querySelector(`.content${e.target.className.slice(23)}`).innerText;
 
         document.querySelector(`.update-cancel${e.target.className.slice(23)}`).addEventListener('click', (event) => {
+    
             document.querySelector(`.update-form${e.target.className.slice(23)}`).style.display = 'none';
-            document.querySelector(`.update-text${e.target.className.slice(23)}`).innerText = '';
             document.querySelector(`.update-post${e.target.className.slice(23)}`).style.display = 'block';
         });
 
         document.querySelector(`.update-button${e.target.className.slice(23)}`).addEventListener('click', (event) => {
+            event.preventDefault();
 
+            let content = document.querySelector(`.update-text${e.target.className.slice(23)}`).value;
+
+            let contentBreaks = content.replace(/\n/g, '<br>');
+            
+            //i forget this (/\s+/g, '-') is for all spaces so that would have helped
+            //some of it. maybe I can make it work better now. 
             let obj = {
                 category: window.location.href.slice(29, window.location.href.lastIndexOf('/')),
-                content: document.querySelector(`.update-text${e.target.className.slice(23)}`).value,
+                content: contentBreaks,
                 id: document.querySelector(`.update-form${e.target.className.slice(23)}`).getAttribute('data-id')
             }
 
@@ -75,6 +122,7 @@ allPosts.addEventListener('click', (e) => {
                     location.reload();
                 }
             }
+
             xhr.send(JSON.stringify(obj));
         })
     }

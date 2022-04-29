@@ -18,25 +18,29 @@ if (window.location.href.slice(0, 36) === 'http://localhost:5000/reset-password'
     
     document.querySelector('.form-container').appendChild(h4);
     h4.className = 'match';
+
+    password.addEventListener('input', (e) => {
+        if (password.value === password2.value) {
+            document.querySelector('.match').innerHTML = 'Passwords match';
+        } else {
+            document.querySelector('.match').innerHTML = "Passwords don't match";
+        }
+    })
+
+    password2.addEventListener('input', (e) => {
+        if (password.value === password2.value) {
+            document.querySelector('.match').innerHTML = 'Passwords match';
+        } else {
+            document.querySelector('.match').innerHTML = "Passwords don't match";
+        }
+    })
 };
 console.log(window.location.href)
 
 
-password.addEventListener('input', (e) => {
-    if (password.value === password2.value) {
-        document.querySelector('.match').innerHTML = 'Passwords match';
-    } else {
-        document.querySelector('.match').innerHTML = "Passwords don't match";
-    }
-})
 
-password2.addEventListener('input', (e) => {
-    if (password.value === password2.value) {
-        document.querySelector('.match').innerHTML = 'Passwords match';
-    } else {
-        document.querySelector('.match').innerHTML = "Passwords don't match";
-    }
-})
+
+
 
 form.addEventListener('submit', (e) => {
     e.preventDefault();

@@ -41,61 +41,61 @@
 					<div class="site-location">	
 						<h3 class=""><a href="/forums">Home</a></h3>								
 					</div>
-					<div class="search">
+					{{!-- <div class="search">
 						<form action="" method="POST">
 							<input class="search-input" type="text" placeholder=" Search...." name="search">
 							<button class="search-button" type="submit">SEARCH</button>
 						</form>
-					</div>			
+					</div>			 --}}
 				</div>
 				<div class="column-container">
 					<div class="general column">
 						<h1 class="column-header">General</h1>
 						<div class="camping column-block">
 							<h2 class="forum camping"><a href="/forums/camping_pg1">Camping</a></h2>
-							<a><h4>Top posts</h4></a>
+							<h4><a href="/forums/camping/{{obj.recentthreads.camping.titleReplace}}-{{obj.recentthreads.camping.id}}_pg1">{{obj.recentthreads.camping.title}}</a></h4>
 						</div>
 						<div class="hikin column-block">
 							<h2 class="forum hiking"><a href="/forums/hiking_pg1">Hiking</a></h2>
-							<a><h4>Top posts</h4></a>
+							<h4><a href="/forums/hiking/{{obj.recentthreads.hiking.titleReplace}}-{{obj.recentthreads.hiking.id}}_pg1">{{obj.recentthreads.hiking.title}}</a></h4>
 						</div>
 						<div class="backpacking column-block">
 							<h2 class="forum"><a href="/forums/backpacking_pg1">Backpacking</a></h2>
-							<a><h4>Top posts</h4></a>
+							<h4><a href="/forums/backpacking/{{obj.recentthreads.backpacking.titleReplace}}-{{obj.recentthreads.backpacking.id}}_pg1">{{obj.recentthreads.backpacking.title}}</a></h4>
 						</div>
 					</div>
 					<div class="wildlife column">
 						<h1 class="column-header">Wildlife</h1>
 						<div class="fish column-block">
 							<h2 class="forum"><a href="/forums/fish_pg1">Fish</a></h2>
-							<a ><h4>Top posts</h4></a>
+							<h4><a href="/forums/fish/{{obj.recentthreads.fish.titleReplace}}-{{obj.recentthreads.fish.id}}_pg1">{{obj.recentthreads.fish.title}}</a></h4>
 						</div>
 						<div class="mammals column-block">
 							<h2 class="forum"><a href="/forums/mammals_pg1">Mammals</a></h2>
-							<a><h4>Top posts</h4></a>
+							<h4><a href="/forums/mammals/{{obj.recentthreads.mammals.titleReplace}}-{{obj.recentthreads.mammals.id}}_pg1">{{obj.recentthreads.mammals.title}}</a></h4>
 						</div>
 						<div class="reptiles column-block">
 							<h2 class="forum"><a href="/forums/reptiles_pg1">Reptiles</a></h2>
-							<a><h4>Top posts</h4></a>
+							<h4><a href="/forums/reptiles/{{obj.recentthreads.reptiles.titleReplace}}-{{obj.recentthreads.reptiles.id}}_pg1">{{obj.recentthreads.reptiles.title}}</a></h4>
 						</div>
 					</div>
 					<div class="environment column">
 						<h1 class="column-header">Plants</h1>
 						<div class="column-block trees">
 							<h2 class="forum"><a href="/forums/trees_pg1">Trees</a></h2>
-							<a><h4>Top posts</h4></a>
+							<h4><a href="/forums/trees/{{obj.recentthreads.trees.titleReplace}}-{{obj.recentthreads.trees.id}}_pg1">{{obj.recentthreads.trees.title}}</a></h4>
 						</div>
 						<div class="column-block vegitation">
 							<h2 class="forum"><a href="/forums/vegitation_pg1">Vegitation</a></h2>	
-							<a><h4>Top posts</h4></a>			
+							<h4><a href="/forums/vegitation/{{obj.recentthreads.vegitation.titleReplace}}-{{obj.recentthreads.vegitation.id}}_pg1">{{obj.recentthreads.vegitation.title}}</a></h4>			
 						</div>
 						<div class="column-block flowers">
 							<h2 class="forum"><a href="/forums/flowers_pg1">Flowers</a></h2>
-							<a><h4>Top posts</h4></a>			
+							<h4><a href="/forums/flowers/{{obj.recentthreads.flowers.titleReplace}}-{{obj.recentthreads.flowers.id}}_pg1">{{obj.recentthreads.flowers.title}}</a></h4>			
 						</div>
 						<div class="column-block mushrooms">
 							<h2 class="forum"><a href="/forums/mushrooms_pg1">Mushrooms</a></h2>
-							<a><h4>Top posts</h4></a>
+							<h4><a href="/forums/mushrooms/{{obj.recentthreads.mushrooms.titleReplace}}-{{obj.recentthreads.mushrooms.id}}_pg1">{{obj.recentthreads.mushrooms.title}}</a></h4>
 						</div>
 					</div>
 				</div>
