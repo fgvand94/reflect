@@ -86,7 +86,7 @@ a:hover {
 	position: absolute;
 	top: 0;
 	left: 0;
-	filter: brightness(95%);
+	filter: brightness(110%);
 	background-image: url(../images/reflect.jpg);
 	height: 100%;
 	width: 100%;
@@ -146,7 +146,7 @@ article {
 	width: 100%;
 	top: 100vh;
 	position: absolute;
-	filter: brightness(90%);	
+	filter: brightness(110%);	
 }
 
 .user {

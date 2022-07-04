@@ -11855,6 +11855,7 @@ zshops
 zu
 zum
 zus`;
+console.log('bloop');
 
 // this put the same time stamp on everything so I might just sort by post id like
 // i did with the other one cause it doesn't know how to sort it. I figured it would
