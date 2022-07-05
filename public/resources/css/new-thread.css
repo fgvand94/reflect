@@ -85,7 +85,7 @@ a:hover {
 
 .top-bar {
 	width: 1240px;
-	background-color: lightgray;
+	background-color: rgb(220, 220, 220);;
 	margin-left: auto;
 	margin-right: auto;
 	display: flex;

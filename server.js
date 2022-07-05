@@ -1242,6 +1242,7 @@ app.get('/forums/([^/]+)/search-results', (req, res) => {
 })
 
 app.get('/forums', (req, res) => {
+    console.log('1');
 
     let obj = {
         isLoggedIn: user.isLoggedIn,
@@ -1254,7 +1255,7 @@ app.get('/forums', (req, res) => {
     const threadArray = ['camping', 'hiking', 'backpacking', 'fish', 'mammals', 'reptiles', 'trees', 'vegitation', 'flowers', 'mushrooms'];
     
     if (user.isLoggedIn === true) {
-        
+        console.log('2');
         pool.query(`select * from users where email = '${user.email}'`, (err, resp) => {
 
             if (err || resp.rows.length !== 1) {
@@ -1339,10 +1340,12 @@ app.get('/forums', (req, res) => {
     //synchronously it takes longer to do some queries with more data than others
     // doesn't really matter though. all though I might later think of how to fix
     //it just for fun and future reference.  
-        let i = 0;
+    console.log('3');    
+    let i = 0;
     function loop() {
         pool.query(`select ${threadArray[i]}threads.title, ${threadArray[i]}threads.id, ${threadArray[i]}posts.id as postid
                      from ${threadArray[i]}threads, ${threadArray[i]}posts where ${threadArray[i]}threads.id = ${threadArray[i]}posts.threadid order by postid desc limit 1`, (err, resp) =>{
+                        console.log('4');
             if (err) {
                 return console.log(err);
             }
@@ -1814,6 +1817,15 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}...`);
 });
+
+//heroku won't load anything but the first page. I was wondering if it was even getting through to my
+//server cause I don't see any of my console logs but it loads the first page and the first page at this
+//point won't even rendere without going through my server file so that's not the issue. My intial thought
+//is that it's just causse I haven't populated all the database tables yet so when it tries to get info
+//from the database it won't read anything. it will go to the login page to which doesn't have anything
+//to do with the database so I'm thinking it's either because of that or some other issue with the database
+//connection in general. I'm going to have to change all the stuff that takes the url to decide what information
+//to populate to the heroku web name instead of local host. 
 
 
 //things to do. I need to make it so you can go to the next page in a thread or a
@@ -11855,8 +11867,8 @@ zshops
 zu
 zum
 zus`;
-console.log('bloop');
 
+//yada
 // this put the same time stamp on everything so I might just sort by post id like
 // i did with the other one cause it doesn't know how to sort it. I figured it would
 // take long enough for it to get distinct timestamps but it didn't. 
