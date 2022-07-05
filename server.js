@@ -55,9 +55,9 @@ console.log('test');
 const Pool = require('pg').Pool;
 const pool = new Pool({
   user: 'qfwlsdhduyfoxe',
-  host: '34.236.171.14800000000fdsa',
+  host: '34.236.171.148',
   database: 'dceohj1rrea8mi',
-  password: 'b5581dfba922efe5ac2e3827e33b1d5ce5ebf2b478fa8bfd5d09447ecbcd2f9c',
+  password: 'b5581dfba922efe5ac2e3827e33b1d5ce5ebf2b478fa8bfd5d09447ecbcd2f9c-jfdlks;asjd;f',
   port: 5432,
 });
 
@@ -1389,7 +1389,9 @@ app.get(`/forums/([^/]+)`, (req, res) => {
     //sure why. I tried logging a hash made by crypto outside of all the routes and the app was crashing
     //before it could even get to the home page. I thought maybe the depencies aren't working and so pg
     //isn't working but handlebars is working fine cause that's how the home page is even displayed so
-    //I don't know why that was causing it to crash.
+    //I don't know why that was causing it to crash. yeah it gives a code enotfound and not etimeout when
+    //I put in the wrong host so it's definitly finding the host and at least trying to connect it just 
+    //keeps timing out.
     // console.log(req.headers);
     obj = {
         isLoggedIn: user.isLoggedIn,
