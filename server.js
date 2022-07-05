@@ -63,7 +63,7 @@ const pool = new Pool({
 
 //no pg_hba.conf entry for host "34.229.119.37", user "yhizmpuqryqnjq", database "dcnebe88p7tv3j"
 
-
+console.log(pool);
 app.get('/', (req, res) => {
     console.log(req.headers);
     console.log(req.header);
