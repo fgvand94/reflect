@@ -51,10 +51,7 @@ for (let j = 0; j < 16; j++) {
 
 let secret = randomArray.join('');
 
-var hash = crypto.createHmac('sha512', key);
-hash.update(text);
-var value = hash.digest('hex'); 
-console.log(value);
+
 
 const Pool = require('pg').Pool;
 const pool = new Pool({
