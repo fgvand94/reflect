@@ -55,7 +55,7 @@ console.log('test');
 const Pool = require('pg').Pool;
 const pool = new Pool({
   user: 'yhizmpuqryqnjq',
-  host: '54-159-22-90',
+  host: '54.159.22.90',
   database: 'dcnebe88p7tv3j',
   password: '113f7218eb8e0bf8dba0e6e47d746dab7c53cd48094d64bf12d968922b824f74',
   port: 5432,
