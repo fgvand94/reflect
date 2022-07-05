@@ -49,8 +49,12 @@ for (let j = 0; j < 16; j++) {
     }
 };
 
-secret = randomArray.join('');
+let secret = randomArray.join('');
 
+var hash = crypto.createHmac('sha512', key);
+hash.update(text);
+var value = hash.digest('hex'); 
+console.log(value);
 
 const Pool = require('pg').Pool;
 const pool = new Pool({
@@ -1344,12 +1348,13 @@ app.get('/forums', (req, res) => {
     let i = 0;
     function loop() {
         console.log(i);
+        console.log(threadArray[i]);
         pool.query(`select ${threadArray[i]}threads.title, ${threadArray[i]}threads.id, ${threadArray[i]}posts.id as postid
                      from ${threadArray[i]}threads, ${threadArray[i]}posts where ${threadArray[i]}threads.id = ${threadArray[i]}posts.threadid order by postid desc limit 1`, (err, resp) =>{
                         console.log('4');
-            // if (err) {
-            //     return console.log(err);
-            // }
+            if (err) {
+                return console.log(err);
+            }
             console.log(i);
             console.log(resp.rows);
             // console.log(threadArray[i]);
