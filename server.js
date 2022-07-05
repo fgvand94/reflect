@@ -55,7 +55,7 @@ secret = randomArray.join('');
 const Pool = require('pg').Pool;
 const pool = new Pool({
   user: 'qfwlsdhduyfoxe',
-  host: 'ec2-34-201-95-176.compute-1.amazonaws.com',
+  host: '34.236.171.148',
   database: 'dceohj1rrea8mi',
   password: 'b5581dfba922efe5ac2e3827e33b1d5ce5ebf2b478fa8bfd5d09447ecbcd2f9c',
   port: 5432,
