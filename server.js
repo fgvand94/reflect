@@ -52,11 +52,10 @@ for (let j = 0; j < 16; j++) {
 let secret = randomArray.join('');
 
 
-
 const Pool = require('pg').Pool;
 const pool = new Pool({
   user: 'qfwlsdhduyfoxe',
-  host: '34.236.171.148',
+  host: '34.236.171.14800000000fdsa',
   database: 'dceohj1rrea8mi',
   password: 'b5581dfba922efe5ac2e3827e33b1d5ce5ebf2b478fa8bfd5d09447ecbcd2f9c',
   port: 5432,
@@ -1379,6 +1378,18 @@ app.get('/forums', (req, res) => {
  
 
 app.get(`/forums/([^/]+)`, (req, res) => {
+    //I got heroku logging the things from inside here. It was giving me an error saying that there was
+    //no connection to the given database. I updated the credentials in the pg and now it doesn't say that
+    //but it timesout at pool.query. after another minute or so from time out it displays an actual error from
+    //inside pool query essentially indicating sometype of time out as well. When I removed the error catch
+    //it did essentially the same thing but instead of logging the error it went through the rest of it and
+    //said resp.rows not defined in the console log. This usually means that the query isn't working. the
+    //words are correct though for the query. And It seems like there is some kind of connection established
+    //to the database or at least it can see the database now but it's not quite connecting properly i'm not
+    //sure why. I tried logging a hash made by crypto outside of all the routes and the app was crashing
+    //before it could even get to the home page. I thought maybe the depencies aren't working and so pg
+    //isn't working but handlebars is working fine cause that's how the home page is even displayed so
+    //I don't know why that was causing it to crash.
     // console.log(req.headers);
     obj = {
         isLoggedIn: user.isLoggedIn,
