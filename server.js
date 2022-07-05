@@ -55,11 +55,13 @@ console.log('test');
 const Pool = require('pg').Pool;
 const pool = new Pool({
   user: 'yhizmpuqryqnjq',
-  host: '54.159.22.90',
+  host: '34.229.119.37',
   database: 'dcnebe88p7tv3j',
   password: '113f7218eb8e0bf8dba0e6e47d746dab7c53cd48094d64bf12d968922b824f74',
   port: 5432,
 });
+
+//no pg_hba.conf entry for host "34.229.119.37", user "yhizmpuqryqnjq", database "dcnebe88p7tv3j"
 
 
 app.get('/', (req, res) => {
@@ -1391,7 +1393,11 @@ app.get(`/forums/([^/]+)`, (req, res) => {
     //isn't working but handlebars is working fine cause that's how the home page is even displayed so
     //I don't know why that was causing it to crash. yeah it gives a code enotfound and not etimeout when
     //I put in the wrong host so it's definitly finding the host and at least trying to connect it just 
-    //keeps timing out.
+    //keeps timing out. changing password didn't give any errors so it doesn't really give you a lot to 
+    //go on. I realised I was using the credectials from the first database that I didn't populate. changed
+    //to the right one and initially got the error no pg_hba.conf entry for host "34.229.119.37", user "yhizmpuqryqnjq", database "dcnebe88p7tv3j"
+    //which isn't the host for the database. Not sure what that's about. ran it again and didn't get that error
+    //message. just the regular timout still. 
     // console.log(req.headers);
     obj = {
         isLoggedIn: user.isLoggedIn,
