@@ -1343,12 +1343,13 @@ app.get('/forums', (req, res) => {
     console.log('3');    
     let i = 0;
     function loop() {
+        console.log(i);
         pool.query(`select ${threadArray[i]}threads.title, ${threadArray[i]}threads.id, ${threadArray[i]}posts.id as postid
                      from ${threadArray[i]}threads, ${threadArray[i]}posts where ${threadArray[i]}threads.id = ${threadArray[i]}posts.threadid order by postid desc limit 1`, (err, resp) =>{
                         console.log('4');
-            if (err) {
-                return console.log(err);
-            }
+            // if (err) {
+            //     return console.log(err);
+            // }
             console.log(i);
             console.log(resp.rows);
             // console.log(threadArray[i]);
@@ -1370,7 +1371,7 @@ app.get('/forums', (req, res) => {
 
     }
     loop();
-    console.log(obj.recentthreads.backpacking);
+    // console.log(obj.recentthreads.backpacking);
 }
 });
  
