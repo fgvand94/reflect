@@ -54,11 +54,13 @@ console.log('test');
 
 const Pool = require('pg').Pool;
 const pool = new Pool({
-  user: 'yhizmpuqryqnjq',
-  host: '34.229.119.37',
-  database: 'dcnebe88p7tv3j',
-  password: '113f7218eb8e0bf8dba0e6e47d746dab7c53cd48094d64bf12d968922b824f74',
-  port: 5432,
+//   user: 'yhizmpuqryqnjq',
+//   host: '34.229.119.37',
+//   database: 'dcnebe88p7tv3j',
+//   password: '113f7218eb8e0bf8dba0e6e47d746dab7c53cd48094d64bf12d968922b824f74',
+//   port: 5432,
+    connectionString: process.env.DATABASE_URL,
+    ssl: true
 });
 
 //no pg_hba.conf entry for host "34.229.119.37", user "yhizmpuqryqnjq", database "dcnebe88p7tv3j"
@@ -1397,7 +1399,18 @@ app.get(`/forums/([^/]+)`, (req, res) => {
     //go on. I realised I was using the credectials from the first database that I didn't populate. changed
     //to the right one and initially got the error no pg_hba.conf entry for host "34.229.119.37", user "yhizmpuqryqnjq", database "dcnebe88p7tv3j"
     //which isn't the host for the database. Not sure what that's about. ran it again and didn't get that error
-    //message. just the regular timout still. 
+    //message. just the regular timout still. The error with the different host gave the same user and 
+    //database name though which is really strang the host is just different which makes no sense. I'll
+    //read more tomorrow maybe there's just something I have to add to pool for heroku that I don't for
+    //my local host or something. found out ssl mode is set to require. It looks like it might have to
+    //be set to this. and it won't let a connection be established if it's not. I don't think I have ssl
+    //set up. If I do I also read something and hour or so ago about ssl issues with node.js heroku and
+    //having to do something specific. I'll figure it out. there should be a way to remove it for testing
+    //though cause security at this point is really not an issue. I'm getting emails from git guardian
+    //which is something that detects secrets being reveled in you git hub. The emails seem to correspond
+    //with me connecting to heroku. I never signed up for git guardian. idk if that's something that 
+    //heroku has built in. oh no actually it seems to coincide with me pushing things to my github.
+    //which is even wierder cause I'm preatty sure I never signed up for any git guardian. 
     // console.log(req.headers);
     obj = {
         isLoggedIn: user.isLoggedIn,
