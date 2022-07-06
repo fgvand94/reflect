@@ -60,7 +60,7 @@ const pool = new Pool({
 //   password: '113f7218eb8e0bf8dba0e6e47d746dab7c53cd48094d64bf12d968922b824f74',
 //   port: 5432,
     connectionString: process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: false }
+    ssl: false
 });
 
 //no pg_hba.conf entry for host "34.229.119.37", user "yhizmpuqryqnjq", database "dcnebe88p7tv3j"
