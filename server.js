@@ -1633,22 +1633,19 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
         person: user.userName,
         view: {},
     }
-   
+
     let lastSlash = req.url.lastIndexOf('/');
     let threadid = req.url.lastIndexOf('-');
     let title = req.url.substring(lastSlash + 1, threadid).replaceAll('-', ' ');
-    console.log('yeah');
-    console.log(req.url);
-    console.log(req.url.substring(36, lastSlash).toLowerCase());
+   
     const offset = Math.ceil(req.url.slice(req.url.lastIndexOf('_') +3) * 20);
-    //I'm thinking I could probably make the 43 a variable that basically finds the
-    //number of the substing forum and bases it off that so that it'll work on local
-    //host or any url but I'm just going to hard code it for now. 
-    if (req.url.substring(36, lastSlash).toLowerCase() === 'camping' || req.url.substring(36, lastSlash).toLowerCase() === 'hiking' ||
-    req.url.substring(36, lastSlash).toLowerCase() === 'backpacking' || req.url.substring(36, lastSlash).toLowerCase() === 'fish' ||
-    req.url.substring(36, lastSlash).toLowerCase() === 'mammals' || req.url.substring(36, lastSlash).toLowerCase() === 'reptiles' ||
-    req.url.substring(36, lastSlash).toLowerCase() === 'trees' || req.url.substring(36, lastSlash).toLowerCase() === 'vegitation' ||
-    req.url.substring(36, lastSlash).toLowerCase() === 'flowers' || req.url.substring(36, lastSlash).toLowerCase() === 'mushrooms') {
+    console.log(req.url.substring(8, lastSlash).toLowerCase());
+    if (req.url.substring(8, lastSlash).toLowerCase() === 'camping' || req.url.substring(8, lastSlash).toLowerCase() === 'hiking' ||
+    req.url.substring(8, lastSlash).toLowerCase() === 'backpacking' || req.url.substring(8, lastSlash).toLowerCase() === 'fish' ||
+    req.url.substring(8, lastSlash).toLowerCase() === 'mammals' || req.url.substring(8, lastSlash).toLowerCase() === 'reptiles' ||
+    req.url.substring(8, lastSlash).toLowerCase() === 'trees' || req.url.substring(8, lastSlash).toLowerCase() === 'vegitation' ||
+    req.url.substring(8, lastSlash).toLowerCase() === 'flowers' || req.url.substring(8, lastSlash).toLowerCase() === 'mushrooms') {
+        console.log('first if');
     
     //I should maybe put these in a next route
         if (req.url.substring(lastSlash + 1) === 'Introduce-yourself') {
@@ -1665,15 +1662,15 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
 
 
         console.log(req.url.slice(threadid + 1, req.url.lastIndexOf('_')));
-        console.log(req.url.substring(36, lastSlash).toLowerCase());
+        console.log(req.url.substring(8, lastSlash).toLowerCase());
         console.log(title);
-        pool.query(`select users.name, users.photo, ${req.url.substring(36, lastSlash).toLowerCase()}posts.content, ${req.url.substring(36, lastSlash).toLowerCase()}threads.title,
-        ${req.url.substring(36, lastSlash).toLowerCase()}posts.id, count(*) over() as full_count
-        from ${req.url.substring(36, lastSlash).toLowerCase()}posts, ${req.url.substring(36, lastSlash).toLowerCase()}threads, users 
-        where ${req.url.substring(36, lastSlash).toLowerCase()}posts.threadid = '${req.url.slice(threadid + 1, req.url.lastIndexOf('_'))}' 
-        and ${req.url.substring(36, lastSlash).toLowerCase()}posts.username = users.name
-        and ${req.url.substring(36, lastSlash).toLowerCase()}threads.title = '${title}'
-        order by ${req.url.substring(36, lastSlash).toLowerCase()}posts.id asc
+        pool.query(`select users.name, users.photo, ${req.url.substring(8, lastSlash).toLowerCase()}posts.content, ${req.url.substring(8, lastSlash).toLowerCase()}threads.title,
+        ${req.url.substring(8, lastSlash).toLowerCase()}posts.id, count(*) over() as full_count
+        from ${req.url.substring(8, lastSlash).toLowerCase()}posts, ${req.url.substring(8, lastSlash).toLowerCase()}threads, users 
+        where ${req.url.substring(8, lastSlash).toLowerCase()}posts.threadid = '${req.url.slice(threadid + 1, req.url.lastIndexOf('_'))}' 
+        and ${req.url.substring(8, lastSlash).toLowerCase()}posts.username = users.name
+        and ${req.url.substring(8, lastSlash).toLowerCase()}threads.title = '${title}'
+        order by ${req.url.substring(8, lastSlash).toLowerCase()}posts.id asc
         limit 20 offset ${offset - 20}`, (err, resp) => {
             
             if (err) {
@@ -1682,7 +1679,7 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
             };
            
             obj.pageArray = [];
-            obj.category = req.url.substring(36, lastSlash).toLowerCase();
+            obj.category = req.url.substring(8, lastSlash).toLowerCase();
             obj.threadName = req.url.slice(lastSlash + 1, req.url.lastIndexOf('-'));
             obj.threadId = req.url.slice(threadid + 1, req.url.lastIndexOf('_'));
             console.log(obj.threadName);
