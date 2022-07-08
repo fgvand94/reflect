@@ -1664,7 +1664,7 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
         console.log(req.url.slice(threadid + 1, req.url.lastIndexOf('_')));
         console.log(req.url.substring(8, lastSlash).toLowerCase());
         console.log(title);
-        pool.query(`select users.name, users.photo, ${req.url.substring(8, lastSlash).toLowerCase()}posts.content, ${req.url.substring(8, lastSlash).toLowerCase()}threads.title,
+        pool.query(`select users.name, ${req.url.substring(8, lastSlash).toLowerCase()}posts.content, ${req.url.substring(8, lastSlash).toLowerCase()}threads.title,
         ${req.url.substring(8, lastSlash).toLowerCase()}posts.id, count(*) over() as full_count
         from ${req.url.substring(8, lastSlash).toLowerCase()}posts, ${req.url.substring(8, lastSlash).toLowerCase()}threads, users 
         where ${req.url.substring(8, lastSlash).toLowerCase()}posts.threadid = '${req.url.slice(threadid + 1, req.url.lastIndexOf('_'))}' 
