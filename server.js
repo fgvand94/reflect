@@ -1633,11 +1633,11 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
         person: user.userName,
         view: {},
     }
-
+   
     let lastSlash = req.url.lastIndexOf('/');
     let threadid = req.url.lastIndexOf('-');
     let title = req.url.substring(lastSlash + 1, threadid).replaceAll('-', ' ');
-   
+    console.log(req.url.substring(43, lastSlash).toLowerCase());
     const offset = Math.ceil(req.url.slice(req.url.lastIndexOf('_') +3) * 20);
     //I'm thinking I could probably make the 43 a variable that basically finds the
     //number of the substing forum and bases it off that so that it'll work on local
