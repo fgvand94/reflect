@@ -1627,7 +1627,7 @@ app.get(`/forums/([^/]+):search`, (req, res) => {
 
 
 app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
-    
+    console.log('yada');
     let obj = {
         isLoggedIn: user.isLoggedIn,
         person: user.userName,
