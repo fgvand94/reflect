@@ -6,11 +6,11 @@ let password2 = document.querySelector('.password2');
 
 
 
-if (window.location.href === 'http://localhost:5000/confirm-email') {
+if (window.location.href === 'http://reflect-forum.herokuapp.com/confirm-email') {
     password.style.display = 'none';
 };
 
-if (window.location.href.slice(0, 36) === 'http://localhost:5000/reset-password') {
+if (window.location.href.slice(0, 36) === 'http://reflect-forum.herokuapp.com/reset-password') {
     console.log('password reset');
     email.style.display = 'none';
     password2.style.display = 'block';
@@ -60,7 +60,7 @@ form.addEventListener('submit', (e) => {
         email.value = '';
         password.value = '';
         if (this.responseText === 'success') {
-            window.location = 'http://localhost:5000/forums';
+            window.location = 'http://reflect-forum.herokuapp.com/forums';
         };
 
         if (this.responseText === 'Not verified') {
