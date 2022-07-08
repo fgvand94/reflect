@@ -815,7 +815,7 @@ app.post('/user-*', (req, res) => {
         column = 'photos';
         data = req.body.photos;
         pool.query(`select id from pictures order by id desc limit 1`, (err, resp) => {
-            if (resp.rows[0].id) {
+            if (resp.rows[0]) {
                 let id = resp.rows[0].id + 1;
             } else {
                 let id = 1;
