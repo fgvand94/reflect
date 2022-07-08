@@ -816,10 +816,11 @@ app.post('/user-*', (req, res) => {
         data = req.body.photos;
         pool.query(`select id from pictures order by id desc limit 1`, (err, resp) => {
             console.log(resp.rows.length);
+            let id;
             if (resp.rows.length !== 0) {
-                let id = resp.rows[0].id + 1;
+                id = resp.rows[0].id + 1;
             } else {
-                let id = 1;
+                id = 1;
             };
             
             pool.query(`insert into pictures (id, photo, username) values ($1, $2, $3) `,
