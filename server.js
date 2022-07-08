@@ -1638,6 +1638,7 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
     let threadid = req.url.lastIndexOf('-');
     let title = req.url.substring(lastSlash + 1, threadid).replaceAll('-', ' ');
     console.log('yeah');
+    console.log(req.url);
     console.log(req.url.substring(36, lastSlash).toLowerCase());
     const offset = Math.ceil(req.url.slice(req.url.lastIndexOf('_') +3) * 20);
     //I'm thinking I could probably make the 43 a variable that basically finds the
