@@ -15,7 +15,7 @@ if (post === 'new-thread' || post === 'Introduce-yourself') {
 // navPost.innerHTML = post.substring(0, threadid).replaceAll('-', ' ');
 console.log(post);
 
-let nav = windowFull.replace("http://localhost:5000/forums/", "");
+let nav = windowFull.replace("https://reflect-forum.herokuapp.com/forums/", "");
 let category = nav.substring(0, nav.lastIndexOf('/'));
 let categoryUpper = category.charAt(0).toUpperCase() + category.slice(1);
 
