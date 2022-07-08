@@ -1,7 +1,7 @@
 let forumNav = document.querySelector('.forumNav');
 let windowLength = window.location.href.length;
-let nav = window.location.href.replace("http://reflect-forum.herokuapp.com/forums/", "");
-let navAll = window.location.href
+let nav = window.location.href.replace("https://reflect-forum.herokuapp.com/forums/", "");
+let navAll = window.location.href;
 let navUpper = nav.charAt(0).toUpperCase() + nav.slice(1);
 let page = document.querySelector('.page-container');
 let pg = document.querySelector('.pages');
