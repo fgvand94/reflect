@@ -815,9 +815,14 @@ app.post('/user-*', (req, res) => {
         column = 'photos';
         data = req.body.photos;
         pool.query(`select id from pictures order by id desc limit 1`, (err, resp) => {
-            let id = resp.rows[0].id + 1 || 0;//if length = 0 then 1 or yada. 
-            pool.query(`insert into pictures (id, username, photo) values ($1, $2, $3) `,
-            [id, user.userName, data], (err, resp) => {
+            if (resp.rows[0].id) {
+                let id = resp.rows[0].id + 1;
+            } else {
+                let id = 1;
+            };
+            
+            pool.query(`insert into pictures (id, photo, username) values ($1, $2, $3) `,
+            [id, data, user.userName], (err, resp) => {
                 if (err) {
                     console.log(err);
                 }
