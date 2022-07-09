@@ -50,8 +50,8 @@ newPost.addEventListener('submit', (e) => {
     const lastSlash = windowFull.lastIndexOf('/');
     const lastSlashSlice = window.location.href.slice(0, windowFull.lastIndexOf('/'));
     const nextLastSlash = lastSlashSlice.lastIndexOf('/');
-    const category = window.location.href.substring(29, nextLastSlash);
-    const thread = windowFull.slice(nextLastSlash + 1, lastSlash);
+   
+    // const thread = windowFull.slice(nextLastSlash + 1, lastSlash);
     const threadId = thread.slice(thread.lastIndexOf('-') + 1, thread.lastIndexOf('_'));
     console.log(thread);
     console.log(threadId);
