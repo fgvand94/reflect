@@ -1806,6 +1806,7 @@ app.get('/forums/([^/]+)/([^/]+)/add-a-post', (req, res) => {
 });
 
 app.post('/forums/([^/]+)/([^/]+)/add-a-post', (req, res) => {
+    console.log('1');
     let date_ob = new Date();
 
     let date = ("0" + date_ob.getDate()).slice(-2);
@@ -1834,7 +1835,7 @@ app.post('/forums/([^/]+)/([^/]+)/add-a-post', (req, res) => {
     threadEnd.substring(8, nextLastSlash).toLowerCase() === 'mammals' || threadEnd.substring(8, nextLastSlash).toLowerCase() === 'reptiles' ||
     threadEnd.substring(8, nextLastSlash).toLowerCase() === 'trees' || threadEnd.substring(8, nextLastSlash).toLowerCase() === 'vegitation' ||
     threadEnd.substring(8, nextLastSlash).toLowerCase() === 'flowers' || threadEnd.substring(8, nextLastSlash).toLowerCase() === 'mushrooms') {
-
+        console.log('2');
         pool.query(`select id, threadid from ${threadEnd.substring(8, nextLastSlash)}posts order by id desc limit 1`, (err, resp) => {
             let id = resp.rows[0].id + 1;
             // let threadid = req.url.slice;
@@ -1847,7 +1848,9 @@ app.post('/forums/([^/]+)/([^/]+)/add-a-post', (req, res) => {
                     console.log(err);
                 }
                 console.log('insert');
-                pool.query(`update ${threadEnd.substring(8, nextLastSlash)}threads set time = $2 where id = $1`, [req.body.threadId, fullTime])
+                pool.query(`update ${threadEnd.substring(8, nextLastSlash)}threads set time = $2 where id = $1`, [req.body.threadId, fullTime], (error, res) => {
+                    res.send('success');
+                })
             });
         })
     }

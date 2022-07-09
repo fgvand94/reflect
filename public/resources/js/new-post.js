@@ -59,12 +59,18 @@ newPost.addEventListener('submit', (e) => {
     let body = {
         threadId: threadId
     }
+    console.log(`forums/${category}/${thread}/add-a-post?message=${message.value.replace(/\n/g, '<br>')}`);
 
     let xhr = new XMLHttpRequest();
     xhr.open('POST', `/forums/${category}/${thread}/add-a-post?message=${message.value.replace(/\n/g, '<br>')}`);
     xhr.setRequestHeader('content-type', 'application/json');
     xhr.onload = function () {
-        window.location.href = `/forums/${category}/${thread}`;   
+        if (this.responseText === 'success') {
+        window.location.href = `/forums/${category}/${thread}`;
+        } else {
+            alert('post failed');
+        }
+
     }
   
     xhr.send(JSON.stringify(body));
