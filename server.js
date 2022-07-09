@@ -279,7 +279,7 @@ app.post('/confirm-email', (req, res) => {
                 from: 'portfolliotemp@gmail.com',
                 to: email,
                 subject: `Password reset`,
-                html: `Reset your password <a href="http://localhost:5000/reset-password?email=${email}&token=${value}">here</a>`,     
+                html: `Reset your password <a href="http://reflect-forum.herokuapp.com/reset-password?email=${email}&token=${value}">here</a>`,     
               }
             
               transporter.sendMail(mailOptions, (error, info)=> {
@@ -460,7 +460,7 @@ app.post('/register', (req, res) => {
                   from: 'portfolliotemp@gmail.com',
                   to: email,
                   subject: `Email verification`,
-                  html: `Go to the link <a href="http://localhost:5000/verify?email=${email}&token=${value2}">here</a> to verify your account`,     
+                  html: `Go to the link <a href="http://reflect-forum.herokuapp.com/verify?email=${email}&token=${value2}">here</a> to verify your account`,     
                 }
               
                 transporter.sendMail(mailOptions, (error, info)=> {
