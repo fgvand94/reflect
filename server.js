@@ -1274,7 +1274,7 @@ app.get('/forums', (req, res) => {
                 res.render('index', {obj});
                 return;
             } 
-            
+            console.log(resp.rows);
             if (resp.rows[0].name === user.userName && resp.rows[0].email === user.email
                 && resp.rows[0].password === user.password && resp.rows[0].session === req.headers.cookie.substring(10)) {
                     console.log('logged in is true');
