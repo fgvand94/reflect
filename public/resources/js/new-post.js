@@ -60,6 +60,7 @@ newPost.addEventListener('submit', (e) => {
         threadId: threadId
     }
     console.log(`forums/${category}/${thread}/add-a-post?message=${message.value.replace(/\n/g, '<br>')}`);
+    console.log(`forums/${category}/${thread}/add-a-post?message=${message.value}`);
 
     let xhr = new XMLHttpRequest();
     xhr.open('POST', `/forums/${category}/${thread}/add-a-post?message=${message.value.replace(/\n/g, '<br>')}`);
