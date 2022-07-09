@@ -17,7 +17,7 @@ let windowFull = window.location.href;
 
 
 
-let nav = windowFull.replace("http://reflect-forum.herokuapp.com/forums/", "");
+let nav = windowFull.replace("https://reflect-forum.herokuapp.com/forums/", "");
 let category1 = nav.substring(0, nav.lastIndexOf('/'));
 let category = category1.substring(0, category1.lastIndexOf('/'));
 let thread = category1.substring(category1.lastIndexOf('/') + 1);
