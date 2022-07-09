@@ -109,7 +109,7 @@ allPosts.addEventListener('click', (e) => {
             //i forget this (/\s+/g, '-') is for all spaces so that would have helped
             //some of it. maybe I can make it work better now. 
             let obj = {
-                category: window.location.href.slice(29, window.location.href.lastIndexOf('/')),
+                category: category,
                 content: contentBreaks,
                 id: document.querySelector(`.update-form${e.target.className.slice(23)}`).getAttribute('data-id')
             }
