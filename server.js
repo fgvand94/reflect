@@ -1848,9 +1848,15 @@ app.post('/forums/([^/]+)/([^/]+)/add-a-post', (req, res) => {
                     console.log(err);
                 }
                 console.log('insert');
-                pool.query(`update ${threadEnd.substring(8, nextLastSlash)}threads set time = $2 where id = $1`, [req.body.threadId, fullTime], (error, res) => {
-                    res.send('success');
-                })
+                res.send('success');
+
+                //have time in threads to update to latest post. I don't really need that anymore cause the order of
+                //the posts aren't based off the post time anymore but the post id. IDK maybe I'll keep it just as a time
+                //stamp for the origional post. Some forums have a time by the latest post on the thread though but if I want
+                //to do that it makes more sense to just put it in the posts table. 
+                // pool.query(`update ${threadEnd.substring(8, nextLastSlash)}threads set time = $2 where id = $1`, [req.body.threadId, fullTime], (error, res) => {
+                //     res.send('success');
+                // })
             });
         })
     }
