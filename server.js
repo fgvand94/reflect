@@ -28,6 +28,14 @@ app.use(express.urlencoded({ limit: "50mb", extended: true, parameterLimit: 5000
 //above addons for some reason. body parser is deprecated... extended: This option allows to choose between parsing the URL-encoded data with the querystring library (when false) or the qs library (when true). The “extended” syntax allows for rich objects and arrays to be encoded into the URL-encoded format, allowing for a JSON-like experience with URL-encoded. For more information, please see the qs library.
 app.use(express.raw({ limit: "50mb" }));
 
+//all this user info carries over devices so I need to find a way around that. There's npm packeges that do
+//this authorization stuff for you but I want to be able to create it myself. IDK how but I'm thinking maybe
+//I could somehow use the ip address of the device and have a different user object depending on the ip address.
+//something to that effect at least. I'm pretty sure I could make it work by creating something in my database
+//everytime someone visits with the ip address and do it like that but that seems like alot of stuff to put
+//in my database. That would be wierd having a bunch of ip addresses in my database for people who aren't even
+//registered lol. maybe I could store the ip address in local storage or something but then there's safety concerns
+//with stuff like that. I'll have to look again at how secure the different storages are.
 let user = {
     userName: "",
     password: "",
@@ -149,8 +157,9 @@ app.post('/login', (req, res) => {
     
     const {email, password} = req.body;
   
-    
+    console.log(email);
     pool.query(`select * from users where email = '${email}'`, (err, resp) => {
+        console.log('what');
         console.log(resp.rows.email);
         if (err) {
             return console.log(err);
@@ -160,7 +169,7 @@ app.post('/login', (req, res) => {
             res.sendStatus(400);
             return;
         };
-
+        console.log('what2');
         text = password;
         key = resp.rows[0].salt;
   
@@ -890,7 +899,7 @@ app.post('/new-conversation', (req, res) => {
                 }
 
                 let id;
-                
+
                 if (response.rows.length !== 0) {
                     id = response.rows[0].id + 1;
                 } else {
