@@ -226,9 +226,10 @@ app.post('/login', (req, res) => {
             res.send('success');
             return;
         };
-
-        res.send('invalid');
+        alert('invalid email or password');
         console.log('invalid');
+        res.send('invalid');
+        
   
     });
     
@@ -288,7 +289,7 @@ app.post('/confirm-email', (req, res) => {
                 from: 'portfolliotemp@gmail.com',
                 to: email,
                 subject: `Password reset`,
-                html: `Reset your password <a href="http://reflect-forum.herokuapp.com/reset-password?email=${email}&token=${value}">here</a>`,     
+                html: `Reset your password <a href="https://reflect-forum.herokuapp.com/reset-password?email=${email}&token=${value}">here</a>`,     
               }
             
               transporter.sendMail(mailOptions, (error, info)=> {
