@@ -469,6 +469,7 @@ app.post('/register', (req, res) => {
                     res.send('error');
                   }else {
                     console.log('email sent');
+                    console.log
                     pool.query(`insert into users (id, name, email, password, salt, verified, verificationtoken)
                     values ($1, $2, $3, $4, $5, $6, $7)`, [id, userName, email, value, key, false, value2], (error, response) => {
                         if (error) {
@@ -508,12 +509,14 @@ app.get('/verify', (req, res) => {
         }
   
         if (req.query.token === resp.rows[0].verificationtoken && req.query.email === resp.rows[0].email) {
+            console.log('verifying');
             pool.query(`update users set verified = $2, verificationtoken = $3
             where email = $1`, [req.query.email, true, null], (err, response) => {
                 if (err) {
                     console.log('in update')
                    return console.log(err);
                 }
+                console.log('updated');
                 res.redirect('/login');
       
             });
