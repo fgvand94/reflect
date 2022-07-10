@@ -10,7 +10,7 @@ if (window.location.href === 'https://reflect-forum.herokuapp.com/confirm-email'
     password.style.display = 'none';
 };
 
-if (window.location.href === 'https://reflect-forum.herokuapp.com/reset-password') {
+if (window.location.href.slice(0, 50) === 'https://reflect-forum.herokuapp.com/reset-password') {
     console.log('password reset');
     email.style.display = 'none';
     password2.style.display = 'block';
@@ -35,7 +35,7 @@ if (window.location.href === 'https://reflect-forum.herokuapp.com/reset-password
         }
     })
 };
-console.log(window.location.href)
+console.log(window.location.href.slice(0, 50));
 
 
 
