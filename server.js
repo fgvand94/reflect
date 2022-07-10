@@ -448,10 +448,9 @@ app.post('/register', (req, res) => {
               
                 const transporter = nodemailer.createTransport ({
                   service: 'gmail',
+                  host: 'https://reflect-forum.herokuapp.com',
                   auth: {
                     user: 'portfolliotemp@gmail.com',
-                    //I need to find out how to hide these passwords on my
-                    //file
                     pass: 'fourothreepm10!'
                   }
                 })
