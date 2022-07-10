@@ -460,7 +460,7 @@ app.post('/register', (req, res) => {
                   from: 'portfolliotemp@gmail.com',
                   to: email,
                   subject: `Email verification`,
-                  html: `Go to the link <a href="http://reflect-forum.herokuapp.com/verify?email=${email}&token=${value2}">here</a> to verify your account`,     
+                  html: `Go to the link <a href="https://reflect-forum.herokuapp.com/verify?email=${email}&token=${value2}">here</a> to verify your account`,     
                 }
               
                 transporter.sendMail(mailOptions, (error, info)=> {

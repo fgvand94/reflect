@@ -25,7 +25,7 @@ register.addEventListener('submit', (e) => {
         userName.value = '';
         email.value = '';
         password.value = '';
-        window.location = "http://localhost:5000/login?";
+        window.location = "https://reflect-forum.herokuapp.com/login?";
       } else {
         alert('ERROR');
       }
