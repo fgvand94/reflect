@@ -281,7 +281,7 @@ app.post('/confirm-email', (req, res) => {
                   user: 'portfolliotemp@gmail.com',
                   //I need to find out how to hide these passwords on my
                   //file
-                  pass: 'fourothreepm10!'
+                  pass: 'zvyvrysuzkjqkabf'
                 }
               })
             
