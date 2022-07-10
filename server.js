@@ -505,7 +505,8 @@ app.get('/verify', (req, res) => {
         };
 
         if (resp.rows[0].verificationtoken === null || resp.rows[0].verified) {
-            return console.log('already verified');
+            console.log('already verified');
+            return res.redirect('/login');;
         }
   
         if (req.query.token === resp.rows[0].verificationtoken && req.query.email === resp.rows[0].email) {
@@ -517,7 +518,7 @@ app.get('/verify', (req, res) => {
                    return console.log(err);
                 }
                 console.log('updated');
-                // res.redirect('/login');
+                return res.redirect('/login');
       
             });
             return;
