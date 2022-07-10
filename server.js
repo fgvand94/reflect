@@ -329,7 +329,8 @@ app.get('/reset-password', (req, res) => {
         confirm: false,
         reset: true,
     }
-
+    console.log('reset password');
+    console.log(obj);
     res.render('login', {obj});
 })
 
