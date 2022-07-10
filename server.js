@@ -393,7 +393,7 @@ app.get('/register', (req, res) => {
 
 app.post('/register', (req, res) => {
     const {userName, email, password} = req.body;
-
+    console.log(req.body);
     pool.query(`select email from users where email = '${email}'`, (err, resp) => {
         if (resp.rows.length > 0) {
             console.log(resp.rows[0].email + " already exists");
