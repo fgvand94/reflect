@@ -867,8 +867,14 @@ app.post('/new-conversation', (req, res) => {
             // let seconds = date_ob.getSeconds();
         
             let fullTime = year + "-" + month + "-" + date;
+            console.log(resp.rows);
+            let conversationId;
+            if (resp.rows.length !== 0) {
+                conversationId = resp.rows[0].conversationid + 1;
+            } else {
+                conversationId = 1;
+            };
 
-            let conversationId = resp.rows[0].conversationid + 1;
             pool.query(`insert into conversations (conversationid, datecreated, title, user2name, user1name)
             values ($1, $2, $3, $4, $5)`, [conversationId, fullTime, req.body.title, req.body.user, user.userName], (err, response) => {
                 if(err) {
@@ -883,7 +889,14 @@ app.post('/new-conversation', (req, res) => {
                     return console.log(error);
                 }
 
-                let id = response.rows[0].id + 1;
+                let id;
+                
+                if (response.rows.length !== 0) {
+                    id = response.rows[0].id + 1;
+                } else {
+                    id = 1;
+                }
+                
                 pool.query(`insert into conversationposts (id, convid, datecreated, content, username)
                 values ($1, $2, $3, $4, $5)`, [id, conversationId, fullTime, req.body.message, user.userName], (err, resp) => {
                     if (err) {
