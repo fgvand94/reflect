@@ -51,7 +51,7 @@ form.addEventListener('submit', (e) => {
         password2: password2.value
     }
 
-   console.log(body);
+   
 
     let xhr = new XMLHttpRequest();
     xhr.open('POST', window.location.href);
