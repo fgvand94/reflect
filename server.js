@@ -517,7 +517,7 @@ app.get('/verify', (req, res) => {
                    return console.log(err);
                 }
                 console.log('updated');
-                res.redirect('/login');
+                // res.redirect('/login');
       
             });
             return;
