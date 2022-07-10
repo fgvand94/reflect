@@ -373,6 +373,7 @@ app.post('/reset-password', (req, res) => {
                     if (err) {
                         return console.log(err);
                     }
+                    res.send('success');
                 })
                 
                 return;
