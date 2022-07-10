@@ -448,11 +448,11 @@ app.post('/register', (req, res) => {
               
                 const transporter = nodemailer.createTransport ({
                   service: 'gmail',
-                  host: 'https://reflect-forum.herokuapp.com',
-                  auth: {
-                    user: 'portfolliotemp@gmail.com',
-                    pass: 'fourothreepm10!'
-                  }
+                //   host: 'https://reflect-forum.herokuapp.com',
+                //   auth: {
+                //     user: 'portfolliotemp@gmail.com',
+                //     pass: 'fourothreepm10!'
+                //   }
                 })
               
                 const mailOptions = {
