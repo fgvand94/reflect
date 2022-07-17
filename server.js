@@ -75,6 +75,8 @@ const pool = new Pool({
 
 console.log(pool.user);
 app.get('/', (req, res) => {
+   console.log(req.getHeader('Set-Cookie'));
+   console.log(req.getHeader('Cookie'));
     console.log(user);
     console.log(req.headers);
     console.log(req.header);
