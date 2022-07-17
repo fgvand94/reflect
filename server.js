@@ -75,6 +75,7 @@ const pool = new Pool({
 
 console.log(pool.user);
 app.get('/', (req, res) => {
+    console.log(user);
     console.log(req.headers);
     console.log(req.header);
     let obj = {
@@ -1283,7 +1284,7 @@ app.get('/forums/([^/]+)/search-results', (req, res) => {
 
 app.get('/forums', (req, res) => {
     console.log('1');
-
+    console.log(user);
     let obj = {
         isLoggedIn: user.isLoggedIn,
         person: user.userName,
