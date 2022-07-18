@@ -19,7 +19,6 @@
             <img src="{{obj.photo}}" class="user-photo">
 			<h1>{{obj.person}}</h1>			
 		</div>
-		{{!-- I'll make this all look better later I'm just getting it all working now --}}
 		{{#if obj.userMatch}}
 		<div class="info">
 			<h2 class="bio">Bio:</h2>
@@ -30,8 +29,6 @@
 			</div>
 			<h3 class="bio-text">{{obj.bio}}</h3>
 			<h4><a class="update-bio">Update bio</a></h4>
-			{{!-- I should maybe make it so all the pictures keep their aspect ratios
-			Also need to fine to for responsiveness but I'll do that later. --}}
 			<h2>Images:</h2>
 			<div class="image-enlarge">
 				<h2 ><a class="exit">x</a></h2>
@@ -44,8 +41,6 @@
 			{{/each}}		
 			</div>
 			<h4><a  class="update-picture">add pictures<a></h4>
-			{{!-- Look up how to make a small window pop up like how facebook 
-			does. idk if I want to do it like that but it would be good to know --}}
 			<div class="photo-form">
 				<input type="file" class="photo-input" accept="image/png, image/jpeg"><br>
 				<h3 class="photo-upload"><a>Upload</a></h3>
@@ -65,7 +60,6 @@
 					</div>
 					<div class="other-info">
 						<h3>Replies: {{this.replies}}</h3>
-						{{!--  --}}
 						<h4><a href="/user-{{this.replyUser}}">{{this.replyUser}}</a> {{this.replyDate}}</h4>
 					</div>					
 				</div>
@@ -75,10 +69,6 @@
 			<form>
 				<input class="user" type="text" placeholder="users name">
 				<input class="title" type="text" placeholder="subject"> <br>
-				{{!-- one forum I looked at used a content editable for there
-				form so you got to be able to change the fact that it extends. 
-				I'm going to go back and look cause they had certain attributes on
-				there that I've not used --}}
 				<textarea  name="message" type="text" class="message" rows="10" cols="50"></textarea>
 				<h3 class="submit"><a href="/new-conversation">Create</a></h3>
 			</form>
@@ -88,8 +78,6 @@
 			<h2>bio:</h2>
 			<h3 class="bio-text">{{obj.bio}}</h3>		
 			<h2>add pictures:</h2>
-			{{!-- I need to make it so you can click and get a full size view
-			of the picture.  --}}
 			<h2>Images:</h2>
 			<div class="image-enlarge">
 				<h2 ><a class="exit">x</a></h2>
@@ -102,10 +90,6 @@
 		</div>
 		{{/if}}
 	</main>
-	{{!-- if I want the images to be enlargable when not logged in i'll either
-	have to create a seperate js file for logged out or create more logic
-	in my js file. I kind of like it not being linked at all when logged out
-	though so idk I'll do that later.  --}}
 	{{#if obj.userMatch}}
 	<script src="../resources/js/user-page.js"></script> 
 	{{else}}

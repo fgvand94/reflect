@@ -3,8 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>Reflect</title>
-    <link rel="stylesheet" type="text/css" href="../resources/css/threads.css">
-    <link rel="stylesheet" type="text/css" href="../../resources/css/threads.css">           
+    <link rel="stylesheet" type="text/css" href="../resources/css/threads.css">          
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet">
@@ -52,23 +51,6 @@
             </div>			
         </div>
         <div class="column-container">  
-            {{!-- I should probably put these in the database. Or atleast the introduce
-            yourself one. I don't know if I even want to keep the introduce yoursel
-            thread though. they're throwing an error from the js file becase posts[i] isn't
-            defined in them. it's not a big deal but I could fix it by moving everything to
-            the back end like I was thinking. Or I could just create a value in the object
-            put it on a data piece in something above the loop and use that as in if this
-            in the js file to negate the whole thing if it is on of these two threads. 
-            New thread doesn't really need to be moved
-            to the database but If I keep introduce yourself it will cause people will
-            have to post. I also want to get rid of the page number and the id on newthread
-            but I'm not to worried about it right now. shouldn't be to hard to fix. If I want
-            to keep a thread at the top though I could just put it as its own thing
-            in the obj and them place it in manually at the top or loop through the top
-            threads that I have and keep them seperate.  a lot of the threads don't
-            work when you click on them but that's just becausse I never created a post
-            when I made them which no thread is going to be created without a post of
-            somekind in it so I don't think I really even need to address that. --}}
             <h3 class="new-thread"><a href="/forums/{{obj.category}}/new-thread" data-id="0" class="newthread">New Thread</a></h3>  
             <div class="threads">                       
                 <h2 class="thread"><a href="/forums/{{obj.category}}/Introduce-yourself" data-id="0" class="thread1">Introduce yourself</a></h2>
@@ -76,8 +58,6 @@
             {{#each obj.view}}
             <div class="threads">
                 <div class="thread-info">
-                    {{!-- <h2 class="thread"><a class="thread" data-id="{{this.id}}" >{{this.thread}}</a></h2>  --}}
-
                     <h2 class="thread"><a class="thread" data-id="{{this.id}}" href="/forums/{{../obj.category}}/{{this.threadReplace}}-{{this.id}}_pg1">{{this.thread}}</a></h2> 
                     <h4 class="user"><a href="/user-{{this.user}}">{{this.user}}</a></h4>
                 </div>

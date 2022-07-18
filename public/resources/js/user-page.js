@@ -40,7 +40,7 @@ bioButton.addEventListener('click', (e) => {
     let body = {
         bio: bioInput.value
     }
-    console.log(body.bio)
+    console.log(body.bio);
 
     bioForm.style.display = 'none';
 
@@ -76,7 +76,7 @@ photoUpload.addEventListener('click', () => {
     xhr.open('POST', `${window.location.href.slice(window.location.href.lastIndexOf('/'))}`);
     xhr.setRequestHeader('content-type', 'application/json');
     xhr.onload = function () {
-        console.log(this.responseText)
+        console.log(this.responseText);
         if (this.responseText === 'success') {
             location.reload();          
         }
@@ -96,7 +96,7 @@ image.addEventListener('click', (e) => {
     if (e.target.className === 'photos') {
     imageEnlarge.style.display = 'block';
     enlargedImage.src = e.target.src;
-    console.log(e.target.src);
+    
     }
 })
 
@@ -111,7 +111,7 @@ setPicture.addEventListener('click', () => {
         data: enlargedImage.src
     }
 
-    console.log(typeof(body.data));
+   
     let xhr = new XMLHttpRequest();
     xhr.open('PUT', '/updatePhoto');
     xhr.setRequestHeader('content-type', 'application/json');
@@ -131,7 +131,7 @@ newConversation.addEventListener('click', (e) => {
         title: conversationTitle.value,
         message: conversationContent.value
     }
-    console.log(body);
+ 
     let xhr = new XMLHttpRequest();
 
     xhr.open('POST', '/new-conversation');

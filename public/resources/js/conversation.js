@@ -1,6 +1,5 @@
 const addPost = document.querySelector('.add-post');
 const addButton = document.querySelector('.add-button');
-// const cancelButton = document.querySelector('.add-cancel');
 const addText = document.querySelector('.post-text');
 
 

@@ -47,26 +47,14 @@
                     </div>                      
                     <div class="post">
                         <h4><a href="/user-{{this.name}}" class="post-user posts{{@index}}" data-id="{{@last}}">{{this.name}}</a></h4>                      
-                        {{!-- putting everything in a pre tage will make all the spaces register.
-                        It doesn't retain the h4 tag that it's in though still registers anchor tags
-                        and any class name but for some reason the size from the hx doesn't stay.--}}
                         <pre><h4 class="content content{{@index}}">{{{this.content}}}</h4></pre>
-
-                        {{!-- The update isn't exactly behaving how I want. Everything updates fine but
-                        if you try to press enter or something to create paragraphs it doesn't seem to notice
-                        when you update it. also if you press tab it doesn't 5 space the form it just brings your highlite
-                        down to the next post. I'm thinking I could maybe write some js that would put a
-                        break whenever you hit enter but I'm thinking there's probably something built int
-                        that does that. also I'd have to remove it everytime you go up a line.
-                        also I need to look up how to take of the adjustable size for the text area--}}                     
+                     
                     </div>
                 </div>
                 {{/each}} 
             <form action="" method="PUT" class="add-post add-post{{@index}}" data-id="{{this.id}}">
                 <textarea id="post-text{{@index}}" class="post-text{{@index}} post-text" type="text" placeholder="" name="search" cols="50" rows="10"></textarea> <br>
-                {{!-- <pre><div  contenteditable="" class="update-text{{@index}} update-text"></div></pre> --}}
-                <h4 class="add-button{{@index}} add-button">Add post</h4>
-              
+                <h4 class="add-button{{@index}} add-button">Add post</h4>   
             </form>                             
             </div>
             <div class="page-container">
