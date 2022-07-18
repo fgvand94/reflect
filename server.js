@@ -2030,3 +2030,19 @@ app.listen(PORT, () => {
 //to do with that. so now if I change all the paths in my routes and js files
 //everything should be working like it was locally. 
 
+
+//got the sessions working independentlly on different devices. Seems to be functioning just like any other 
+//website at this point. I could add some bells and whistles and make it look nicer. add the trail search api
+//on the home page. Other than that I need to just make sure all of my security stuff is as good as it can be
+//create session timeouts and I think there's a way in the session packages to check the ip address so I'll see
+//if I can do that on my end. And then just learn whatever else I can as far as security goes. I think it's
+//decent though at this point but probably not amazing cause I don't know to much about that. It has https though
+//so that's good. The pictures load quick after they're chached so I think if I just upgrade my dynos it'll
+//be fine in that aspect to. Not to sure though. Oh yeah and maybe work on the add post and update parts so 
+//they're all fancy like other forums with things you can insert and just make sure that's all working as good
+//as possible. Then maybe make it so you can login with google and facebook and do 2fa. Certain pages like the user
+//page don't have a button to go back to the home page either so I should fix that. I didn't want the bar on
+//the top but I'm thinking I'll just put it in. I was going to think of some other button but idk might seem
+//wierd. Oh and I either need to take out the search bar in the posts page or make it so it will search through
+//the posts in the thread that your on. 
+

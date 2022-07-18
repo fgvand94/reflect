@@ -39,7 +39,7 @@
         <div class="top-bar">
             <div class="site-location">
                 {{#if obj.isSearch}}
-                <h3 class=""><a href="/forums">Home</a> > {{obj.category}} > {{obj.search}}</h3>
+                <h3 class=""><a href="/forums">Home</a> > <a href="/forums/{{obj.category}}">{{obj.category}}</a> > {{obj.search}}</h3>
                 {{else}}
                 <h3 class=""><a href="/forums">Home</a> > <span class="forumNav"></span> > All</h3>
                 {{/if}}
