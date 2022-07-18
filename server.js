@@ -36,13 +36,13 @@ app.use(express.raw({ limit: "50mb" }));
 //in my database. That would be wierd having a bunch of ip addresses in my database for people who aren't even
 //registered lol. maybe I could store the ip address in local storage or something but then there's safety concerns
 //with stuff like that. I'll have to look again at how secure the different storages are.
-// let user = {
-//     userName: "",
-//     password: "",
-//     email: "",
-//     id: 0,
-//     isLoggedIn: false
-// };
+let user = {
+    userName: "",
+    password: "",
+    email: "",
+    id: 0,
+    isLoggedIn: false
+};
 
 const alpha = Array.from(Array(26)).map((e, i) => i + 65);
 const alphabet = alpha.map((x) => String.fromCharCode(x));
