@@ -696,6 +696,7 @@ app.post('/user-*', (req, res) => {
 app.post('/new-conversation', (req, res) => {
     console.log(req.url.slice(req.url.lastIndexOf('-') + 1))
     console.log(req.body);
+ //combine this and the below user look up   
     pool.query(`select conversations.conversationid, users.name 
     from conversations, users
     where users.name = '${req.body.user}' order by conversations.conversationid desc limit 1`, (err, resp) => {
@@ -721,34 +722,36 @@ app.post('/new-conversation', (req, res) => {
             } else {
                 conversationId = 1;
             };
-
-            pool.query(`insert into conversations (conversationid, datecreated, title, user2name, user1name)
-            values ($1, $2, $3, $4, $5)`, [conversationId, fullTime, req.body.title, req.body.user, req.url.slice(req.url.lastIndexOf('-') + 1)], (err, response) => {
-                if(err) {
-                    return console.log(err);
-                }
-            });
-
-
-            pool.query(`select id from conversationposts order by id desc limit 1`, (error, response) => {
-                if (error) {
-                    return console.log(error);
-                }
-
-                let id;
-
-                if (response.rows.length !== 0) {
-                    id = response.rows[0].id + 1;
-                } else {
-                    id = 1;
-                }
+            pool.query (`select name from users where session = '${req.headers.cookie.slice(10)}'`, (er, re) => {
                 
-                pool.query(`insert into conversationposts (id, convid, datecreated, content, username)
-                values ($1, $2, $3, $4, $5)`, [id, conversationId, fullTime, req.body.message, user.userName], (err, resp) => {
-                    if (err) {
+                pool.query(`insert into conversations (conversationid, datecreated, title, user2name, user1name)
+                values ($1, $2, $3, $4, $5)`, [conversationId, fullTime, req.body.title, req.body.user, re.rows[0].name], (err, response) => {
+                    if(err) {
                         return console.log(err);
-                    };
-                    return res.send('success');
+                    }
+                });
+
+
+                pool.query(`select id from conversationposts order by id desc limit 1`, (error, response) => {
+                    if (error) {
+                        return console.log(error);
+                    }
+
+                    let id;
+
+                    if (response.rows.length !== 0) {
+                        id = response.rows[0].id + 1;
+                    } else {
+                        id = 1;
+                    }
+                    
+                    pool.query(`insert into conversationposts (id, convid, datecreated, content, username)
+                    values ($1, $2, $3, $4, $5)`, [id, conversationId, fullTime, req.body.message, re.rows[0].name], (err, resp) => {
+                        if (err) {
+                            return console.log(err);
+                        };
+                        return res.send('success');
+                    })
                 })
             })
 
