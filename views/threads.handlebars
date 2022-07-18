@@ -38,7 +38,11 @@
         <h1 class="main-header">Forums</h1>
         <div class="top-bar">
             <div class="site-location">
+                {{#if obj.isSearch}}
                 <h3 class=""><a href="/forums">Home</a> > {{obj.category}} > {{obj.search}}</h3>
+                {{else}}
+                <h3 class=""><a href="/forums">Home</a> > <span class="forumNav"></span> > All</h3>
+                {{/if}}
             </div>
             <div class="search">
                 <form method="GET" action="/forums/{{obj.category}}/search-results">
