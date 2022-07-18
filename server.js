@@ -78,7 +78,7 @@ app.get('/', (req, res) => {
 //    console.log(req.getHeader('Set-Cookie'));
 //    console.log(req.getHeader('Cookie'));
     console.log(user);
-    console.log(req.headers.cookie.splice(10));
+    console.log(req.headers.cookie.slice(10));
     console.log(req.header);
     let obj = {
         isLoggedIn: false,
@@ -87,7 +87,7 @@ app.get('/', (req, res) => {
    
     // if (user.isLoggedIn === true) {
         
-        pool.query(`select * from users where session = '${req.headers.cookie.splice(10)}'`, (err, resp) => {
+        pool.query(`select * from users where session = '${req.headers.cookie.slice(10)}'`, (err, resp) => {
 
             if (err || resp.rows.length !== 1) {
                 console.log('auth failed');
