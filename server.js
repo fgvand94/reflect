@@ -1738,33 +1738,37 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
                     for (let j = 0; j < pageCount; j++) {
                         obj.pageArray.push(j+1);
                     }
+                    
 
-                    for (let i = 0; i < resp.rows.length; i++) {
-
-                        obj.view[i] = {
-                            name: resp.rows[i].name,
-                            content: resp.rows[i].content,
-                            photo: resp.rows[i].photo,
-                            id: resp.rows[i].id,
-                            match: false
-                        }
-
-                        if (obj.view[i].name === user.userName) {
-                            obj.view[i].match = true;
-                        }
-
-                    }
     
                     pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
-                        if (error) {
-                            res.render('threads', {obj});
-                            return;
-                        } else {
-                            obj.isLoggedIn = true;
-                            obj.person = response.rows[0].name;
-                            res.render('threads', {obj});
-                            return;
+                        for (let i = 0; i < resp.rows.length; i++) {
+
+                            obj.view[i] = {
+                                name: resp.rows[i].name,
+                                content: resp.rows[i].content,
+                                photo: resp.rows[i].photo,
+                                id: resp.rows[i].id,
+                                match: false
+                            }
+    
+                            if (obj.view[i].name === response.rows[0].name) {
+                                obj.view[i].match = true;
+                            }
+
+                            if (error && i === resp.rows.length - 1 || response.rows.length === 0 && i === resp.rows.length - 1) {
+                                res.render('threads', {obj});
+                                return;
+                            } else if (i === resp.rows.length -1) {
+                                obj.isLoggedIn = true;
+                                obj.person = response.rows[0].name;
+                                res.render('threads', {obj});
+                                return;
+                            }
+    
                         }
+                       
+
                     });      
                 } else {
                     res.sendStatus(404);
