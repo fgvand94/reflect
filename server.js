@@ -87,7 +87,7 @@ app.get('/', (req, res) => {
    
     // if (user.isLoggedIn === true) {
         
-        pool.query(`select * from users where session = '${req.headers.cookie.slice(10)}'`, (err, resp) => {
+        pool.query(`select * from users where session = '${req.headers.cookie.slice(10) || null}'`, (err, resp) => {
 
             if (err || resp.rows.length !== 1) {
                 console.log('auth failed');
