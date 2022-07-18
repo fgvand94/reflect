@@ -1331,7 +1331,7 @@ app.get('/forums', (req, res) => {
                    loop();
                } else {
                    // console.log(obj.recentthreads);
-                   console.log(obj);
+                  
                    pool.query(`select * from users where session = '${req.headers.cookie.slice(10)}'`, (err, resp) => {
                     console.log('query');
                     if (err || resp.rows.length !== 1) {
@@ -1343,6 +1343,7 @@ app.get('/forums', (req, res) => {
                         console.log('set true');
                         obj.isLoggedIn = true;
                         obj.person = resp.rows[0].name;
+                        console.log(obj.isLoggedIn);
                         res.render('forum-home', {obj});
                         return;
                     }
