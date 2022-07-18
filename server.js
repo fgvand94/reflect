@@ -941,7 +941,9 @@ app.post('/new-conversation', (req, res) => {
 app.get('/conversation/*', (req, res) => {
 
     let obj = {
-        person: user.userName
+        isLoggedIn: false,
+        person: '',
+        view: {}
     }
 console.log(req.url.slice(req.url.lastIndexOf('-') + 1, req.url.lastIndexOf('_')));
 
@@ -955,13 +957,6 @@ console.log(req.url.slice(req.url.lastIndexOf('-') + 1, req.url.lastIndexOf('_')
             return console.log(err);
         }
 
-        obj = {
-            isLoggedIn: user.isLoggedIn,
-            view: {
-
-            }
-
-        }
 
         obj.pageArray = [];
         // console.log(req.url.slice(req.url.lastIndexOf('_') + 3));
@@ -990,7 +985,18 @@ console.log(req.url.slice(req.url.lastIndexOf('-') + 1, req.url.lastIndexOf('_')
         
         //idk if I want to use the new conversations handlebar I made or if I
         //should just use posts and adjust everything for this cercumstance. 
-        res.render('conversations', {obj});
+        pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
+            if (error) {
+                res.render('threads', {obj});
+                return;
+            } else {
+                obj.isLoggedIn = true;
+                obj.person = response.rows[0].name;
+                res.render('threads', {obj});
+                return;
+            }
+        });
+        
     })
 })
 
@@ -1053,8 +1059,8 @@ app.put('/updatePhoto', (req, res) => {
 app.get('/forums/([^/]+)/search-results', (req, res) => {
     
     let obj = {
-        isLoggedIn: user.isLoggedIn,
-        person: user.userName,
+        isLoggedIn: false,
+        person: '',
         view: {
 
         },
@@ -1224,7 +1230,18 @@ app.get('/forums/([^/]+)/search-results', (req, res) => {
                                             i ++;
                                             loop();
                                         } else {
-                                            res.render('threads', {obj});
+                                            pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
+                                                if (error) {
+                                                    res.render('threads', {obj});
+                                                    return;
+                                                } else {
+                                                    obj.isLoggedIn = true;
+                                                    obj.person = response.rows[0].name;
+                                                    res.render('threads', {obj});
+                                                    return;
+                                                }
+                                            });
+                                            
                                         }
                                         
                                     } else {
@@ -1284,7 +1301,18 @@ app.get('/forums/([^/]+)/search-results', (req, res) => {
                         }
                         console.log(obj.view[i]);
                         if (i === response.rows.length -1) {
-                            return res.render('threads', {obj});
+                            pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
+                                if (error) {
+                                    res.render('threads', {obj});
+                                    return;
+                                } else {
+                                    obj.isLoggedIn = true;
+                                    obj.person = response.rows[0].name;
+                                    res.render('threads', {obj});
+                                    return;
+                                }
+                            });
+                            
                         }
                     })
 
@@ -1355,7 +1383,7 @@ app.get('/forums', (req, res) => {
        }
        loop();
     // if (user.isLoggedIn === true) {
-        console.log('2');
+        // console.log('2');
 
 });
  
@@ -1392,8 +1420,8 @@ app.get(`/forums/([^/]+)`, (req, res) => {
     //which is even wierder cause I'm preatty sure I never signed up for any git guardian. 
     // console.log(req.headers);
     obj = {
-        isLoggedIn: user.isLoggedIn,
-        person: user.userName,
+        isLoggedIn: false,
+        person: '',
         view: {},
         category: req.url.substring(8).toLowerCase(),
         pageTotal:"",   
@@ -1548,9 +1576,19 @@ app.get(`/forums/([^/]+)`, (req, res) => {
                 // console.log(i);
 
                 if (i === resp.rows.length - 1 ) {
-                    res.render('threads',  {obj});
-                    i = 0;
-                    return;
+                    pool.query(`select name from users where session = '${req.headers.cookie.splice(10)}'`, (err, resp) => {
+                        i = 0;
+                        if (err) {
+                            res.render('threads',  {obj}); 
+                            return;
+                        } else {
+                            obj.isLoggedIn = true;
+                            obj.person = resp.rows[0].name;
+                            res.render('threads',  {obj});
+                            return;
+                        }
+                    })
+                    
                 } 
 
                 i ++;
@@ -1573,8 +1611,8 @@ app.get(`/forums/([^/]+)`, (req, res) => {
 app.get(`/forums/([^/]+):search`, (req, res) => {
     console.log('get');
     let obj = {
-        isLoggedIn: user.isLoggedIn,
-        person: user.userName,
+        isLoggedIn: false,
+        person: '',
         view: {
 
         }
@@ -1608,8 +1646,8 @@ app.get(`/forums/([^/]+):search`, (req, res) => {
 app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
     
     let obj = {
-        isLoggedIn: user.isLoggedIn,
-        person: user.userName,
+        isLoggedIn: false,
+        person: '',
         view: {},
     }
 
@@ -1628,15 +1666,34 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
     
     //I should maybe put these in a next route
         if (req.url.substring(lastSlash + 1) === 'Introduce-yourself') {
-            res.render('posts', {obj});
-            return;       
+            pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
+                if (error) {
+                    res.render('threads', {obj});
+                    return;
+                } else {
+                    obj.isLoggedIn = true;
+                    obj.person = response.rows[0].name;
+                    res.render('threads', {obj});
+                    return;
+                }
+            });      
         };
 
         if (req.url.substring(lastSlash + 1) === 'new-thread') {
             //the other method would be to put the if logic back here and then
             //render a different object based on that
-            res.render('new-thread', {obj});
-            return;
+            pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
+                if (error) {
+                    res.render('threads', {obj});
+                    return;
+                } else {
+                    obj.isLoggedIn = true;
+                    obj.person = response.rows[0].name;
+                    res.render('threads', {obj});
+                    return;
+                }
+            });
+          
         }
 
 
@@ -1693,8 +1750,17 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
 
                     }
     
-                    res.render('posts', {obj}); 
-                    return;        
+                    pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
+                        if (error) {
+                            res.render('threads', {obj});
+                            return;
+                        } else {
+                            obj.isLoggedIn = true;
+                            obj.person = response.rows[0].name;
+                            res.render('threads', {obj});
+                            return;
+                        }
+                    });      
                 };
                 res.sendStatus(404);
             }
@@ -1771,10 +1837,20 @@ app.post('/forums/([^/]+)/new-thread', (req, res) => {
 app.get('/forums/([^/]+)/([^/]+)/add-a-post', (req, res) => {
     
     const obj = {
-        isLoggedIn: user.isLoggedIn
+        isLoggedIn: false
     }
 
-    res.render('new-post', {obj});
+    pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
+        if (error) {
+            res.render('threads', {obj});
+            return;
+        } else {
+            obj.isLoggedIn = true;
+            obj.person = response.rows[0].name;
+            res.render('threads', {obj});
+            return;
+        }
+    });
 });
 
 app.post('/forums/([^/]+)/([^/]+)/add-a-post', (req, res) => {
