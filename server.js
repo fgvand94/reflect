@@ -445,7 +445,7 @@ app.post('/register', (req, res) => {
                     res.send('error');
                   }else {
                     console.log('email sent');
-                    console.log
+                    
                     pool.query(`insert into users (id, name, email, password, salt, verified, verificationtoken)
                     values ($1, $2, $3, $4, $5, $6, $7)`, [id, userName, email, value, key, false, value2], (error, response) => {
                         if (error) {
@@ -467,10 +467,13 @@ app.post('/register', (req, res) => {
 
 });
 
+
 app.get('/verify', (req, res) => {
+
     if (!req.headers.cookie) {
         res.setHeader(`Set-Cookie`, `sessionId=''`);   
     };
+
     if (req.query.token === null) {
         return;
     }
@@ -648,13 +651,14 @@ console.log('yada2')
 
 app.post('/user-*', (req, res) => {
 
+    
    
     let column;
     let data;
     if (req.body.bio) {
         column = 'bio';
         data = req.body.bio;
-        pool.query(`update users set ${column} = $1 where email = $2`, [data, user.email], (err, resp) =>{
+        pool.query(`update users set ${column} = $1 where session = $2`, [data, req.headers.cookie.slice(10)], (err, resp) =>{
             if (err) {
                 console.log(err);
                 console.log('in query')
@@ -676,7 +680,7 @@ app.post('/user-*', (req, res) => {
             };
             
             pool.query(`insert into pictures (id, photo, username) values ($1, $2, $3) `,
-            [id, data, user.userName], (err, resp) => {
+            [id, data, req.url.slice(req.url.lastIndexOf('-') + 1)], (err, resp) => {
                 if (err) {
                     console.log(err);
                 }
@@ -690,6 +694,7 @@ app.post('/user-*', (req, res) => {
 
 
 app.post('/new-conversation', (req, res) => {
+    console.log(req.url.slice(req.url.lastIndexOf('-') + 1))
     console.log(req.body);
     pool.query(`select conversations.conversationid, users.name 
     from conversations, users
@@ -718,7 +723,7 @@ app.post('/new-conversation', (req, res) => {
             };
 
             pool.query(`insert into conversations (conversationid, datecreated, title, user2name, user1name)
-            values ($1, $2, $3, $4, $5)`, [conversationId, fullTime, req.body.title, req.body.user, user.userName], (err, response) => {
+            values ($1, $2, $3, $4, $5)`, [conversationId, fullTime, req.body.title, req.body.user, req.url.slice(req.url.lastIndexOf('-') + 1)], (err, response) => {
                 if(err) {
                     return console.log(err);
                 }
