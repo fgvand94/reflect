@@ -1298,8 +1298,7 @@ app.get('/forums/([^/]+)/search-results', (req, res) => {
 })
 
 app.get('/forums', (req, res) => {
-    console.log('1');
-    console.log(user);
+
     let obj = {
         isLoggedIn: false,
         person: '',
