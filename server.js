@@ -78,27 +78,30 @@ app.get('/', (req, res) => {
 //    console.log(req.getHeader('Set-Cookie'));
 //    console.log(req.getHeader('Cookie'));
     console.log(user);
-    console.log(req.headers.cookie);
+    console.log(req.headers.cookie.splice(10));
     console.log(req.header);
     let obj = {
-        isLoggedIn: user.isLoggedIn,
-        person: user.userName
+        isLoggedIn: false,
+        person: false
     }
    
-    if (user.isLoggedIn === true) {
+    // if (user.isLoggedIn === true) {
         
-        pool.query(`select * from users where email = '${user.email}'`, (err, resp) => {
+        pool.query(`select * from users where session = '${req.headers.cookie.splice(10)}'`, (err, resp) => {
 
             if (err || resp.rows.length !== 1) {
                 console.log('auth failed');
-                user.isLoggedIn = false;
-                user.userName = '';
-                user.password = '';
-                user.email = '';
-                res.sendFile(__dirname + "/public/login.html");
+                // user.isLoggedIn = false;
+                // user.userName = '';
+                // user.password = '';
+                // user.email = '';
+                // res.sendFile(__dirname + "/public/login.html");
+                res.render('index', {obj});
 
-            } else if (resp.rows[0].name === user.userName && resp.rows[0].email === user.email
-                && resp.rows[0].password === user.password && resp.rows[0].session === req.headers.cookie.substring(10)) {
+            } else {
+
+                    obj.isLoggedIn = true;
+                    obj.person = resp.rows[0].name;
 
                     const alpha = Array.from(Array(26)).map((e, i) => i + 65);
                     const alphabet = alpha.map((x) => String.fromCharCode(x));
@@ -140,7 +143,7 @@ app.get('/', (req, res) => {
                 return res.render('index', {obj});                         
         })
         return;
-    }
+    // }
     res.render('index', {obj});
 });
 
