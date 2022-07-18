@@ -1766,8 +1766,10 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
                             return;
                         }
                     });      
-                };
-                res.sendStatus(404);
+                } else {
+                    res.sendStatus(404);
+                }
+               
             }
 
         });
