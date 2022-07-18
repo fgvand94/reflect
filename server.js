@@ -215,11 +215,11 @@ app.post('/login', (req, res) => {
             hash.update(text);
             var value = hash.digest('hex');
             
-            user.userName = resp.rows[0].name;
-            user.password = resp.rows[0].password;
-            user.email = resp.rows[0].email;
-            user.id = resp.rows[0].id;
-            user.isLoggedIn = true;
+            // user.userName = resp.rows[0].name;
+            // user.password = resp.rows[0].password;
+            // user.email = resp.rows[0].email;
+            // user.id = resp.rows[0].id;
+            // user.isLoggedIn = true;
 
             if (resp.rows[0].session === null) {
             res.setHeader(`Set-Cookie`, `sessionId=${value}`);
@@ -1315,6 +1315,7 @@ app.get('/forums', (req, res) => {
             // res.render('index', {obj});
             return;
         } else {
+            console.log(resp.rows);
             obj.isLoggedIn = true;
             obj.person = resp.rows[0].name;
         }
@@ -1329,20 +1330,21 @@ app.get('/forums', (req, res) => {
                if (err) {
                    return console.log(err);
                }
-               console.log(i);
-               console.log(resp.rows);
+            //    console.log(i);
+            //    console.log(resp.rows);
                // console.log(threadArray[i]);
                obj.recentthreads[threadArray[i]] = {
                    title: resp.rows[0].title,
                    id: resp.rows[0].id,
                    titleReplace: resp.rows[0].title.replace(/\s+/g, '-')
                }
-               console.log(obj.recentthreads[threadArray[i]].id);
+            //    console.log(obj.recentthreads[threadArray[i]].id);
                if (i < threadArray.length - 1)  {
                    i++;
                    loop();
                } else {
                    // console.log(obj.recentthreads);
+                   console.log(obj);
                    res.render('forum-home', {obj});
                    return;
                }
