@@ -1702,9 +1702,9 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
         }
 
 
-        console.log(req.url.slice(threadid + 1, req.url.lastIndexOf('_')));
-        console.log(req.url.substring(8, lastSlash).toLowerCase());
-        console.log(title);
+        // console.log(req.url.slice(threadid + 1, req.url.lastIndexOf('_')));
+        // console.log(req.url.substring(8, lastSlash).toLowerCase());
+        // console.log(title);
         pool.query(`select users.name, users.photo, ${req.url.substring(8, lastSlash).toLowerCase()}posts.content, ${req.url.substring(8, lastSlash).toLowerCase()}threads.title,
         ${req.url.substring(8, lastSlash).toLowerCase()}posts.id, count(*) over() as full_count
         from ${req.url.substring(8, lastSlash).toLowerCase()}posts, ${req.url.substring(8, lastSlash).toLowerCase()}threads, users 
@@ -1757,9 +1757,11 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
                             }
 
                             if (error && i === resp.rows.length - 1 || response.rows.length === 0 && i === resp.rows.length - 1) {
+                                console.log(obj.view);
                                 res.render('threads', {obj});
                                 return;
                             } else if (i === resp.rows.length -1) {
+                                console.log(obj.view);
                                 obj.isLoggedIn = true;
                                 obj.person = response.rows[0].name;
                                 res.render('threads', {obj});
