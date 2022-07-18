@@ -64,12 +64,17 @@ form.addEventListener('submit', (e) => {
             window.location = 'https://reflect-forum.herokuapp.com/forums';
         };
 
+        if (this.responseText === 'invalid') {
+            alert('Incorrect email or password');
+        };
+
         if (this.responseText === 'Not verified') {
             alert("This account hasn't been verified.");
         }
 
-        if (this.responseText === 'password reset sent') {
+        if (this.responseText === 'Password reset sent') {
             alert("Password reset sent");
+            window.location = 'https://reflect-forum.herokuapp.com/forums';
         };
 
         

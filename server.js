@@ -134,7 +134,7 @@ app.post('/login', (req, res) => {
         console.log('what');
         console.log(resp.rows.email);
         if (err || resp.rows.length === 0) {
-            alert('Incorrect email or password');
+            res.send('invalid')
             return console.log(err);
         }
 
@@ -149,7 +149,7 @@ app.post('/login', (req, res) => {
         if (value === resp.rows[0].password) {
             console.log('inside');
             if (!resp.rows[0].verified) {
-                alert('Verify your account before logging in');
+               
                 res.send('Not verified');
                 console.log('inside');
                 return;
@@ -194,7 +194,7 @@ app.post('/login', (req, res) => {
             res.send('success');
             return;
         };
-        alert('invalid email or password');
+        // alert('invalid email or password');
         console.log('invalid');
         res.send('invalid');
         
