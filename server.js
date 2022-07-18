@@ -1501,6 +1501,7 @@ app.get(`/forums/([^/]+)`, (req, res) => {
 			where t.rn = 1
             order by t.postsid desc
             limit 20 offset ${offset - 20}`, (err, resp) =>{
+                console.log(resp.rows.length);
             obj.pageArray = [];
             // console.log(req.url.slice(req.url.lastIndexOf('_') + 3));
             let threadCount = resp.rows[0].full_count;
@@ -1576,9 +1577,9 @@ app.get(`/forums/([^/]+)`, (req, res) => {
                 // console.log(i);
 
                 if (i === resp.rows.length - 1 ) {
-                    pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (err, respo) => {
+                    pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (erro, respo) => {
                         i = 0;
-                        if (err) {
+                        if (erro) {
                             res.render('threads',  {obj}); 
                             return;
                         } else {
