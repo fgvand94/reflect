@@ -1307,24 +1307,23 @@ app.get('/forums', (req, res) => {
 
         }
     };
+
+    pool.query(`select * from users where session = '${req.headers.cookie.slice(10)}'`, (err, resp) => {
+
+        if (err || resp.rows.length !== 1) {
+            console.log('error');
+            // res.render('index', {obj});
+            return;
+        } else {
+            obj.isLoggedIn = true;
+            obj.person = resp.rows[0].name;
+        }
+
+});
     
     const threadArray = ['camping', 'hiking', 'backpacking', 'fish', 'mammals', 'reptiles', 'trees', 'vegitation', 'flowers', 'mushrooms'];
-    
-    if (user.isLoggedIn === true) {
-        console.log('2');
-        pool.query(`select * from users where email = '${user.email}'`, (err, resp) => {
-
-            if (err || resp.rows.length !== 1) {
-                console.log('error');
-                res.render('index', {obj});
-                return;
-            } 
-            console.log(resp.rows);
-            if (resp.rows[0].name === user.userName && resp.rows[0].email === user.email
-                && resp.rows[0].password === user.password && resp.rows[0].session === req.headers.cookie.substring(10)) {
-                    console.log('logged in is true');
-                    let i = 0;
-                    function loop() {
+    let i = 0;
+        function loop() {
                         pool.query(`select ${threadArray[i]}threads.title, ${threadArray[i]}threads.id, ${threadArray[i]}posts.id as postid
                         from ${threadArray[i]}threads, ${threadArray[i]}posts where ${threadArray[i]}threads.id = ${threadArray[i]}posts.threadid order by postid desc limit 1`, (err, resp) =>{
                if (err) {
@@ -1351,85 +1350,9 @@ app.get('/forums', (req, res) => {
    
        }
        loop();
-                } else {
-                console.log('auth failed');
-                user.isLoggedIn = false;
-                user.userName = '';
-                user.password = "";
-                user.email = '';
-                user.id = 0;
-               let i = 0;
-                function loop () {
-                    pool.query(`select ${threadArray[i]}threads.title, ${threadArray[i]}threads.id, ${threadArray[i]}posts.id as postid
-                     from ${threadArray[i]}threads, ${threadArray[i]}posts, where ${threadArray[i]}threads.id = postid order by postid desc limit 1`, (err, resp) =>{
-                        if (err) {
-                            return console.log(err);
-                        }
-                        // console.log(i);
-                        // console.log(resp.rows);
-                        // console.log(threadArray[i]);
-                        obj.recentthreads[threadArray[i]] = {
-                            title: resp.rows[0].title,
-                            id: resp.rows[0].id,
-                            titleReplace: resp.rows[0].title.replace(/\s+/g, '-')
-                        }
-                        console.log(obj.recentthreads[threadArray[i]]);
-                        if (i < threadArray.length - 1) {
-                            i++;
-                            loop();
-                        } else{
-                            // console.log(obj.recentthreads);
-                            res.render('forum-home', {obj});
-                            return;
-                        }
-                    })
-                    
-                }
-                loop();
-                // console.log(obj.recentthreads.backpacking);
-            }
-        });
-        
-    } else {
-    //for some reason this goes 0 1 6 7 2 3 4 5 8 9. It still works right idk why
-    //it's out of order though. I'm thinking maybe cause the pool.query doesn't run
-    //synchronously it takes longer to do some queries with more data than others
-    // doesn't really matter though. all though I might later think of how to fix
-    //it just for fun and future reference.  
-    console.log('3');    
-    let i = 0;
-    function loop() {
-        console.log(i);
-        console.log(threadArray[i]);
-        pool.query(`select ${threadArray[i]}threads.title, ${threadArray[i]}threads.id, ${threadArray[i]}posts.id as postid
-                     from ${threadArray[i]}threads, ${threadArray[i]}posts where ${threadArray[i]}threads.id = ${threadArray[i]}posts.threadid order by postid desc limit 1`, (err, resp) =>{
-                        console.log('4');
-            if (err) {
-                return console.log(err);
-            }
-            console.log(i);
-            console.log(resp.rows);
-            // console.log(threadArray[i]);
-            obj.recentthreads[threadArray[i]] = {
-                title: resp.rows[0].title,
-                id: resp.rows[0].id,
-                titleReplace: resp.rows[0].title.replace(/\s+/g, '-')
-            }
-            console.log(obj.recentthreads[threadArray[i]].id);
-            if (i < threadArray.length - 1)  {
-                i++;
-                loop();
-            } else {
-                // console.log(obj.recentthreads);
-                res.render('forum-home', {obj});
-                return;
-            }
-        })
+    // if (user.isLoggedIn === true) {
+        console.log('2');
 
-    }
-    loop();
-    // console.log(obj.recentthreads.backpacking);
-}
 });
  
 
