@@ -133,14 +133,11 @@ app.post('/login', (req, res) => {
     pool.query(`select * from users where email = '${email}'`, (err, resp) => {
         console.log('what');
         console.log(resp.rows.email);
-        if (err) {
+        if (err || resp.rows.length === 0) {
+            alert('Incorrect email or password');
             return console.log(err);
         }
-        if (resp.rows.length === 0) {
-            console.log('error');
-            res.sendStatus(400);
-            return;
-        };
+
         console.log('what2');
         text = password;
         key = resp.rows[0].salt;
@@ -152,6 +149,7 @@ app.post('/login', (req, res) => {
         if (value === resp.rows[0].password) {
             console.log('inside');
             if (!resp.rows[0].verified) {
+                alert('Verify your account before logging in');
                 res.send('Not verified');
                 console.log('inside');
                 return;

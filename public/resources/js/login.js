@@ -59,6 +59,7 @@ form.addEventListener('submit', (e) => {
     xhr.onload = function() {       
         email.value = '';
         password.value = '';
+        password2.value = '';
         if (this.responseText === 'success') {
             window.location = 'https://reflect-forum.herokuapp.com/forums';
         };
@@ -69,7 +70,9 @@ form.addEventListener('submit', (e) => {
 
         if (this.responseText === 'password reset sent') {
             alert("Password reset sent");
-        }
+        };
+
+        
         return;   
     };
     xhr.send(JSON.stringify(body));
