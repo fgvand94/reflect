@@ -1064,9 +1064,10 @@ app.get('/forums/([^/]+)/search-results', (req, res) => {
         view: {
 
         },
-        category: req.url.substring(8, req.url.lastIndexOf('/')).toLowerCase()
+        category: req.url.substring(8, req.url.lastIndexOf('/')).toLowerCase(),
+        search: req.query.search
     };
-
+    
     if (req.url.substring(8, req.url.lastIndexOf('/')).toLowerCase() === 'camping' || req.url.substring(8, req.url.lastIndexOf('/')).toLowerCase() === 'hiking' ||
     req.url.substring(8, req.url.lastIndexOf('/')).toLowerCase() === 'backpacking' || req.url.substring(8, req.url.lastIndexOf('/')).toLowerCase() === 'fish' ||
     req.url.substring(8, req.url.lastIndexOf('/')).toLowerCase() === 'mammals' || req.url.substring(8, req.url.lastIndexOf('/')).toLowerCase() === 'reptiles' ||
@@ -1440,7 +1441,8 @@ app.get(`/forums/([^/]+)`, (req, res) => {
         person: '',
         view: {},
         category: req.url.substring(8).toLowerCase(),
-        pageTotal:"",   
+        pageTotal:"",
+        search: 'All'   
     }
     //So i think the reason I couldn't send body data is because I forgot to set
     //the request header type to application/json. it's apperently still not
