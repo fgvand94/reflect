@@ -52,7 +52,9 @@ const pool = new Pool({
 
 console.log(pool.user);
 app.get('/', (req, res) => {
+
     if (!req.headers.cookie) {
+        console.log('yada');
         res.setHeader(`Set-Cookie`, `sessionId=''`);   
     }
 
