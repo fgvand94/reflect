@@ -1726,7 +1726,7 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
             console.log(obj.threadName);
             console.log(obj.threadId);
      
-            console.log(resp.rows);
+            // console.log(resp.rows);
         
             let postCount = resp.rows[0].full_count;
             let pageCount = Math.ceil(postCount/20);
@@ -1743,7 +1743,7 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
     
                     pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
                         for (let i = 0; i < resp.rows.length; i++) {
-
+                            console.log(resp.rows[i]);
                             obj.view[i] = {
                                 name: resp.rows[i].name,
                                 content: resp.rows[i].content,
