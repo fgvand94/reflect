@@ -1501,7 +1501,7 @@ app.get(`/forums/([^/]+)`, (req, res) => {
 			where t.rn = 1
             order by t.postsid desc
             limit 20 offset ${offset - 20}`, (err, resp) =>{
-                console.log(resp.rows[0].id);
+                console.log(resp.rows.length);
             obj.pageArray = [];
             // console.log(req.url.slice(req.url.lastIndexOf('_') + 3));
             let threadCount = resp.rows[0].full_count;
@@ -1558,11 +1558,12 @@ app.get(`/forums/([^/]+)`, (req, res) => {
                 //going to before with the conversation I just hadn't tried it yet. 
             let i = 0;
             function queryLoop () {
+                console.log(i);
                 console.log(resp.rows[i].id);
             pool.query(`select username as postuser, count(*) over() as full_count 
             from ${req.url.substring(8, req.url.lastIndexOf('_')).toLowerCase()}posts
             where threadid = ${resp.rows[i].id} order by id desc limit 1`, (error, response) => {
-                console.log(i);
+                
 
                 obj.view[i] = {
                     thread: resp.rows[i].title,
@@ -1591,10 +1592,12 @@ app.get(`/forums/([^/]+)`, (req, res) => {
                         }
                     })
                     
-                } 
+                } else {
+                    i ++;
+                    queryLoop();
+                }
 
-                i ++;
-                queryLoop();
+
                 
                 
             })
