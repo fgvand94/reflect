@@ -845,14 +845,18 @@ app.post('/conversation-add', (req, res) => {
     
         let fullTime = year + "-" + month + "-" + date;
         console.log(req.body.id);
-        pool.query(`insert into conversationposts (id, convid, datecreated, content, username)
-        values ($1, $2, $3, $4, $5)`, 
-        [id, req.body.id, fullTime, req.body.content, user.userName], (error, response) => {
-            if (error) {
-                return console.log(error);
-            }
-            console.log('success');
-            res.send('success');
+        //I could just grab the user name from the drop down and send it over from the front end instead
+        //of doing a whole new query to get the username. I might change that and test speeds.  
+        pool.query (`select name from users where session = '${req.headers.cookie.slice(10)}'`, (er, re) => {
+            pool.query(`insert into conversationposts (id, convid, datecreated, content, username)
+            values ($1, $2, $3, $4, $5)`, 
+            [id, req.body.id, fullTime, req.body.content, re.rows[0].name], (error, response) => {
+                if (error) {
+                    return console.log(error);
+                }
+                console.log('success');
+                res.send('success');
+            })
         })
     })
 
@@ -863,12 +867,13 @@ app.post('/conversation-add', (req, res) => {
  
 app.put('/updatePhoto', (req, res) => {
 
-   
-    pool.query(`update users set photo = $1 where name = $2`, [req.body.data, user.userName], (err, resp) => {
-        if (err) {
-            return console.log(err);
-        }
-        res.send('success');
+    pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
+        pool.query(`update users set photo = $1 where name = $2`, [req.body.data, response.rows[0].name], (err, resp) => {
+            if (err) {
+                return console.log(err);
+            }
+            res.send('success');
+        })
     })
 });
 
@@ -1505,22 +1510,24 @@ app.post('/forums/([^/]+)/new-thread', (req, res) => {
     req.url.substring(8, lastSlash).toLowerCase() === 'trees' || req.url.substring(8, lastSlash).toLowerCase() === 'vegitation' ||
     req.url.substring(8, lastSlash).toLowerCase() === 'flowers' || req.url.substring(8, lastSlash).toLowerCase() === 'mushrooms') {
         let threadid;
-        let userid;
+        
      
         pool.query(`select * from ${req.url.substring(8, lastSlash)}threads order by id desc`, (err, resp) => {
             threadid = resp.rows[0].id + 1;
-           
-            pool.query(`insert into ${req.url.substring(8, lastSlash).toLowerCase()}threads (id, title, time, username)
-            values ($1, $2, $3, $4)`, [threadid, req.query.thread, fullTime, user.userName]);
+            pool.query(`select name from users where session = '${req.headers.cooke.slice(10)}'`, (error, response) => {
+                pool.query(`insert into ${req.url.substring(8, lastSlash).toLowerCase()}threads (id, title, time, username)
+                values ($1, $2, $3, $4)`, [threadid, req.query.thread, fullTime, response.rows[0].name]);
+            })
 
             
         });
 
         pool.query(`select * from ${req.url.substring(8, lastSlash)}posts order by id desc`, (err, resp) => {
             let id = resp.rows[0].id + 1;
-            
-            pool.query(`insert into ${req.url.substring(8, lastSlash).toLowerCase()}posts (id, threadid, content, username) 
-            values ($1, $2, $3, $4)`, [id, threadid, req.query.message, user.userName]);
+            pool.query(`select name from users where session = '${req.headers.cooke.slice(10)}'`, (error, response) => {
+                pool.query(`insert into ${req.url.substring(8, lastSlash).toLowerCase()}posts (id, threadid, content, username) 
+                values ($1, $2, $3, $4)`, [id, threadid, req.query.message, response.rows[0].name]);
+            })
         })
       
     }
@@ -1586,16 +1593,17 @@ app.post('/forums/([^/]+)/([^/]+)/add-a-post', (req, res) => {
       
             console.log(resp.rows);
             console.log(req.body);
-         
-            pool.query(`insert into ${threadEnd.substring(8, nextLastSlash)}posts (id, threadid, content, username)
-            values ($1, $2, $3, $4)`, [id, req.body.threadId, req.query.message, user.userName], (err, response) => {
-                if (err) {
-                    console.log(err);
-                }
-                console.log('insert');
-                res.send('success');
+            pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
+                pool.query(`insert into ${threadEnd.substring(8, nextLastSlash)}posts (id, threadid, content, username)
+                values ($1, $2, $3, $4)`, [id, req.body.threadId, req.query.message, response.rows[0].name], (err, re) => {
+                    if (err) {
+                        console.log(err);
+                    }
+                    console.log('insert');
+                    res.send('success');
 
 
+                });
             });
         })
     }
