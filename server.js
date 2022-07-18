@@ -1306,15 +1306,15 @@ app.get('/forums', (req, res) => {
 
         }
     };
-
+    console.log(req.headers.cookie.slice(10));
     pool.query(`select * from users where session = '${req.headers.cookie.slice(10)}'`, (err, resp) => {
-
+        console.log('query');
         if (err || resp.rows.length !== 1) {
             console.log('error');
             // res.render('index', {obj});
             return;
         } else {
-            console.log(resp.rows);
+            console.log('set true');
             obj.isLoggedIn = true;
             obj.person = resp.rows[0].name;
         }
