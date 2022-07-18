@@ -1301,8 +1301,8 @@ app.get('/forums', (req, res) => {
     console.log('1');
     console.log(user);
     let obj = {
-        isLoggedIn: user.isLoggedIn,
-        person: user.userName,
+        isLoggedIn: false,
+        person: '',
         recentthreads: {
 
         }
