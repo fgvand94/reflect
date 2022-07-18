@@ -1318,7 +1318,23 @@ app.get('/forums/([^/]+)/search-results', (req, res) => {
 
                 }
                   
-                }                
+                } else {
+                    obj.view[0] = {
+                        thread: 'No results'
+                    }
+                    
+                    pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
+                        if (error) {
+                            res.render('threads', {obj});
+                            return;
+                        } else {
+                            obj.isLoggedIn = true;
+                            obj.person = response.rows[0].name;
+                            res.render('threads', {obj});
+                            return;
+                        }
+                    });
+                }             
             })
         }
         })
