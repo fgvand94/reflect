@@ -36,13 +36,13 @@ app.use(express.raw({ limit: "50mb" }));
 //in my database. That would be wierd having a bunch of ip addresses in my database for people who aren't even
 //registered lol. maybe I could store the ip address in local storage or something but then there's safety concerns
 //with stuff like that. I'll have to look again at how secure the different storages are.
-let user = {
-    userName: "",
-    password: "",
-    email: "",
-    id: 0,
-    isLoggedIn: false
-};
+// let user = {
+//     userName: "",
+//     password: "",
+//     email: "",
+//     id: 0,
+//     isLoggedIn: false
+// };
 
 const alpha = Array.from(Array(26)).map((e, i) => i + 65);
 const alphabet = alpha.map((x) => String.fromCharCode(x));
@@ -126,20 +126,20 @@ app.get('/', (req, res) => {
                     hash.update(text);
                     var value = hash.digest('hex'); 
 
-                    res.setHeader(`Set-Cookie`, `sessionId=${value}`);
-                    pool.query(`update users set session = $2 where email = $1`, [user.email, value], async (err, resp) => {
-                        if (err) {
-                            console.log(err);
-                        };
-                    });                               
+                    // res.setHeader(`Set-Cookie`, `sessionId=${value}`);
+                    // pool.query(`update users set session = $2 where email = $1`, [user.email, value], async (err, resp) => {
+                    //     if (err) {
+                    //         console.log(err);
+                    //     };
+                    // });                               
                  
                     return res.render('index', {obj});     
                 };
-                user.isLoggedIn = false;
-                user.userName = '';
-                user.password = "";
-                user.email = '';
-                user.id = 0;
+                // user.isLoggedIn = false;
+                // user.userName = '';
+                // user.password = "";
+                // user.email = '';
+                // user.id = 0;
                 return res.render('index', {obj});                         
         })
         return;
@@ -221,13 +221,18 @@ app.post('/login', (req, res) => {
             user.id = resp.rows[0].id;
             user.isLoggedIn = true;
 
-           
+            if (resp.rows[0].session === null) {
             res.setHeader(`Set-Cookie`, `sessionId=${value}`);
             pool.query(`update users set session = $2 where email = $1`, [email, value], (err, resp) => {
                 if (err) {
                     console.log(err);
                 };
             });
+        } else {
+            res.setHeader('Set-Cookie', `sessionId=${resp.rows[0].session}`)
+        }
+        //I'll maybe see later if there's a way I can reset the session ID every refresh or page change and still allow
+        //independent logins across multiple devices. 
             //cant send after header yada could make else idk i'll fix it later
             res.send('success');
             return;
@@ -552,7 +557,7 @@ app.get('/user-*', (req, res) => {
     
   
     const obj = {
-        isLoggedIn: user.isLoggedIn, 
+        isLoggedIn: false, 
         photos: {
 
         },
@@ -564,6 +569,7 @@ app.get('/user-*', (req, res) => {
  console.log('yada');
     pool.query(`select * from users where name = '${req.url.slice(6)}'`, (err, resp) => {
 console.log('yada2')
+//idk why I was essentially logging people out if the user page you went to didn't exist in the database lol
         if (err || resp.rows.length !== 1) {
             console.log('auth failed');
             user.isLoggedIn = false;
@@ -573,6 +579,10 @@ console.log('yada2')
             res.sendFile(__dirname + "/public/login.html");
             return;
         } 
+
+        if (resp.rows[0].session === req.headers.cookie.slice(10)) {
+            obj.isLoggedIn = true;
+        };
 
         obj.person = resp.rows[0].name;
         obj.photo = resp.rows[0].photo;
@@ -731,61 +741,61 @@ console.log('yada2')
                                 i = 0;
                               
                                 console.log(i);
-                                if (user.isLoggedIn) {
-                                    if (resp.rows[0].name === user.userName && resp.rows[0].email === user.email
-                                    && resp.rows[0].password === user.password && resp.rows[0].session === req.headers.cookie.substring(10)) {
+                                if (obj.isLoggedIn) {
+                                    // if (resp.rows[0].name === user.userName && resp.rows[0].email === user.email
+                                    // && resp.rows[0].password === user.password && resp.rows[0].session === req.headers.cookie.substring(10)) {
                     
                                         
                     
-                                        const alpha = Array.from(Array(26)).map((e, i) => i + 65);
-                                        const alphabet = alpha.map((x) => String.fromCharCode(x));
+                                    //     const alpha = Array.from(Array(26)).map((e, i) => i + 65);
+                                    //     const alphabet = alpha.map((x) => String.fromCharCode(x));
                                         
-                                        let randomArray = [];
-                                        let randomArray2 = [];
+                                    //     let randomArray = [];
+                                    //     let randomArray2 = [];
                         
-                                        for (let j = 0; j < 16; j++) {
-                                            if (Math.random()* 10 < 5) {
-                                                randomArray.push(Math.floor(Math.random()*10));
-                                                randomArray2.push(Math.floor(Math.random()*10));
-                                            } else {
-                                                randomArray.push(alphabet[Math.floor(Math.random()*26)]);
-                                                randomArray2.push(alphabet[Math.floor(Math.random()*26)]);
-                                            }
-                                        };
+                                    //     for (let j = 0; j < 16; j++) {
+                                    //         if (Math.random()* 10 < 5) {
+                                    //             randomArray.push(Math.floor(Math.random()*10));
+                                    //             randomArray2.push(Math.floor(Math.random()*10));
+                                    //         } else {
+                                    //             randomArray.push(alphabet[Math.floor(Math.random()*26)]);
+                                    //             randomArray2.push(alphabet[Math.floor(Math.random()*26)]);
+                                    //         }
+                                    //     };
                                     
-                                        text = randomArray.join('');
-                                        key = randomArray2.join('');
+                                    //     text = randomArray.join('');
+                                    //     key = randomArray2.join('');
                                                         
-                                        var hash = crypto.createHmac('sha512', key);
-                                        hash.update(text);
-                                        var value = hash.digest('hex');  
+                                    //     var hash = crypto.createHmac('sha512', key);
+                                    //     hash.update(text);
+                                    //     var value = hash.digest('hex');  
                                             
-                                        res.setHeader(`Set-Cookie`, `sessionId=${value}`);
+                                    //     res.setHeader(`Set-Cookie`, `sessionId=${value}`);
                     
-                                        pool.query(`update users set session = $2 where email = $1`, [user.email, value], (err, resp) => {
-                                            if (err) {
-                                                console.log(err);
-                                            };
+                                    //     pool.query(`update users set session = $2 where email = $1`, [user.email, value], (err, resp) => {
+                                    //         if (err) {
+                                    //             console.log(err);
+                                    //         };
                                             
-                                        });
+                                    //     });
                                         
                                         
-                                    }  
-                                    if (obj.person === user.userName) {
-                                        obj.userMatch = true;
-                                    }  else {
-                                        obj.userMatch = false;
-                                    };
+                                    // }  
+                                   
+                                    obj.userMatch = true;
+                                    
+                                    
                                     console.log('loggedin');
                                     return res.render('user-page', {obj}); 
                                         
                                 } else {
                                 console.log('logedout');
-                                user.isLoggedIn = false;
-                                user.userName = '';
-                                user.password = "";
-                                user.email = '';
-                                user.id = 0;
+                                // user.isLoggedIn = false;
+                                // user.userName = '';
+                                // user.password = "";
+                                // user.email = '';
+                                // user.id = 0;
+                                obj.userMatch = false;
                                 return res.render('user-page', {obj}); 
                                 } 
                             } 
@@ -796,7 +806,7 @@ console.log('yada2')
                       
                 } else {
                     console.log('else');
-                    if (obj.person === user.userName) {
+                    if (obj.isLoggedIn) {
                         obj.userMatch = true;
                     }  else {
                         obj.userMatch = false;
