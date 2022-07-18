@@ -1576,7 +1576,7 @@ app.get(`/forums/([^/]+)`, (req, res) => {
                 // console.log(i);
 
                 if (i === resp.rows.length - 1 ) {
-                    pool.query(`select name from users where session = '${req.headers.cookie.splice(10)}'`, (err, resp) => {
+                    pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (err, resp) => {
                         i = 0;
                         if (err) {
                             res.render('threads',  {obj}); 
