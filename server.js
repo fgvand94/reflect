@@ -78,7 +78,7 @@ app.get('/', (req, res) => {
 //    console.log(req.getHeader('Set-Cookie'));
 //    console.log(req.getHeader('Cookie'));
     console.log(user);
-    console.log(req.headers.cookie.slice(10));
+    // console.log(req.headers.cookie.slice(10));
     console.log(req.header);
     let obj = {
         isLoggedIn: false,
@@ -2032,7 +2032,8 @@ app.listen(PORT, () => {
 
 
 //got the sessions working independentlly on different devices. Seems to be functioning just like any other 
-//website at this point. I could add some bells and whistles and make it look nicer. add the trail search api
+//website at this point. I just need to update the posts away from the user.name and that and add all the delete
+//routes. I could add some bells and whistles and make it look nicer. add the trail search api
 //on the home page. Other than that I need to just make sure all of my security stuff is as good as it can be
 //create session timeouts and I think there's a way in the session packages to check the ip address so I'll see
 //if I can do that on my end. And then just learn whatever else I can as far as security goes. I think it's
