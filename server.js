@@ -1758,13 +1758,13 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
 
                             if (error && i === resp.rows.length - 1 || response.rows.length === 0 && i === resp.rows.length - 1) {
                                 console.log(obj.view);
-                                res.render('threads', {obj});
+                                res.render('posts', {obj});
                                 return;
                             } else if (i === resp.rows.length -1) {
                                 console.log(obj.view);
                                 obj.isLoggedIn = true;
                                 obj.person = response.rows[0].name;
-                                res.render('threads', {obj});
+                                res.render('posts', {obj});
                                 return;
                             }
     
