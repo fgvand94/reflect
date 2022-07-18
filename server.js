@@ -1496,7 +1496,7 @@ app.get(`/forums/([^/]+)`, (req, res) => {
                 select row_number() over (partition by threads.id order by posts.id desc) as rn,
                 threads.id, threads.title, threads.username, posts.threadid, posts.id as postsid
                 from ${req.url.substring(8, req.url.lastIndexOf('_')).toLowerCase()}threads as threads, ${req.url.substring(8, req.url.lastIndexOf('_')).toLowerCase()}posts as posts
-                where threads.id =  posts.threadid 
+                where threads.id = posts.threadid 
             ) as t
 			where t.rn = 1
             order by t.postsid desc
@@ -1576,14 +1576,14 @@ app.get(`/forums/([^/]+)`, (req, res) => {
                 // console.log(i);
 
                 if (i === resp.rows.length - 1 ) {
-                    pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (err, resp) => {
+                    pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (err, respo) => {
                         i = 0;
                         if (err) {
                             res.render('threads',  {obj}); 
                             return;
                         } else {
                             obj.isLoggedIn = true;
-                            obj.person = resp.rows[0].name;
+                            obj.person = respo.rows[0].name;
                             res.render('threads',  {obj});
                             return;
                         }
