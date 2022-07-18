@@ -351,11 +351,6 @@ app.post('/reset-password', (req, res) => {
 
 app.get('/logout', (req, res) => {
     res.setHeader('Set-Cookie', `sessionId=''`);
-    user.email = '';
-    user.userName = '';
-    user.password = '';
-    user.isLoggedIn = false;
-    user.id = 0;
     res.redirect('/forums');
 });
 
