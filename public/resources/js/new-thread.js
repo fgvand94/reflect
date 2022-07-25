@@ -21,7 +21,7 @@ form.addEventListener('submit', (e) => {
     //     post: message.value
     // };
     const lastSlash = window.location.href.lastIndexOf('/');
-    const category = window.location.href.substring(29, lastSlash);
+    const category = window.location.href.substring(33, lastSlash);
     console.log(category);
 
     let xhr = new XMLHttpRequest();
