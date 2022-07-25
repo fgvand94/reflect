@@ -1390,6 +1390,7 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
         where ${req.url.substring(8, lastSlash).toLowerCase()}posts.threadid = '${req.url.slice(threadid + 1, req.url.lastIndexOf('_'))}' 
         and ${req.url.substring(8, lastSlash).toLowerCase()}posts.username = users.name
         and ${req.url.substring(8, lastSlash).toLowerCase()}threads.title = '${title}'
+        and ${req.url.substring(8, lastSlash).toLowerCase()}threads.id = '${req.url.slice(threadid + 1, req.url.lastIndexOf('_'))}'
         order by ${req.url.substring(8, lastSlash).toLowerCase()}posts.id asc
         limit 20 offset ${offset - 20}`, (err, resp) => {
             
