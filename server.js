@@ -1377,7 +1377,7 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
                 } else {
                     obj.isLoggedIn = true;
                     obj.person = response.rows[0].name;
-                    res.render('new-threads', {obj});
+                    res.render('new-thread', {obj});
                     return;
                 }
             });
@@ -1546,7 +1546,7 @@ app.get('/forums/([^/]+)/([^/]+)/add-a-post', (req, res) => {
         } else {
             obj.isLoggedIn = true;
             obj.person = response.rows[0].name;
-            res.render('threads', {obj});
+            res.render('new-post', {obj});
             return;
         }
     });
