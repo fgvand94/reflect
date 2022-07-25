@@ -801,7 +801,7 @@ console.log(req.url.slice(req.url.lastIndexOf('-') + 1, req.url.lastIndexOf('_')
         
  
         pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
-            if (error) {
+            if (error || response.rows.length === 0) {
                 res.render('threads', {obj});
                 return;
             } else {
@@ -989,7 +989,7 @@ app.get('/forums/([^/]+)/search-results', (req, res) => {
                                             loop();
                                         } else {
                                             pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
-                                                if (error) {
+                                                if (error || response.rows.length === 0) {
                                                     res.render('threads', {obj});
                                                     return;
                                                 } else {
@@ -1060,7 +1060,7 @@ app.get('/forums/([^/]+)/search-results', (req, res) => {
                         console.log(obj.view[i]);
                         if (i === response.rows.length -1) {
                             pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
-                                if (error) {
+                                if (error || response.rows.length === 0) {
                                     res.render('threads', {obj});
                                     return;
                                 } else {
@@ -1082,7 +1082,7 @@ app.get('/forums/([^/]+)/search-results', (req, res) => {
                     }
                     
                     pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
-                        if (error) {
+                        if (error || response.rows.length === 0) {
                             res.render('threads', {obj});
                             return;
                         } else {
@@ -1356,7 +1356,7 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
    
         if (req.url.substring(lastSlash + 1) === 'Introduce-yourself') {
             pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
-                if (error) {
+                if (error || response.rows.length === 0) {
                     res.render('threads', {obj});
                     return;
                 } else {
@@ -1371,7 +1371,7 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
         if (req.url.substring(lastSlash + 1) === 'new-thread') {
 
             pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
-                if (error) {
+                if (error || response.rows.length === 0) {
                     res.render('threads', {obj});
                     return;
                 } else {
@@ -1429,9 +1429,11 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
                                 id: resp.rows[i].id,
                                 match: false
                             }
-    
-                            if (obj.view[i].name === response.rows[0].name) {
-                                obj.view[i].match = true;
+                            
+                            if (response.rows.length !== 0) {
+                                if (obj.view[i].name === response.rows[0].name) {
+                                    obj.view[i].match = true;
+                                }
                             }
 
                             if (error && i === resp.rows.length - 1 || response.rows.length === 0 && i === resp.rows.length - 1) {
@@ -1538,7 +1540,7 @@ app.get('/forums/([^/]+)/([^/]+)/add-a-post', (req, res) => {
     }
 
     pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
-        if (error) {
+        if (error || response.rows.length === 0) {
             res.render('threads', {obj});
             return;
         } else {
