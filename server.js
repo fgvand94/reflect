@@ -1381,7 +1381,7 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
                     return;
                 }
             });
-          
+          return;
         }
 
         pool.query(`select users.name, users.photo, ${req.url.substring(8, lastSlash).toLowerCase()}posts.content, ${req.url.substring(8, lastSlash).toLowerCase()}threads.title,
@@ -1509,7 +1509,7 @@ app.post('/forums/([^/]+)/new-thread', (req, res) => {
      
         pool.query(`select * from ${req.url.substring(8, lastSlash)}threads order by id desc`, (err, resp) => {
             threadid = resp.rows[0].id + 1;
-            pool.query(`select name from users where session = '${req.headers.cooke.slice(10)}'`, (error, response) => {
+            pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
                 pool.query(`insert into ${req.url.substring(8, lastSlash).toLowerCase()}threads (id, title, time, username)
                 values ($1, $2, $3, $4)`, [threadid, req.query.thread, fullTime, response.rows[0].name]);
             })
@@ -1519,7 +1519,7 @@ app.post('/forums/([^/]+)/new-thread', (req, res) => {
 
         pool.query(`select * from ${req.url.substring(8, lastSlash)}posts order by id desc`, (err, resp) => {
             let id = resp.rows[0].id + 1;
-            pool.query(`select name from users where session = '${req.headers.cooke.slice(10)}'`, (error, response) => {
+            pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
                 pool.query(`insert into ${req.url.substring(8, lastSlash).toLowerCase()}posts (id, threadid, content, username) 
                 values ($1, $2, $3, $4)`, [id, threadid, req.query.message, response.rows[0].name]);
             })
