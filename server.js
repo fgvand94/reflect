@@ -1372,12 +1372,12 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
 
             pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
                 if (error || response.rows.length === 0) {
-                    res.render('threads', {obj});
+                    res.render('new-thread', {obj});
                     return;
                 } else {
                     obj.isLoggedIn = true;
                     obj.person = response.rows[0].name;
-                    res.render('threads', {obj});
+                    res.render('new-threads', {obj});
                     return;
                 }
             });
@@ -1541,7 +1541,7 @@ app.get('/forums/([^/]+)/([^/]+)/add-a-post', (req, res) => {
 
     pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
         if (error || response.rows.length === 0) {
-            res.render('threads', {obj});
+            res.render('new-post', {obj});
             return;
         } else {
             obj.isLoggedIn = true;
