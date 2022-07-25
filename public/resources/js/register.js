@@ -25,6 +25,7 @@ register.addEventListener('submit', (e) => {
         userName.value = '';
         email.value = '';
         password.value = '';
+        alert(`Account created. You'll recieve an email from portfoliotemp@gmail.com to confirm your account. Check your spam.`)
         window.location = "https://reflect-forum.herokuapp.com/login?";
       } else {
         alert('ERROR');
