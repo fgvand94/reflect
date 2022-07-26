@@ -53,10 +53,7 @@ const pool = new Pool({
 console.log(pool.user);
 app.get('/', (req, res) => {
 
-    if (!req.headers.cookie) {
-        console.log('yada');
-        res.setHeader(`Set-Cookie`, `sessionId=''`);   
-    }
+
 
 
     let obj = {
@@ -65,7 +62,10 @@ app.get('/', (req, res) => {
     }
    
   
-    
+    if (!req.headers.cookie) {
+        console.log('yada');
+        res.setHeader(`Set-Cookie`, `sessionId=''`);   
+        
         pool.query(`select * from users where session = '${req.headers.cookie.slice(10)}'`, (err, resp) => {
 
             if (err || resp.rows.length !== 1) {
@@ -107,6 +107,7 @@ app.get('/', (req, res) => {
                 };
                             
         })
+    }
 });
 
 
