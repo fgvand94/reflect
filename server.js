@@ -1339,7 +1339,7 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
                         obj.pageArray.push(j+1);
                     }
 
-                    if (!req.header.cookie) {
+                    if (!req.headers.cookie) {
                         for (let i = 0; i < resp.rows.length; i++) {
                             console.log(resp.rows[i]);
                             obj.view[i] = {
@@ -1360,7 +1360,7 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
                         } 
 
                     } else {
-                        
+                        //
                         pool.query(`select name from users where session = '${req.headers.cookie.slice(10) || null}'`, (error, response) => {
                         
                             for (let i = 0; i < resp.rows.length; i++) {
