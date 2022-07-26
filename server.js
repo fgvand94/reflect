@@ -1352,8 +1352,6 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
 
                         if (i === resp.rows.length -1) {
                                 console.log(obj.view);
-                                obj.isLoggedIn = true;
-                                obj.person = response.rows[0].name;
                                 res.render('posts', {obj});
                                 return;
                             }
