@@ -328,6 +328,7 @@ app.post('/register', (req, res) => {
     pool.query(`select email from users where email = '${email}'`, (err, resp) => {
         if (resp.rows.length > 0) {
             console.log(resp.rows[0].email + " already exists");
+            res.send('email in use')
             return;
         };
         //combine the above and below probably
@@ -383,13 +384,15 @@ app.post('/register', (req, res) => {
                     user: 'portfolliotemp@gmail.com',
                     pass: 'zvyvrysuzkjqkabf'
                     //fourothreepm!
-                  }
+                  },
+                  from: 'portfolliotemp@gmail.com'
                 })
               
                 const mailOptions = {
                   from: 'portfolliotemp@gmail.com',
                   to: email,
                   subject: `Email verification`,
+                  text: `Go to the link <a href="https://reflect-forum.herokuapp.com/verify?email=${email}&token=${value2}">here</a> to verify your account`,
                   html: `Go to the link <a href="https://reflect-forum.herokuapp.com/verify?email=${email}&token=${value2}">here</a> to verify your account`,     
                 }
               
@@ -397,7 +400,7 @@ app.post('/register', (req, res) => {
                   if(error) {
                     console.log(error);
                     res.send('error');
-                  }else {
+                  } else {
                     console.log('email sent');
                     
                     pool.query(`insert into users (id, name, email, password, salt, verified, verificationtoken)
