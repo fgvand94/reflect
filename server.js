@@ -1275,16 +1275,16 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
         if (req.url.substring(lastSlash + 1) === 'Introduce-yourself') {
 
             if (!req.headers.cookie) {
-                return res.render('threads', {obj});   
+                return res.render('posts', {obj});   
             } else {
                 pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
                     if (error || response.rows.length === 0) {
-                        res.render('threads', {obj});
+                        res.render('posts', {obj});
                         return;
                     } else {
                         obj.isLoggedIn = true;
                         obj.person = response.rows[0].name;
-                        res.render('threads', {obj});
+                        res.render('posts', {obj});
                         return;
                     }
                 }); 
@@ -1294,16 +1294,16 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
         if (req.url.substring(lastSlash + 1) === 'new-thread') {
 
             if (!req.headers.cookie) {
-                return res.render('threads', {obj});  
+                return res.render('new-thread', {obj});  
             } else {
                 pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
                     if (error || response.rows.length === 0) {
-                        res.render('threads', {obj});
+                        res.render('new-thread', {obj});
                         return;
                     } else {
                         obj.isLoggedIn = true;
                         obj.person = response.rows[0].name;
-                        res.render('threads', {obj});
+                        res.render('new-thread', {obj});
                         return;
                     }
                 }); 
