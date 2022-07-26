@@ -1338,10 +1338,8 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
                     for (let j = 0; j < pageCount; j++) {
                         obj.pageArray.push(j+1);
                     }
-                    
 
-        
-                    pool.query(`select name from users where session = '${req.headers.cookie.slice(10) || null}'`, (error, response) => {
+                    if (!req.header.cookie) {
                         for (let i = 0; i < resp.rows.length; i++) {
                             console.log(resp.rows[i]);
                             obj.view[i] = {
@@ -1351,29 +1349,53 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
                                 id: resp.rows[i].id,
                                 match: false
                             }
-                            
-                            if (response.rows.length !== 0) {
-                                if (obj.view[i].name === response.rows[0].name) {
-                                    obj.view[i].match = true;
-                                }
-                            }
 
-                            if (error && i === resp.rows.length - 1 || response.rows.length === 0 && i === resp.rows.length - 1) {
-                                console.log(obj.view);
-                                res.render('posts', {obj});
-                                return;
-                            } else if (i === resp.rows.length -1) {
+                        if (i === resp.rows.length -1) {
                                 console.log(obj.view);
                                 obj.isLoggedIn = true;
                                 obj.person = response.rows[0].name;
                                 res.render('posts', {obj});
                                 return;
                             }
-    
-                        }
-                       
+                        } 
 
-                    });      
+                    } else {
+                        
+                        pool.query(`select name from users where session = '${req.headers.cookie.slice(10) || null}'`, (error, response) => {
+                        
+                            for (let i = 0; i < resp.rows.length; i++) {
+                                console.log(resp.rows[i]);
+                                obj.view[i] = {
+                                    name: resp.rows[i].name,
+                                    content: resp.rows[i].content,
+                                    photo: resp.rows[i].photo,
+                                    id: resp.rows[i].id,
+                                    match: false
+                                }
+                                
+                                if (response.rows.length !== 0) {
+                                    if (obj.view[i].name === response.rows[0].name) {
+                                        obj.view[i].match = true;
+                                    }
+                                }
+
+                                if (error && i === resp.rows.length - 1 || response.rows.length === 0 && i === resp.rows.length - 1) {
+                                    console.log(obj.view);
+                                    res.render('posts', {obj});
+                                    return;
+                                } else if (i === resp.rows.length -1) {
+                                    console.log(obj.view);
+                                    obj.isLoggedIn = true;
+                                    obj.person = response.rows[0].name;
+                                    res.render('posts', {obj});
+                                    return;
+                                }
+        
+                            }
+                        
+
+                        }); 
+                    }     
                 } else {
                     res.sendStatus(404);
                 }
