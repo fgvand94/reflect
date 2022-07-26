@@ -474,9 +474,7 @@ app.get('/verify', (req, res) => {
 
 
 app.get('/user-*', (req, res) => {
-    if (!req.headers.cookie) {
-        res.setHeader(`Set-Cookie`, `sessionId=''`);   
-    }
+
   
     const obj = {
         isLoggedIn: false, 
@@ -488,9 +486,15 @@ app.get('/user-*', (req, res) => {
         }
             
     };
- console.log('yada');
+
+    if (!req.headers.cookie) {
+        res.setHeader(`Set-Cookie`, `sessionId=''`);   
+    } else if (resp.rows[0].session === req.headers.cookie.slice(10)) {
+        obj.isLoggedIn = true;
+    };
+
     pool.query(`select * from users where name = '${req.url.slice(6)}'`, (err, resp) => {
-console.log('yada2')
+
 
         if (err || resp.rows.length !== 1) {
             console.log('auth failed');
@@ -502,9 +506,7 @@ console.log('yada2')
             return;
         } 
 
-        if (resp.rows[0].session === req.headers.cookie.slice(10)) {
-            obj.isLoggedIn = true;
-        };
+
 
         obj.person = resp.rows[0].name;
         obj.photo = resp.rows[0].photo;
@@ -615,8 +617,6 @@ console.log('yada2')
 
 app.post('/user-*', (req, res) => {
 
-    
-   
     let column;
     let data;
     if (req.body.bio) {
@@ -724,9 +724,7 @@ app.post('/new-conversation', (req, res) => {
 })
 
 app.get('/conversation/*', (req, res) => {
-    if (!req.headers.cookie) {
-        res.setHeader(`Set-Cookie`, `sessionId=''`);   
-    }
+
     let obj = {
         isLoggedIn: false,
         person: '',
@@ -770,20 +768,24 @@ console.log(req.url.slice(req.url.lastIndexOf('-') + 1, req.url.lastIndexOf('_')
             }
         };
         
- 
-        pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
-            if (error || response.rows.length === 0) {
-                res.render('threads', {obj});
-                return;
-            } else {
-                obj.isLoggedIn = true;
-                obj.person = response.rows[0].name;
-                res.render('threads', {obj});
-                return;
-            }
-        });
+        if (!req.headers.cookie) {
+            res.render('threads', {obj});  
+        } else {
+            pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
+                if (error || response.rows.length === 0) {
+                    res.render('threads', {obj});
+                    return;
+                } else {
+                    obj.isLoggedIn = true;
+                    obj.person = response.rows[0].name;
+                    res.render('threads', {obj});
+                    return;
+                }
+            });
+        }
         
     })
+
 })
 
 app.post('/conversation-add', (req, res) => {
@@ -842,9 +844,7 @@ app.put('/updatePhoto', (req, res) => {
 });
 
 app.get('/forums/([^/]+)/search-results', (req, res) => {
-    if (!req.headers.cookie) {
-        res.setHeader(`Set-Cookie`, `sessionId=''`);   
-    }
+
     let obj = {
         isLoggedIn: false,
         person: '',
@@ -922,13 +922,9 @@ app.get('/forums/([^/]+)/search-results', (req, res) => {
                             console.log(resp.rows.length);
                             console.log(response.rows.length);
                             function loop ()   {
-                                
-                                   
-                                
-                                
+                                                
                            console.log(i);
-                       
-                                    //
+                    
                                     pool.query(`select *, count(*) over() as full_count 
                                     from ${req.url.substring(8, req.url.lastIndexOf('/')).toLowerCase()}posts
                                     where threadid = ${response.rows[i - resp.rows.length].id} order by id desc limit 1`, (error, success) => {
@@ -959,18 +955,21 @@ app.get('/forums/([^/]+)/search-results', (req, res) => {
                                             i ++;
                                             loop();
                                         } else {
-                                            pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
-                                                if (error || response.rows.length === 0) {
-                                                    res.render('threads', {obj});
-                                                    return;
-                                                } else {
-                                                    obj.isLoggedIn = true;
-                                                    obj.person = response.rows[0].name;
-                                                    res.render('threads', {obj});
-                                                    return;
-                                                }
-                                            });
-                                            
+                                            if (!req.headers.cookie) {
+                                               return res.render('threads', {obj});   
+                                            } else {
+                                                pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
+                                                    if (error || response.rows.length === 0) {
+                                                        res.render('threads', {obj});
+                                                        return;
+                                                    } else {
+                                                        obj.isLoggedIn = true;
+                                                        obj.person = response.rows[0].name;
+                                                        res.render('threads', {obj});
+                                                        return;
+                                                    }
+                                                });
+                                            }
                                         }
                                         
                                     } else {
@@ -981,9 +980,6 @@ app.get('/forums/([^/]+)/search-results', (req, res) => {
                                 }
                                 innerLoop();
                                 })
-                              
-                          
-                        
                         }
                         console.log('loop');
                         function loopWait () {
@@ -1030,17 +1026,21 @@ app.get('/forums/([^/]+)/search-results', (req, res) => {
                         }
                         console.log(obj.view[i]);
                         if (i === response.rows.length -1) {
-                            pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
-                                if (error || response.rows.length === 0) {
-                                    res.render('threads', {obj});
-                                    return;
-                                } else {
-                                    obj.isLoggedIn = true;
-                                    obj.person = response.rows[0].name;
-                                    res.render('threads', {obj});
-                                    return;
-                                }
-                            });
+                            if (!req.headers.cookie) {
+                                return res.render('threads', {obj});   
+                            } else {
+                                pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
+                                    if (error || response.rows.length === 0) {
+                                        res.render('threads', {obj});
+                                        return;
+                                    } else {
+                                        obj.isLoggedIn = true;
+                                        obj.person = response.rows[0].name;
+                                        res.render('threads', {obj});
+                                        return;
+                                    }
+                                });
+                            }
                             
                         }
                     })
@@ -1052,17 +1052,21 @@ app.get('/forums/([^/]+)/search-results', (req, res) => {
                         thread: 'No results'
                     }
                     
-                    pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
-                        if (error || response.rows.length === 0) {
-                            res.render('threads', {obj});
-                            return;
-                        } else {
-                            obj.isLoggedIn = true;
-                            obj.person = response.rows[0].name;
-                            res.render('threads', {obj});
-                            return;
-                        }
-                    });
+                    if (!req.headers.cookie) {
+                        return res.render('threads', {obj});   
+                    } else {
+                        pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
+                            if (error || response.rows.length === 0) {
+                                res.render('threads', {obj});
+                                return;
+                            } else {
+                                obj.isLoggedIn = true;
+                                obj.person = response.rows[0].name;
+                                res.render('threads', {obj});
+                                return;
+                            }
+                        });
+                    }
                 }             
             })
         }
@@ -1071,9 +1075,7 @@ app.get('/forums/([^/]+)/search-results', (req, res) => {
 })
 
 app.get('/forums', (req, res) => {
-    if (!req.headers.cookie) {
-        res.setHeader(`Set-Cookie`, `sessionId=''`);   
-    }
+
     let obj = {
         isLoggedIn: false,
         person: '',
@@ -1104,23 +1106,26 @@ app.get('/forums', (req, res) => {
                    loop();
                } else {
               
-                  
-                   pool.query(`select * from users where session = '${req.headers.cookie.slice(10)}'`, (err, resp) => {
-                    console.log('query');
-                    if (err || resp.rows.length !== 1) {
-                        console.log('error');
-                     
-                        res.render('forum-home', {obj});
-                        return;
-                    } else {
-                        console.log('set true');
-                        obj.isLoggedIn = true;
-                        obj.person = resp.rows[0].name;
-                        console.log(obj.isLoggedIn);
-                        res.render('forum-home', {obj});
-                        return;
-                    }
-            });
+                if (!req.headers.cookie) {
+                    return res.render('forum-home', {obj});  
+                } else {                  
+                    pool.query(`select * from users where session = '${req.headers.cookie.slice(10)}'`, (err, resp) => {
+                        console.log('query');
+                        if (err || resp.rows.length !== 1) {
+                            console.log('error');
+                        
+                            res.render('forum-home', {obj});
+                            return;
+                        } else {
+                            console.log('set true');
+                            obj.isLoggedIn = true;
+                            obj.person = resp.rows[0].name;
+                            console.log(obj.isLoggedIn);
+                            res.render('forum-home', {obj});
+                            return;
+                        }
+                    });
+                }
                   
                }
            })
@@ -1133,9 +1138,6 @@ app.get('/forums', (req, res) => {
  
 
 app.get(`/forums/([^/]+)`, (req, res) => {
-    if (!req.headers.cookie) {
-        res.setHeader(`Set-Cookie`, `sessionId=''`);   
-    }
 
     obj = {
         isLoggedIn: false,
@@ -1225,36 +1227,31 @@ app.get(`/forums/([^/]+)`, (req, res) => {
                     postCount: response.rows[0].full_count
                 }  
             
-                
-       
-
                 if (i === resp.rows.length - 1 ) {
-                    pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (erro, respo) => {
-                        i = 0;
-                        if (erro || respo.rows.length === 0) {
-                            res.render('threads',  {obj}); 
-                            return;
-                        } else {
-                            obj.isLoggedIn = true;
-                            obj.person = respo.rows[0].name;
-                            res.render('threads',  {obj});
-                            return;
-                        }
-                    })
-                    
+                    if (!req.headers.cookie) {
+                        res.setHeader(`Set-Cookie`, `sessionId=''`);   
+                    } else {
+                        pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (erro, respo) => {
+                            i = 0;
+                            if (erro || respo.rows.length === 0) {
+                                res.render('threads',  {obj}); 
+                                return;
+                            } else {
+                                obj.isLoggedIn = true;
+                                obj.person = respo.rows[0].name;
+                                res.render('threads',  {obj});
+                                return;
+                            }
+                        })
+                    }   
                 } else {
                     i ++;
                     queryLoop();
                 }
-
-
-                
-                
             })
         }
+
         queryLoop();
-            
-        
 
             }
         
@@ -1263,47 +1260,8 @@ app.get(`/forums/([^/]+)`, (req, res) => {
 
 });
 
-app.get(`/forums/([^/]+):search`, (req, res) => {
-    if (!req.headers.cookie) {
-        res.setHeader(`Set-Cookie`, `sessionId=''`);   
-    }
-    console.log('get');
-    let obj = {
-        isLoggedIn: false,
-        person: '',
-        view: {
-
-        }
-    };
-
-    
-    pool.query(`select * from campingthreads where title like '${req.query.search}%'`, (err, resp) => {
-        
-        if (err) {
-            return console.log(err);
-        }
-
-   
-
-        for (let i = 0; i < resp.rows.length; i++) {
-            console.log(i);
-            obj.view[i] = {
-                title: resp.rows[i].title,
-                name: resp.rows[i].username,
-            }
-        }
-
-        res.send(obj);
-        
-    })
-})
-
 
 app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
-    if (!req.headers.cookie) {
-        res.setHeader(`Set-Cookie`, `sessionId=''`);   
-    }
-
     
     let obj = {
         isLoggedIn: false,
@@ -1326,32 +1284,41 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
     
    
         if (req.url.substring(lastSlash + 1) === 'Introduce-yourself') {
-            pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
-                if (error || response.rows.length === 0) {
-                    res.render('threads', {obj});
-                    return;
-                } else {
-                    obj.isLoggedIn = true;
-                    obj.person = response.rows[0].name;
-                    res.render('threads', {obj});
-                    return;
-                }
-            });      
+
+            if (!req.headers.cookie) {
+                return res.render('threads', {obj});   
+            } else {
+                pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
+                    if (error || response.rows.length === 0) {
+                        res.render('threads', {obj});
+                        return;
+                    } else {
+                        obj.isLoggedIn = true;
+                        obj.person = response.rows[0].name;
+                        res.render('threads', {obj});
+                        return;
+                    }
+                }); 
+            }     
         };
 
         if (req.url.substring(lastSlash + 1) === 'new-thread') {
 
-            pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
-                if (error || response.rows.length === 0) {
-                    res.render('new-thread', {obj});
-                    return;
-                } else {
-                    obj.isLoggedIn = true;
-                    obj.person = response.rows[0].name;
-                    res.render('new-thread', {obj});
-                    return;
-                }
-            });
+            if (!req.headers.cookie) {
+                return res.setHeader(`Set-Cookie`, `sessionId=''`);   
+            } else {
+                pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
+                    if (error || response.rows.length === 0) {
+                        res.render('threads', {obj});
+                        return;
+                    } else {
+                        obj.isLoggedIn = true;
+                        obj.person = response.rows[0].name;
+                        res.render('threads', {obj});
+                        return;
+                    }
+                }); 
+            } 
           return;
         }
 
@@ -1390,8 +1357,8 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
                     }
                     
 
-    
-                    pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
+        
+                    pool.query(`select name from users where session = '${req.headers.cookie.slice(10) || null}'`, (error, response) => {
                         for (let i = 0; i < resp.rows.length; i++) {
                             console.log(resp.rows[i]);
                             obj.view[i] = {
@@ -1503,25 +1470,28 @@ app.post('/forums/([^/]+)/new-thread', (req, res) => {
 
 app.get('/forums/([^/]+)/([^/]+)/add-a-post', (req, res) => {
     
-    if (!req.headers.cookie) {
-        res.setHeader(`Set-Cookie`, `sessionId=''`);   
-    }
+
     
     const obj = {
         isLoggedIn: false
     }
 
-    pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
-        if (error || response.rows.length === 0) {
-            res.render('new-post', {obj});
-            return;
-        } else {
-            obj.isLoggedIn = true;
-            obj.person = response.rows[0].name;
-            res.render('new-post', {obj});
-            return;
-        }
-    });
+    if (!req.headers.cookie) {
+        return res.render('new-post', {obj});   
+    } else {
+        pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
+            
+            if (error || response.rows.length === 0) {
+                res.render('new-post', {obj});
+                return;
+            } else {
+                obj.isLoggedIn = true;
+                obj.person = response.rows[0].name;
+                res.render('new-post', {obj});
+                return;
+            }
+        });
+    }
 });
 
 app.post('/forums/([^/]+)/([^/]+)/add-a-post', (req, res) => {
