@@ -1083,7 +1083,6 @@ app.get('/forums', (req, res) => {
 
         }
     };
-    console.log(req.headers.cookie.slice(10));
 
     
     const threadArray = ['camping', 'hiking', 'backpacking', 'fish', 'mammals', 'reptiles', 'trees', 'vegitation', 'flowers', 'mushrooms'];
