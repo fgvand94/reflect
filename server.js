@@ -65,7 +65,7 @@ app.get('/', (req, res) => {
     }
    
   
-    console.log(req.headers.cookie);
+    const query = () => {
         pool.query(`select * from users where session = '${req.headers.cookie.slice(10)}'`, (err, resp) => {
 
             if (err || resp.rows.length !== 1) {
@@ -107,6 +107,8 @@ app.get('/', (req, res) => {
                 };
                             
         })
+    }
+    setTimeout(query, 2000);
 });
 
 
