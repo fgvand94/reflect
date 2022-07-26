@@ -29,7 +29,7 @@ form.addEventListener('submit', (e) => {
     xhr.setRequestHeader('content-type', 'application/json');
     xhr.onload = function () {
         if (this.responseText === 'success') {
-            window.location.href = `/forums/${category}`;
+            window.location.href = `/forums/${category}_pg1`;
         }
     }
   

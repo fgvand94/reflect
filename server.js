@@ -1464,7 +1464,11 @@ app.post('/forums/([^/]+)/new-thread', (req, res) => {
                         let id = respon.rows[0].id + 1;
                         pool.query(`insert into ${req.url.substring(8, lastSlash).toLowerCase()}posts (id, threadid, content, username) 
                         values ($1, $2, $3, $4)`, [id, threadid, req.query.message, response.rows[0].name], (er, re) => {
-                            res.send('success');
+                            if (er) {
+                                console.log(er);
+                            };
+
+                            return res.send('success');
                         }); 
                     })
                 });
