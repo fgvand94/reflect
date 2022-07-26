@@ -311,7 +311,8 @@ app.post('/reset-password', (req, res) => {
 })
 
 app.get('/logout', (req, res) => {
-    res.setHeader('Set-Cookie', `sessionId=''`);
+    res.clearCookie("sessionId");
+    // res.setHeader('Set-Cookie', `sessionId=''`);
     res.redirect('/forums');
 });
 
