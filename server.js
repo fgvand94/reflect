@@ -53,62 +53,31 @@ const pool = new Pool({
 console.log(pool.user);
 app.get('/', (req, res) => {
 
-    if (!req.headers.cookie) {
-        console.log('yada');
-        res.setHeader(`Set-Cookie`, `sessionId=''`);   
-    }
-
-
     let obj = {
         isLoggedIn: false,
         person: false
     }
-   
-  
-    const query = () => {
-        pool.query(`select * from users where session = '${req.headers.cookie.slice(10)}'`, (err, resp) => {
 
-            if (err || resp.rows.length !== 1) {
-                console.log('auth failed');
-                return res.render('index', {obj});
-                
+    if (!req.headers.cookie) {
+        console.log('yada');
+        return res.render('index', {obj});   
+    } else { pool.query(`select * from users where session = '${req.headers.cookie.slice(10)}'`, (err, resp) => {
 
-            } else {
+        if (err || resp.rows.length !== 1) {
+            console.log('auth failed');
+            return res.render('index', {obj});
+            
 
-                    obj.isLoggedIn = true;
-                    obj.person = resp.rows[0].name;
+        } else {
 
-                    const alpha = Array.from(Array(26)).map((e, i) => i + 65);
-                    const alphabet = alpha.map((x) => String.fromCharCode(x));
-                 
-                    let randomArray = [];
-                    let randomArray2 = [];
-    
-                    for (let j = 0; j < 16; j++) {
-                        if (Math.random()* 10 < 5) {
-                            randomArray.push(Math.floor(Math.random()*10));
-                            randomArray2.push(Math.floor(Math.random()*10));
-                        } else {
-                            randomArray.push(alphabet[Math.floor(Math.random()*26)]);
-                            randomArray2.push(alphabet[Math.floor(Math.random()*26)]);
-                        }
-                    };
-                
-                    text = randomArray.join('');
-                    key = randomArray2.join('');
-                                  
-                    var hash = crypto.createHmac('sha512', key);
-                    hash.update(text);
-                    var value = hash.digest('hex'); 
-
-                              
-                 
-                    return res.render('index', {obj});     
-                };
+                obj.isLoggedIn = true;
+                obj.person = resp.rows[0].name;
+                return res.render('index', {obj});     
+            };
                             
         })
     }
-    setTimeout(query, 2000);
+    
 });
 
 
