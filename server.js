@@ -83,10 +83,6 @@ app.get('/', (req, res) => {
 
 app.get('/login', (req, res) => {
 
-    if (!req.headers.cookie) {
-        res.setHeader(`Set-Cookie`, `sessionId=''`);   
-    }
-
     let obj = {
         confirm: false,
         reset: false,
@@ -175,9 +171,7 @@ app.post('/login', (req, res) => {
 });
 
 app.get('/confirm-email', (req, res) => {
-    if (!req.headers.cookie) {
-        res.setHeader(`Set-Cookie`, `sessionId=''`);   
-    }
+
     let obj = {
         confirm: true,
         reset: false
@@ -253,9 +247,7 @@ app.post('/confirm-email', (req, res) => {
 })
 
 app.get('/reset-password', (req, res) => {
-    if (!req.headers.cookie) {
-        res.setHeader(`Set-Cookie`, `sessionId=''`);   
-    }
+
     let obj = {
         confirm: false,
         reset: true,
@@ -325,9 +317,6 @@ app.get('/logout', (req, res) => {
 
 
 app.get('/register', (req, res) => {
-    if (!req.headers.cookie) {
-        res.setHeader(`Set-Cookie`, `sessionId=''`);   
-    }
     res.sendFile(__dirname + "/public/register.html");
 });
 
@@ -434,10 +423,6 @@ app.post('/register', (req, res) => {
 
 app.get('/verify', (req, res) => {
 
-    if (!req.headers.cookie) {
-        res.setHeader(`Set-Cookie`, `sessionId=''`);   
-    };
-
     if (req.query.token === null) {
         return;
     }
@@ -488,13 +473,12 @@ app.get('/user-*', (req, res) => {
     };
 
     if (!req.headers.cookie) {
-        res.setHeader(`Set-Cookie`, `sessionId=''`);   
+
     } else if (resp.rows[0].session === req.headers.cookie.slice(10)) {
         obj.isLoggedIn = true;
     };
 
     pool.query(`select * from users where name = '${req.url.slice(6)}'`, (err, resp) => {
-
 
         if (err || resp.rows.length !== 1) {
             console.log('auth failed');
@@ -769,7 +753,7 @@ console.log(req.url.slice(req.url.lastIndexOf('-') + 1, req.url.lastIndexOf('_')
         };
         
         if (!req.headers.cookie) {
-            res.render('threads', {obj});  
+            return res.render('threads', {obj});  
         } else {
             pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
                 if (error || response.rows.length === 0) {
@@ -1228,7 +1212,7 @@ app.get(`/forums/([^/]+)`, (req, res) => {
             
                 if (i === resp.rows.length - 1 ) {
                     if (!req.headers.cookie) {
-                        res.setHeader(`Set-Cookie`, `sessionId=''`);   
+                        return res.render('threads',  {obj});    
                     } else {
                         pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (erro, respo) => {
                             i = 0;
@@ -1285,16 +1269,16 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
         if (req.url.substring(lastSlash + 1) === 'Introduce-yourself') {
 
             if (!req.headers.cookie) {
-                return res.render('threads', {obj});   
+                return res.render('posts', {obj});   
             } else {
                 pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
                     if (error || response.rows.length === 0) {
-                        res.render('threads', {obj});
+                        res.render('posts', {obj});
                         return;
                     } else {
                         obj.isLoggedIn = true;
                         obj.person = response.rows[0].name;
-                        res.render('threads', {obj});
+                        res.render('posts', {obj});
                         return;
                     }
                 }); 
@@ -1304,16 +1288,16 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
         if (req.url.substring(lastSlash + 1) === 'new-thread') {
 
             if (!req.headers.cookie) {
-                return res.setHeader(`Set-Cookie`, `sessionId=''`);   
+                return res.render('posts', {obj});  
             } else {
                 pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
                     if (error || response.rows.length === 0) {
-                        res.render('threads', {obj});
+                        res.render('posts', {obj});
                         return;
                     } else {
                         obj.isLoggedIn = true;
                         obj.person = response.rows[0].name;
-                        res.render('threads', {obj});
+                        res.render('posts', {obj});
                         return;
                     }
                 }); 
