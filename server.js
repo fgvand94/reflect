@@ -473,7 +473,7 @@ app.get('/user-*', (req, res) => {
     };
 
     if (!req.headers.cookie) {
-
+        obj.isLoggedIn = false;
     } else {
         pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (e, re) => {
             obj.isLoggedIn = true;
