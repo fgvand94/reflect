@@ -1455,26 +1455,20 @@ app.post('/forums/([^/]+)/new-thread', (req, res) => {
         let threadid;
         
      
-        pool.query(`select * from ${req.url.substring(8, lastSlash)}threads order by id desc`, (err, resp) => {
+        pool.query(`select * from ${req.url.substring(8, lastSlash)}threads,  order by id desc`, (err, resp) => {
             threadid = resp.rows[0].id + 1;
             pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
                 pool.query(`insert into ${req.url.substring(8, lastSlash).toLowerCase()}threads (id, title, time, username)
                 values ($1, $2, $3, $4)`, [threadid, req.query.thread, fullTime, response.rows[0].name]);
+                pool.query(`select * from ${req.url.substring(8, lastSlash)}posts order by id desc`, (err, respon) => {
+                    let id = respon.rows[0].id + 1;
+                    pool.query(`insert into ${req.url.substring(8, lastSlash).toLowerCase()}posts (id, threadid, content, username) 
+                    values ($1, $2, $3, $4)`, [id, threadid, req.query.message, response.rows[0].name], (er, re) => {
+                        res.send('success');
+                    }); 
+                })
             })
-
-            
-        });
-
-        pool.query(`select * from ${req.url.substring(8, lastSlash)}posts order by id desc`, (err, resp) => {
-            let id = resp.rows[0].id + 1;
-            pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
-                pool.query(`insert into ${req.url.substring(8, lastSlash).toLowerCase()}posts (id, threadid, content, username) 
-                values ($1, $2, $3, $4)`, [id, threadid, req.query.message, response.rows[0].name], (er, re) => {
-                    res.send('success');
-                });
-            })
-        })
-      
+        });      
     }
 
 });
