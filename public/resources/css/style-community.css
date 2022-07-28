@@ -1,10 +1,6 @@
-
-
-
 body {
 	margin: 0px;
 }
-
 
 nav {
 	display: flex;
@@ -74,13 +70,10 @@ a:hover {
 
 
 .background {
-	
-	
 	height: 100vh;
 	width: 100%;
 	position: fixed;
 	z-index: -1;
-	
 }
 
 .background::before {
@@ -96,7 +89,7 @@ a:hover {
 
 
 .top-bar {
-	width: 1240px;
+	width: 65%;
 	background-color: rgb(220, 220, 220);
 	margin-left: auto;
 	margin-right: auto;
@@ -110,10 +103,11 @@ a:hover {
 	margin-left: auto;
 	margin-right: auto;
 	justify-content: center;
+	
 }
 
 .column {
-	width: 400px;
+	width: 20%;
 	
 	/* background-color: gray; */
 
@@ -175,4 +169,98 @@ h4 {
 	margin-left: 200px;
 	text-align: left;
 	width: 100%;
+}
+
+@media only screen and (max-width: 1000px) {
+	
+	.top-bar {
+		width: 100%;
+	}
+
+	.column {
+		width: 100%;
+	}
+	
+	.background::before {
+		background-size: 100% 100%;
+	}
+
+	h2, h1 {
+		font-family: "Caveat";
+		font-size: 4rem;
+	}
+	h4 {
+		font-family: "Caveat";
+		font-style: italic;
+		font-size: 3rem;
+	}
+
+	h3 {
+		font-family: "Caveat";
+		font-style: italic;
+		font-size: 3.5rem;
+	}
+
+	.main-header {
+		padding-top: 18%;
+		text-align: center;
+	}
+
+	.column-block {
+		margin-top: 0px;
+		height: 30%;
+		width: 100%;
+	}
+
+	.column-container {
+		display: flex;
+		margin-left: auto;
+		margin-right: auto;
+		justify-content: center;
+		height: 800px;
+		width: 100%;
+	}
+	
+	.column {
+		height: 100%;	
+	}
+	
+	.wildlife {
+		margin-left: 20px;
+		margin-right: 20px;
+	}
+	
+	.column-header {
+		text-align: center;
+		border-bottom: 1px solid black;
+		font-size: 5rem;
+	}
+	
+	.column-block {
+		width: 100%;
+		height: auto;
+		min-height: 40%;
+		margin-top: 10px;
+		border-bottom: 1px solid black;
+	}
+
+	.forum {
+		margin: 0px;
+		font-size: 5rem;
+	}
+
+	.top-thread {
+		margin: 0px;
+		font-size: 3.5rem;
+	}
+
+	.column-header {
+		margin-bottom: 0px;
+	}
+
+	.drop-down:target .drop-down-content {
+		display: flex;
+	}
+
+
 }
