@@ -2,7 +2,7 @@ const express = require("express");
 const crypto = require('crypto');
 const exphbs = require('express-handlebars');
 const nodemailer = require("nodemailer");
-const { set } = require("express/lib/application");
+
 
 const hbs = exphbs.create({
     defaultLayout: false,
@@ -45,7 +45,6 @@ const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
     ssl: { rejectUnauthorized: false }
 });
-
 
 
 console.log(pool.user);
@@ -1481,8 +1480,6 @@ app.post('/forums/([^/]+)/new-thread', (req, res) => {
 });
 
 app.get('/forums/([^/]+)/([^/]+)/add-a-post', (req, res) => {
-    
-
     
     const obj = {
         isLoggedIn: false

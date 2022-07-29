@@ -2,24 +2,11 @@ let form = document.querySelector(".new-thread");
 
 let title = document.getElementById('thread');
 let message = document.getElementById("message");
-// let lastThreadId = 0; 
-// let userId = 1; 
-// let threadKey = 'thread2'; 
 
 
 form.addEventListener('submit', (e) => {
     e.preventDefault();
     
-    // let newThread = {
-    //     key: threadKey,
-    //     threadValues: {
-    //     title: title.value,
-    //     user:'work-on-that-later',
-    //     id: lastThreadId + 1,
-    //     userId: userId,
-    //     },
-    //     post: message.value
-    // };
     const lastSlash = window.location.href.lastIndexOf('/');
     const category = window.location.href.substring(43, lastSlash);
     console.log(category);
