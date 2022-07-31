@@ -12,15 +12,6 @@ nav {
 	justify-content: space-between;
 }
 
-a {
-	cursor: pointer;
-	color: rgb(20%, 20%, 20%);
-	text-decoration: none;
-}
-
-a:hover {
-	color: lightblue;
-}
 
 .navleft {
 	margin-left: 14px;
@@ -30,6 +21,10 @@ a:hover {
 	display: flex;
 	justify-content: end;
 	margin-right: 14px;
+}
+
+.navrightmobile {
+	display: none;
 }
 
 .navright h3 {
@@ -62,7 +57,15 @@ a:hover {
 	width: 150px;
 }
 
+a {
+	cursor: pointer;
+	color: rgb(20%, 20%, 20%);
+	text-decoration: none;
+}
 
+a:hover {
+	color: lightblue;
+}
 
 .main-header {
 	padding-top: 50px;	
@@ -108,9 +111,6 @@ a:hover {
 
 .column {
 	width: 20%;
-	
-	/* background-color: gray; */
-
 }
 
 .wildlife {
@@ -126,7 +126,6 @@ a:hover {
 .column-block {
 	width: 100%;
 	height: 100px;
-	/* background-color: white; */
 	margin-top: 20px;
 	border-bottom: 1px solid black;
 }
@@ -171,8 +170,13 @@ h4 {
 	width: 100%;
 }
 
-@media only screen and (max-width: 1000px) {
-	
+@media only screen and (max-width: 500px) {
+
+	nav {
+		align-items: center;
+		height: 60px;
+	}
+
 	.top-bar {
 		width: 100%;
 	}
@@ -187,18 +191,19 @@ h4 {
 
 	h2, h1 {
 		font-family: "Caveat";
-		font-size: 4rem;
+		font-size: 2rem;
 	}
+
 	h4 {
 		font-family: "Caveat";
 		font-style: italic;
-		font-size: 3rem;
+		font-size: 2rem;
 	}
 
 	h3 {
 		font-family: "Caveat";
 		font-style: italic;
-		font-size: 3.5rem;
+		font-size: 2rem;
 	}
 
 	.main-header {
@@ -217,7 +222,7 @@ h4 {
 		margin-left: auto;
 		margin-right: auto;
 		justify-content: center;
-		height: 800px;
+		height: 300px;
 		width: 100%;
 	}
 	
@@ -226,41 +231,88 @@ h4 {
 	}
 	
 	.wildlife {
-		margin-left: 20px;
-		margin-right: 20px;
+		margin-left: 10px;
+		margin-right: 10px;
 	}
 	
 	.column-header {
 		text-align: center;
 		border-bottom: 1px solid black;
-		font-size: 5rem;
+		font-size: 1.8rem;
 	}
 	
 	.column-block {
-		width: 100%;
+		width: auto;
 		height: auto;
 		min-height: 40%;
 		margin-top: 10px;
 		border-bottom: 1px solid black;
 	}
 
+	.column {
+		width: 31%;
+	}
+
 	.forum {
 		margin: 0px;
-		font-size: 5rem;
+		font-size: 1.8rem;
 	}
 
 	.top-thread {
 		margin: 0px;
-		font-size: 3.5rem;
+		font-size: 1rem;
 	}
 
 	.column-header {
 		margin-bottom: 0px;
 	}
 
-	.drop-down:target .drop-down-content {
+	/* .drop-down:target .drop-down-content {
 		display: flex;
+	} */
+
+	.site-location {
+		margin-left: 50px;
 	}
+
+	.top-bar {
+		height: 60px;
+	}
+
+	.navrightmobile {
+		display: flex;
+		align-items: center;
+		margin-right: 20px;
+	}
+
+	.navright {
+		display: none;
+	}
+	
+	.drop-down-content-mobile {
+		display: none;
+		position: fixed;
+		height: 100%;
+		width: 50%;
+		right: 0px;
+		top: 60px;
+		font-size: 1rem;
+		background-color: white;
+		text-align: center;
+	}
+
+	.drop-down-content-mobile h3{
+		font-size: 1.5rem;
+	}
+
+	#demo {
+		visibility: hidden;
+	}
+
+	#demo:checked + label .drop-down-content-mobile {
+		display: block;
+	}
+
 
 
 }

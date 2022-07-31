@@ -2,6 +2,7 @@
 <html>
 <head>
 	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 	<title>Reflect</title>
 	<link rel="stylesheet" type="text/css" href="/resources/css/style-community.css">
 
@@ -31,7 +32,36 @@
                 {{/if}}
                 </div>
             </div>
-        </div>	
+        </div>
+		<div class="navrightmobile">
+			<input type="checkbox" id="demo"/>
+			<label for="demo"> 
+				<h3>Menu</h3>
+				<div class="drop-down-mobile">
+					<div class="drop-down-content-mobile">
+						{{#if obj.isLoggedIn}}
+						<h3>Community Home</h3>
+						<h3><a href="/user-{{obj.person}}" class="user">{{obj.person}}</a></h3>
+						<h3><a href="/logout">Logout</a></h3>
+						{{else}}
+						<h3>Community Home</h3>
+						<a href="/login" class="login"><h3>Login</h3></a>
+						{{/if}}
+					</div>
+				</div>
+			</label>
+			{{!-- <div class="drop-down-mobile">
+                <div class="drop-down-content-mobile">
+					{{#if obj.isLoggedIn}}
+					<h3><a href="/user-{{obj.person}}" class="user">{{obj.person}}</a></h3>
+					<h3><a href="/logout">Logout</a></h3>
+					{{else}}
+					<a href="/login" class="login"><button class="button">Login</button></a>
+					{{/if}}
+                </div>
+            </div> --}}
+			
+		</div>	
 	</nav>
 	<main>
 		<div class="background"></div>
