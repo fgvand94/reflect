@@ -69,6 +69,7 @@ a:hover {
 
 .main-header {
 	padding-top: 50px;	
+	margin-left: 10px;
 }
 
 
@@ -88,8 +89,6 @@ a:hover {
 	position: absolute;	
 	filter: brightness(110%);
 }
-
-
 
 .top-bar {
 	width: 65%;
@@ -134,6 +133,7 @@ h2 {
 	font-family: "Caveat";
 	font-size: 30px;
 }
+
 h4 {
 	font-family: "Caveat";
 	font-style: italic;

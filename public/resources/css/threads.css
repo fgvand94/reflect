@@ -70,6 +70,7 @@ a:hover {
 
 .main-header {
 	padding-top: 50px;
+	margin-left: 10px;
 }
 
 
@@ -252,7 +253,6 @@ a:hover {
 		top: 60px;
 		font-size: 1rem;
 		background-color: white;
-		
 	}
 
 	.drop-down-content-mobile h3{
