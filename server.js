@@ -36,11 +36,18 @@ for (let j = 0; j < 16; j++) {
 };
 
 const Pool = require('pg').Pool;
-const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: false }
-});
+// const pool = new Pool({
+//     connectionString: process.env.DATABASE_URL,
+//     ssl: { rejectUnauthorized: false }
+// });
 
+const pool = new Pool({
+    user: 'postgres',
+    host: 'localhost',
+    database: 'reflect',
+    password: 'password',
+    port: 5432,
+  });
 
 app.get('/', (req, res) => {
 

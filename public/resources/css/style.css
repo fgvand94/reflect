@@ -83,7 +83,6 @@ a:hover {
 	
 }
 
-
 .herobackground::before {
 	content: "";
 	position: absolute;
@@ -144,7 +143,7 @@ article {
 
 .background {
 	background-image: url(../images/Free_Wood_Texture_09.jpg);
-	background-size: contain;
+	background-size: 100% 100%;
 	height: 100vh;
 	width: 100%;
 	top: 100vh;
@@ -158,7 +157,7 @@ article {
 }
 
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 920px) {
 
 	nav {
 		align-items: center;
