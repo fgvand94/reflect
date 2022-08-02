@@ -7,6 +7,7 @@ let post = windowFull.slice(thread + 1);
 let allPosts = document.querySelector('.column-container');
 let currentUser = document.querySelector('.user');
 let threadid = post.lastIndexOf('-');
+
 if (post === 'new-thread' || post === 'Introduce-yourself') {
     navPost.innerHTML = post.replaceAll('-', ' ');
 } else {

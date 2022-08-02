@@ -43,6 +43,10 @@ a:hover {
 	margin-left: 10px;
 }
 
+.navrightmobile {
+	display: none;
+}
+
 .drop-down {
 	padding-left: 20px;
 }
@@ -72,7 +76,6 @@ a:hover {
 
 
 .herobackground {
-	
 	height: 100vh;
 	position: relative;
 	width: 100vw;
@@ -155,4 +158,69 @@ article {
 }
 
 
+@media only screen and (max-width: 500px) {
 
+	nav {
+		align-items: center;
+		height: 60px;
+	}
+	
+	.background {
+		background-size: 100% 100%;
+	}
+
+	h2, h1 {
+		font-family: "Caveat";
+		font-size: 2rem;
+	}
+
+	h4 {
+		font-family: "Caveat";
+		font-style: italic;
+		font-size: 2rem;
+	}
+
+	h3 {
+		font-family: "Caveat";
+		font-style: italic;
+		font-size: 2rem;
+	}
+
+	.navrightmobile {
+		display: flex;
+		padding-right: 20px;
+	}
+
+	.navright {
+		display: none;
+	}
+
+	.drop-down-content-mobile {
+		display: none;
+		position: fixed;
+		height: 100%;
+		width: 50%;
+		right: 0px;
+		top: 60px;
+		font-size: 1rem;
+		background-color: white;
+	}
+
+	.drop-down-content-mobile h3{
+		font-size: 1.5rem;
+		text-align: center;
+	}
+
+	.user {
+		margin-left: 0px;
+		margin-right: 0px;
+	}
+
+	#demo {
+		visibility: hidden;
+	}
+
+	#demo:checked + label .drop-down-content-mobile {
+		display: block;
+	}
+}

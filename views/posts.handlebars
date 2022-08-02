@@ -2,8 +2,16 @@
 <html>
     <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
         <title>Reflect</title>
         <link rel="stylesheet" type="text/css" href="../../resources/css/posts.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">   
     </head>
     <body>
         <nav>
@@ -24,20 +32,32 @@
                 </div>
             </div>
         </div>
+        <div class="navrightmobile">
+			<input type="checkbox" id="demo"/>
+			<label for="demo"> 
+				<h3>Menu</h3>
+				<div class="drop-down-mobile">
+					<div class="drop-down-content-mobile">
+						{{#if obj.isLoggedIn}}
+						<a href="/forums"><h3>Community Home</h3></a>
+						<h3><a href="/user-{{obj.person}}" class="user">{{obj.person}}</a></h3>
+						<h3><a href="/logout">Logout</a></h3>
+						{{else}}
+						<a href="/forums"><h3>Community Home</h3></a>
+						<a href="/login" class="login"><h3>Login</h3></a>
+						{{/if}}
+					</div>
+				</div>
+			</label>
+		</div>
         </nav>
         <main>
             <div class="background"></div>               
             <h1 class="main-header">Forums</h1>
             <div class="top-bar">
                 <div class="site-location">
-                    <h3><a href="/forums">Home</a> > <a href="/forums/threads" class="forum">Camping</a> > <a class="thread-name"></a></h3>
-                </div>
-                <div class="search">
-                    <form action="" method="POST">
-                        <input class="search-input" type="text" placeholder=" Search...." name="search">
-                        <button class="search-button" type="submit">SEARCH</button>
-                    </form>
-                </div>			
+                    <h3><a href="/forums">Home</a> > <a href="/forums/threads" class="forum">Camping</a> > <a class="thread-name">Promises brick observations</a></h3>
+                </div>		
             </div>
             <div class="column-container">
                 <h3><a class="new-post">Add a post</a></h3>               

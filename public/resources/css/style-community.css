@@ -179,6 +179,11 @@ h4 {
 
 	.top-bar {
 		width: 100%;
+		height: auto;
+	}
+
+	.site-location h3 {
+		margin: 0px;
 	}
 
 	.column {
@@ -226,10 +231,6 @@ h4 {
 		width: 100%;
 	}
 	
-	.column {
-		height: 100%;	
-	}
-	
 	.wildlife {
 		margin-left: 10px;
 		margin-right: 10px;
@@ -251,6 +252,7 @@ h4 {
 
 	.column {
 		width: 31%;
+		height: 100%;
 	}
 
 	.forum {
@@ -267,16 +269,8 @@ h4 {
 		margin-bottom: 0px;
 	}
 
-	/* .drop-down:target .drop-down-content {
-		display: flex;
-	} */
-
 	.site-location {
 		margin-left: 50px;
-	}
-
-	.top-bar {
-		height: 60px;
 	}
 
 	.navrightmobile {
@@ -298,11 +292,16 @@ h4 {
 		top: 60px;
 		font-size: 1rem;
 		background-color: white;
-		text-align: center;
+	}
+
+	.user {
+		margin-left: 0px;
+		margin-right: 0px;
 	}
 
 	.drop-down-content-mobile h3{
 		font-size: 1.5rem;
+		text-align: center;
 	}
 
 	#demo {
