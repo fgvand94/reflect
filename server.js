@@ -496,14 +496,16 @@ app.get('/user-*', (req, res) => {
         obj.bio = resp.rows[0].bio;
     
         pool.query(`explain analyze select * from pictures where username = '${req.url.slice(6)}'`, (err, response) => {
-            
+            console.log(response);
+
             if (err) {
                 return console.log(err);
             };
-            
+            date.now();
             for (let i = 0; i < response.rows.length; i++) {
                 obj.photos[i] = response.rows[i].photo;
             };
+            date.now();
 
             pool.query(`select *
             from 
