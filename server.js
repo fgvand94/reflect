@@ -495,17 +495,17 @@ app.get('/user-*', (req, res) => {
         obj.photo = resp.rows[0].photo;
         obj.bio = resp.rows[0].bio;
     
-        pool.query(`explain analyze select * from pictures where username = '${req.url.slice(6)}'`, (err, response) => {
+        pool.query(`select * from pictures where username = '${req.url.slice(6)}'`, (err, response) => {
             console.log(response);
 
             if (err) {
                 return console.log(err);
             };
-            Date.now();
+            console.log(Date.now());
             for (let i = 0; i < response.rows.length; i++) {
                 obj.photos[i] = response.rows[i].photo;
             };
-            Date.now();
+            console.log(Date.now());
 
             pool.query(`select *
             from 
