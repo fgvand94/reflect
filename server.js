@@ -501,11 +501,11 @@ app.get('/user-*', (req, res) => {
             if (err) {
                 return console.log(err);
             };
-            date.now();
+            Date.now();
             for (let i = 0; i < response.rows.length; i++) {
                 obj.photos[i] = response.rows[i].photo;
             };
-            date.now();
+            Date.now();
 
             pool.query(`select *
             from 
