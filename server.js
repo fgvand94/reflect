@@ -495,7 +495,7 @@ app.get('/user-*', (req, res) => {
         obj.photo = resp.rows[0].photo;
         obj.bio = resp.rows[0].bio;
     
-        pool.query(`select * from pictures where username = '${req.url.slice(6)}'`, (err, response) => {
+        pool.query(`explain analyze select * from pictures where username = '${req.url.slice(6)}'`, (err, response) => {
             
             if (err) {
                 return console.log(err);
