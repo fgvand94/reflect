@@ -81,11 +81,12 @@ photoUpload.addEventListener('click', () => {
             location.reload();          
         }
     }
- 
+    
     const reader = new FileReader();
     reader.readAsDataURL(photoInput.files[0]);
     reader.onload = function() {
         body.photos = reader.result;
+        console.log(body.photos);
         xhr.send(JSON.stringify(body));
     }
    

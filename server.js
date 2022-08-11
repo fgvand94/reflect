@@ -2,6 +2,7 @@ const express = require("express");
 const crypto = require('crypto');
 const exphbs = require('express-handlebars');
 const nodemailer = require("nodemailer");
+const sharp = require("sharp");
 
 const hbs = exphbs.create({
     defaultLayout: false,
@@ -40,6 +41,7 @@ const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
     ssl: { rejectUnauthorized: false }
 });
+
 
 app.get('/', (req, res) => {
 
@@ -496,16 +498,16 @@ app.get('/user-*', (req, res) => {
         obj.bio = resp.rows[0].bio;
     
         pool.query(`select * from pictures where username = '${req.url.slice(6)}'`, (err, response) => {
-            console.log(response);
+         
 
             if (err) {
                 return console.log(err);
             };
-            console.log(Date.now());
+           
             for (let i = 0; i < response.rows.length; i++) {
                 obj.photos[i] = response.rows[i].photo;
             };
-            console.log(Date.now());
+          
 
             pool.query(`select *
             from 
@@ -618,26 +620,36 @@ app.post('/user-*', (req, res) => {
     } else {
 
         column = 'photos';
-        data = req.body.photos;
+        base64Pic = req.body.photos.slice(22);
+        
+        const Buffer = require("buffer").Buffer;
+        let base64buffer = Buffer.from(base64Pic, "base64");
 
-        pool.query(`select id from pictures order by id desc limit 1`, (err, resp) => {
+        sharp(base64buffer).resize(100, 100).toBuffer().then(result => {
+
+            let newBase64 = result.toString("base64");
+            let dataUrl = `data:image/png;base64,${newBase64}`;
+           
+            pool.query(`select id from pictures order by id desc limit 1`, (err, resp) => {
     
-            let id;
-
-            if (resp.rows.length !== 0) {
-                id = resp.rows[0].id + 1;
-            } else {
-                id = 1;
-            };
-            
-            pool.query(`insert into pictures (id, photo, username) values ($1, $2, $3) `,
-            [id, data, req.url.slice(req.url.lastIndexOf('-') + 1)], (err, resp) => {
-                if (err) {
-                    console.log(err);
-                }
-                res.send('success');
-            })
-        }) 
+                let id;
+    
+                if (resp.rows.length !== 0) {
+                    id = resp.rows[0].id + 1;
+                } else {
+                    id = 1;
+                };
+                
+                pool.query(`insert into pictures (id, photo, username) values ($1, $2, $3) `,
+                [id, dataUrl, req.url.slice(req.url.lastIndexOf('-') + 1)], (err, resp) => {
+                    if (err) {
+                        console.log(err);
+                    }
+                    res.send('success');
+                })
+            }) 
+            return result;
+        });
 
     }
  
