@@ -3,7 +3,9 @@ const crypto = require('crypto');
 const exphbs = require('express-handlebars');
 const nodemailer = require("nodemailer");
 const sharp = require("sharp");
+const Pool = require('pg').Pool;
 
+//Create a handle bars object and define certain properties. 
 const hbs = exphbs.create({
     defaultLayout: false,
     extname: '.handlebars'
@@ -11,6 +13,7 @@ const hbs = exphbs.create({
  
 const app = express();
 
+//Define the render engine to be used for express. 
 app.engine('handlebars', hbs.engine);
 
 app.use(express.static('public'));
@@ -36,24 +39,33 @@ for (let j = 0; j < 16; j++) {
     }
 };
 
-const Pool = require('pg').Pool;
+//Creating and setting up my postgreSQL ORM
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
     ssl: { rejectUnauthorized: false }
 });
 
-
+//Get route for the home page. 
 app.get('/', (req, res) => {
 
+    //Object to be rendered in handlebars. It has two states. One for if a user
+    //is logged in and one for the users name.
     let obj = {
         isLoggedIn: false,
-        person: false
+        person: ""
     }
 
+    //Checks if there is any cookies. My site doesn't have any cookies if a user
+    //is not logged in. So checking if there are cookies at all indicates whether or
+    //not a user is logged in. If there isn't it renders the page normally. If there
+    //Is it checks the database for a match in the session cookie and then gets the
+    //username based on that sessionID and sets person to that user and isLoggedIn to true
     if (!req.headers.cookie) {
         return res.render('index', {obj});  
 
-    } else { pool.query(`select * from users where session = '${req.headers.cookie.slice(10)}'`, (err, resp) => {
+    } else { 
+        
+        pool.query(`select * from users where session = '${req.headers.cookie.slice(10)}'`, (err, resp) => {
 
         if (err || resp.rows.length !== 1) {
             console.log('auth failed');
@@ -70,9 +82,12 @@ app.get('/', (req, res) => {
     
 });
 
-
+//Get method for the login page. 
 app.get('/login', (req, res) => {
 
+    //The same handlebars file is used to render the initial loggin screen as
+    //well as the confirm your email page and the reset your password page.
+    //The states of obj determain which parts of the loggin file are rendered. 
     let obj = {
         confirm: false,
         reset: false,
@@ -81,18 +96,25 @@ app.get('/login', (req, res) => {
     res.render('login', {obj});
 });
 
- 
+//Post method for the login page. 
 app.post('/login', (req, res) => {
     
+    //Destructures the passed in body object from login.js to get the email and
+    //password input of the user. 
     const {email, password} = req.body;
   
+    //Queries the database for user with the given user email.
     pool.query(`select * from users where email = '${email}'`, (err, resp) => {
-
+        
+        //Sends invalid if there is no match which in turn will tell login.js
+        //to create a prompt telling the user that that email or password is invalid
         if (err || resp.rows.length === 0) {
             res.send('invalid')
             return console.log(err);
         }
 
+        //Hashes the input password with the given salt that's stored for that
+        //user to check if the password is a match. 
         text = password;
         key = resp.rows[0].salt;
   
@@ -100,12 +122,16 @@ app.post('/login', (req, res) => {
         hash.update(text);
         var value = hash.digest('hex');
 
+        //If password is a match...
         if (value === resp.rows[0].password) {
-  
+            
+            //Send a not verified response if the user hasn't verified their account
+            //which will tell login.js to prompt the user of this. 
             if (!resp.rows[0].verified) {      
                return res.send('Not verified');
             }
          
+            //Create a sessionID 
             const alpha = Array.from(Array(26)).map((e, i) => i + 65);
             const alphabet = alpha.map((x) => String.fromCharCode(x));
             
@@ -131,7 +157,10 @@ app.post('/login', (req, res) => {
             hash.update(text);
             var value = hash.digest('hex');
             
-
+            //Set sessionID to the created session id and store it in the database
+            //if there is no session currently in the database. If there is a session
+            //IE they are logged in on another device don't update the database and
+            //set the session to the sessionID already in the database. 
             if (resp.rows[0].session === null) {
 
             res.setHeader(`Set-Cookie`, `sessionId=${value}`);
@@ -143,9 +172,9 @@ app.post('/login', (req, res) => {
                 };
             });
 
-        } else {
-            res.setHeader('Set-Cookie', `sessionId=${resp.rows[0].session}`);
-        }
+            } else {
+                res.setHeader('Set-Cookie', `sessionId=${resp.rows[0].session}`);
+            }
 
             res.send('success');
             return;
@@ -157,7 +186,8 @@ app.post('/login', (req, res) => {
     
 });
 
-
+//Get method for the confirm-email page. Your need to confirm the email when
+//you want to change the password. I should probably change the name. 
 app.get('/confirm-email', (req, res) => {
 
     let obj = {
@@ -168,10 +198,13 @@ app.get('/confirm-email', (req, res) => {
     res.render('login', {obj});
 });
 
-
+//Post method for confirm email page. 
 app.post('/confirm-email', (req, res) => {
+
+    //Get the input of the users email
     let email = req.body.email;
 
+    //Create a verification token
     let randomArray = [];
 
     for (let j = 0; j < 16; j++) {
@@ -192,9 +225,12 @@ app.post('/confirm-email', (req, res) => {
     hash.update(text);
     var value = hash.digest('hex');
 
-
+    //Query the verfied column of the users table for the given user email.
     pool.query(`select verified from users where email = '${email}'`, (err, resp) => {
         
+        //If there is a user with this email and their email has been verified
+        //send an email with a link to reset the password. This link will include
+        //the verification token. 
         if (resp.rows[0].verified && resp.rows.length > 0) {
 
             const transporter = nodemailer.createTransport ({
@@ -223,7 +259,7 @@ app.post('/confirm-email', (req, res) => {
                 }
             });
 
-  
+            //Update the users verficationtoken in the database. 
             pool.query('update users set verificationtoken = $2 where email = $1', [email, value], (err, resp) => {
                 
                 if (err) {
@@ -237,7 +273,7 @@ app.post('/confirm-email', (req, res) => {
 
 })
 
-
+//Get method for password reset page
 app.get('/reset-password', (req, res) => {
 
     let obj = {
@@ -251,17 +287,23 @@ app.get('/reset-password', (req, res) => {
 
 app.post('/reset-password', (req, res) => {
 
+    //First check if there is a match for both new passwords the user inputs.
     if (req.body.password === req.body.password2) {
 
+        //Query the database for the verification token and email for the given
+        //user. 
         pool.query(`select verificationtoken, email 
         from users where email = '${req.query.email}'`, (err, resp) => {
 
             if (err) {
                 return console.log(err);
             }
- 
+            
+            //Check if the verification token in the url matches that in the
+            //database. 
             if (req.query.token === resp.rows[0].verificationtoken) {
-             
+                
+                //Create a randomely generated salt phrase for the user password. 
                 let randomArray = [];
             
                 for (let j = 0; j < 16; j++) {
@@ -271,7 +313,8 @@ app.post('/reset-password', (req, res) => {
                         randomArray.push(alphabet[Math.floor(Math.random()*26)]);
                     }
                 };
-            
+                
+                //Add the salt phrase to the user password and create a sha512 hash
                 text = req.body.password;
             
                 key = randomArray.join('');
@@ -280,6 +323,7 @@ app.post('/reset-password', (req, res) => {
                 hash.update(text);
                 var value = hash.digest('hex');
 
+                //update the user password, set verification to null and update the salt in the database. 
                 pool.query(`update users set password = $2, verificationtoken = $3, salt = $4 
                 where email = $1`, [req.query.email, value, null, key], (err, resp) => {
 
@@ -301,22 +345,26 @@ app.post('/reset-password', (req, res) => {
 
 })
 
-
+//Get method for logout.
 app.get('/logout', (req, res) => {
+
+    //Clears the users sessionID cookie and redirect to the forum home page. 
     res.clearCookie("sessionId");
     res.redirect('/forums');
 });
 
-
+//Get method for the register user page. 
 app.get('/register', (req, res) => {
     res.sendFile(__dirname + "/public/register.html");
 });
 
-
+//Post method for the register user page. 
 app.post('/register', (req, res) => {
 
+    //Desctucture username, email and password provided as input by the user. 
     const {userName, email, password} = req.body;
 
+    //Query the user table for a matching email to check if the user already exists. 
     pool.query(`select email from users where email = '${email}'`, (err, resp) => {
 
         if (resp.rows.length > 0) {
@@ -325,12 +373,15 @@ app.post('/register', (req, res) => {
             return;
         };
 
+        //query user table to check if user name exists. 
         pool.query(`select name from users where name = '${userName}'`, (err, resp) => {
             if (resp.rows.length > 0) {
                 console.log(resp.rows[0].name + ' already exists');
                 return;
             };
             
+            //If the user doesn't exists get the highest id for the user so it can
+            //be incremented. I don't need this. The email acts as the primary key.
             pool.query(`select id from users order by id desc`,  (err, resp) => {
 
                 if (err) {
@@ -341,6 +392,9 @@ app.post('/register', (req, res) => {
                 const alpha = Array.from(Array(26)).map((e, i) => i + 65);
                 const alphabet = alpha.map((x) => String.fromCharCode(x));
 
+                //Create two randomely generated arrays of characters. One for
+                //the passwords salt and one to create the verification token
+                //to be used to confirm the email. 
                 let randomArray = [];
                 let randomArray2 = [];
 
@@ -359,6 +413,8 @@ app.post('/register', (req, res) => {
                 text = password;
                 text2 = email;
 
+                //Add salt to password and create a hash also create a hash for
+                //the verification token. 
                 key = randomArray.join('');
                 key2 = randomArray2.join('');
                 
@@ -369,7 +425,8 @@ app.post('/register', (req, res) => {
                 var hash2 = crypto.createHmac('sha512', key2);
                 hash2.update(text2);
                 var value2 = hash2.digest('hex');
-              
+                
+                //Email the user a link to confirm their email. 
                 const transporter = nodemailer.createTransport ({
                   service: 'gmail',
                   host: 'https://reflect-forum.herokuapp.com',
@@ -395,7 +452,10 @@ app.post('/register', (req, res) => {
                     return res.send(error);
 
                   } else {
-             
+                    
+                    //If the email sends without error create a new row in the user table and add all
+                    //the column values. The only reason the email would fail to send is if the user 
+                    //input an invalid email. So I only create the account if a valid email is used. 
                     pool.query(`insert into users (id, name, email, password, salt, verified, verificationtoken)
                     values ($1, $2, $3, $4, $5, $6, $7)`, [id, userName, email, value, key, false, value2], (error, response) => {
                        
@@ -419,25 +479,35 @@ app.post('/register', (req, res) => {
 
 });
 
-
+//Get method for the verify email page. 
 app.get('/verify', (req, res) => {
 
+    //if the theres no token in the url send a 404 status cause the page shouldn't
+    //be accessable without a token. 
     if (req.query.token === null) {
+        res.sendStatus(404);
         return;
     }
 
+    //query the database for the email verificationtoken and verified status of the
+    //given user email provided in the url. 
     pool.query(`select email, verificationtoken, verified 
     from users where email = '${req.query.email}'`, (err, resp) => {
      
         if (err) {
+            res.sendStatus(404);
             return console.log(err);
         };
 
+        //If theres the verification toekn is null or if the user is already verfied
+        //redirect to the login page.
         if (resp.rows[0].verificationtoken === null || resp.rows[0].verified) {
             return res.redirect('/login');;
         }
-  
-        if (req.query.token === resp.rows[0].verificationtoken && req.query.email === resp.rows[0].email) {
+        
+        //If the verification token is a match and the user is not verified yet update the users
+        //verified status to true and reset the verification token to null. 
+        if (req.query.token === resp.rows[0].verificationtoken && req.query.email === resp.rows[0].email && !resp.rows[0].verified) {
 
             pool.query(`update users set verified = $2, verificationtoken = $3
             where email = $1`, [req.query.email, true, null], (err, response) => {
@@ -454,12 +524,11 @@ app.get('/verify', (req, res) => {
 
         }
 
-        res.sendStatus(404);
 
     })
 })
 
-
+//Get method for user pages. 
 app.get('/user-*', (req, res) => {
 
     const obj = {
@@ -473,6 +542,10 @@ app.get('/user-*', (req, res) => {
             
     };
 
+    //Check if there is a sessionID. if there is and it matches a session ID in 
+    //the database-each would be unique-set the user logged in state to true. This
+    //Is used to control certian permissions on the page such as setting pictures
+    //and sending or viewing personal messages. 
     if (!req.headers.cookie) {
         obj.isLoggedIn = false;
 
@@ -485,18 +558,22 @@ app.get('/user-*', (req, res) => {
         
     };
     
-
+    //Query the database for the user with the name givin in the url after user. 
     pool.query(`select * from users where name = '${req.url.slice(6)}'`, (err, resp) => {
 
+        //If no user exists send a 404 response. 
         if (err || resp.rows.length !== 1) {
-            res.sendFile(__dirname + "/public/login.html");
+            res.sendStatus(404);
             return;
         } 
 
+        //Set the appropriet obj properties to the users name, profile picture and
+        //biography to be rendered on the page. 
         obj.person = resp.rows[0].name;
         obj.photo = resp.rows[0].photo;
         obj.bio = resp.rows[0].bio;
-    
+        
+        //Get the users other picture from the pictures table in the database. 
         pool.query(`select * from pictures where username = '${req.url.slice(6)}'`, (err, response) => {
          
 
@@ -504,19 +581,36 @@ app.get('/user-*', (req, res) => {
                 return console.log(err);
             };
            
+            //Add all the users pictures the the obj.photos array to be rendered. 
             for (let i = 0; i < response.rows.length; i++) {
                 obj.photos[i] = response.rows[i].photo;
             };
           
-
+            //Query the database for the conversations that have a primary or secondary
+            //participant that is equal to the user for the given userpage. Sorted by the 
+            //conversation with the most recent post. 
+            //The inner query partitions the query by the conversationid and gives an index number for each partition
+            //group. This partition is ordered by post.id so that partition index one is the highest
+            //post.id in the given parition group. And the where statements insure this happens
+            //only when there are non erronous rows. The second sub query gets the reply count per conversation. 
+            //The outer query defines that query should only return the rows that have
+            //a 1 index in their partition group. This insures that you only get one row for each 
+            //conversation and that row is the row containing the most recent post.
+            //It then orders the whole result by the post.id as well so that the whole query is displayed
+            //by the conversationid with the most recent post. 
             pool.query(`select *
             from 
             (
                 select row_number() over (partition by conversation.conversationid order by posts.id desc) as rn
-                , posts.id, conversation.conversationid, posts.convid, conversation.user1name, conversation.user2name,
-                conversation.title, conversation.datecreated, posts.username, person.photo
-                from conversationposts as posts, conversations as conversation, users as person
-                where posts.convid = conversation.conversationid and person.name = conversation.user1name
+                , a.count, posts.id, conversation.conversationid, posts.convid, conversation.user1name, conversation.user2name,
+                conversation.title, conversation.datecreated, posts.datecreated as date, posts.username, person.photo
+                from conversationposts as posts, conversations as conversation, users as person,
+                (
+                    select count(id) as count, convid
+                    from conversationposts
+                    group by convid
+                ) as a
+                where posts.convid = conversation.conversationid and person.name = conversation.user1name and a.convid = posts.convid	
             ) as t
             where t.user1name = '${req.url.slice(6)}' and t.rn = 1
             or t.user2name = '${req.url.slice(6)}' and t.rn = 1
@@ -529,50 +623,43 @@ app.get('/user-*', (req, res) => {
                 if(response.rows.length !== 0) {
 
                     let i = 0;
-                    function loop () {
+
+                    //create a loop to add the conversations to a obj.conversation array.
+                    function loop () { 
+
+                    
+                        obj.conversation[i] = {
+                            id: response.rows[i].conversationid,
+                            user1: response.rows[i].user1name,
+                            user2: response.rows[i].user2name,
+                            date: response.rows[i].datecreated,
+                            title: response.rows[i].title,
+                            photo: response.rows[i].photo,
+                            replies: response.rows[i].count,
+                            replyDate: response.rows[i].date,
+                            replyUser: response.rows[i].username,
+                            url: response.rows[i].title.replace(/\s+/g, '+') 
+                        }
                 
-                        pool.query(`select username, datecreated as date, count(*) over() as full_count
-                        from conversationposts where convid = '${response.rows[i].conversationid}' 
-                        order by id desc limit 1`, (erro, resp) => {
-                         
-                            if (erro) {
-                                return console.log(err);
-                            }
-                       
-                            obj.conversation[i] = {
-                                id: response.rows[i].conversationid,
-                                user1: response.rows[i].user1name,
-                                user2: response.rows[i].user2name,
-                                date: response.rows[i].datecreated,
-                                title: response.rows[i].title,
-                                photo: response.rows[i].photo,
-                                replies: resp.rows[0].full_count,
-                                replyDate: resp.rows[0].date,
-                                replyUser: resp.rows[0].username,
-                                url: response.rows[i].title.replace(/\s+/g, '+') 
-                            }
-                   
-                            if (i < response.rows.length - 1) {
+                        if (i < response.rows.length - 1) {
+                            i++;
+                            loop();
 
-                                i++;
-                                loop();
+                        } else {
+                            i = 0;
+                            console.log(i);
 
-                            } else {
-                                i = 0;
-                              
-                                console.log(i);
-                                if (obj.isLoggedIn) {
-
-                                    obj.userMatch = true;
-                                    return res.render('user-page', {obj}); 
-                                        
-                                } else {
-
-                                obj.userMatch = false;
+                            if (obj.isLoggedIn) {
+                                obj.userMatch = true;
                                 return res.render('user-page', {obj}); 
-                                } 
+                                    
+                            } else {
+                            obj.userMatch = false;
+                            return res.render('user-page', {obj}); 
+
                             } 
-                        })
+                        } 
+                        
                         
                     }
 
@@ -597,11 +684,16 @@ app.get('/user-*', (req, res) => {
       
 })
 
+//post method for user profiles. 
 app.post('/user-*', (req, res) => {
 
     let column;
     let data;
 
+    //if the body object from user-page.js has a bio element then we're updating
+    //the bio and so set the column name to add to the database as bio and the
+    //data as the bio property from the body object. Else it's a photo being updated
+    //and the the column and data are set approprietly. 
     if (req.body.bio) {
 
         column = 'bio';
@@ -620,13 +712,22 @@ app.post('/user-*', (req, res) => {
     } else {
 
         column = 'photos';
+
+        //Takes the image file chosen by the user which was converted to a 
+        //dataurl in user-page.js and initialises a variable with that value. 
         base64Pic = req.body.photos.slice(22);
         
+        //Takes the data url and creates a buffer from that data url because
+        //the sharp add on won't accept the string base64 as input. 
         const Buffer = require("buffer").Buffer;
         let base64buffer = Buffer.from(base64Pic, "base64");
 
+        //Use the sharp dependency to resize that buffer to 100 by 100 pixels
+        //which is the size used in the thumbnails to increase page load speeds. 
         sharp(base64buffer).resize(100, 100).toBuffer().then(result => {
 
+            //Convert the resized base64 buffer back to string and create a data
+            //url to be stored in the database and rendered in html. 
             let newBase64 = result.toString("base64");
             let dataUrl = `data:image/png;base64,${newBase64}`;
            
@@ -655,9 +756,11 @@ app.post('/user-*', (req, res) => {
  
 })
 
-
+//Post method for adding new conversations. 
 app.post('/new-conversation', (req, res) => {
-  
+    
+    //Query the database for the conversationid of conversations and the username
+    //input to create a conversation with if that user exists. 
     pool.query(`select conversations.conversationid, users.name 
     from conversations, users
     where users.name = '${req.body.user}' order by conversations.conversationid desc limit 1`, (err, resp) => {
@@ -666,7 +769,10 @@ app.post('/new-conversation', (req, res) => {
             return console.log(err);
         }
 
+        //Check if user exists. 
         if (resp.rows[0].name) {
+
+            //Get the date the conversation was created. 
             let date_ob = new Date();
 
             let date = ("0" + date_ob.getDate()).slice(-2);
@@ -685,8 +791,11 @@ app.post('/new-conversation', (req, res) => {
                 conversationId = 1;
             };
 
+            //Get the name of the user creating the conversation. I don't need to
+            //get this form the database in this way I can just use the current url
             pool.query (`select name from users where session = '${req.headers.cookie.slice(10)}'`, (er, re) => {
                 
+                //Inser the conversation into the conversation table. 
                 pool.query(`insert into conversations (conversationid, datecreated, title, user2name, user1name)
                 values ($1, $2, $3, $4, $5)`, [conversationId, fullTime, req.body.title, req.body.user, re.rows[0].name], (err, response) => {
                     if(err) {
@@ -694,6 +803,7 @@ app.post('/new-conversation', (req, res) => {
                     }
                 });
 
+                //Get the most recent id form the conversationposts table. 
                 pool.query(`select id from conversationposts order by id desc limit 1`, (error, response) => {
                    
                     if (error) {
@@ -708,6 +818,7 @@ app.post('/new-conversation', (req, res) => {
                         id = 1;
                     }
                     
+                    //Insert the initial post created with the conversation into conversationposts. 
                     pool.query(`insert into conversationposts (id, convid, datecreated, content, username)
                     values ($1, $2, $3, $4, $5)`, [id, conversationId, fullTime, req.body.message, re.rows[0].name], (err, resp) => {
                         if (err) {
@@ -722,6 +833,7 @@ app.post('/new-conversation', (req, res) => {
     })
 })
 
+//Get method for conversations. 
 app.get('/conversation/*', (req, res) => {
 
     let obj = {
@@ -730,6 +842,8 @@ app.get('/conversation/*', (req, res) => {
         view: {}
     }
 
+    //Query the database for the posts and user photos for each post for the given
+    //conversation. 
     pool.query(`select conversationposts.content, users.photo, users.name, count(*) over() as full_count 
     from conversationposts, users 
     where conversationposts.convid = '${req.url.slice(req.url.lastIndexOf('-') + 1, req.url.lastIndexOf('_'))}'
@@ -742,7 +856,8 @@ app.get('/conversation/*', (req, res) => {
         }
 
         obj.pageArray = [];
-     
+        
+        //need to finish the page functionality here as it is in the threads page. 
         let postCount = resp.rows[0].full_count;
         let pageCount = Math.ceil(postCount/20);
        
@@ -788,6 +903,7 @@ app.get('/conversation/*', (req, res) => {
 
 })
 
+//Post method for adding new posts to an already existing conversation. 
 app.post('/conversation-add', (req, res) => {
 
     pool.query(`select id from conversationposts order by id desc limit 1`, (err, resp) => {
@@ -1178,16 +1294,21 @@ app.get(`/forums/([^/]+)`, (req, res) => {
     req.url.substring(8, req.url.lastIndexOf('_')).toLowerCase() === 'flowers' || req.url.substring(8, req.url.lastIndexOf('_')).toLowerCase() === 'mushrooms') {
 
         pool.query(`select *, count(*) over() as full_count
-            from 
+        from 
+        (
+            select row_number() over (partition by threads.id order by posts.id desc) as rn,
+            threads.id, a.count, posts.username as postuser, threads.title, threads.username, posts.threadid, posts.id as postsid
+            from ${req.url.substring(8, req.url.lastIndexOf('_')).toLowerCase()}threads as threads, ${req.url.substring(8, req.url.lastIndexOf('_')).toLowerCase()}posts as posts,
             (
-                select row_number() over (partition by threads.id order by posts.id desc) as rn,
-                threads.id, threads.title, threads.username, posts.threadid, posts.id as postsid
-                from ${req.url.substring(8, req.url.lastIndexOf('_')).toLowerCase()}threads as threads, ${req.url.substring(8, req.url.lastIndexOf('_')).toLowerCase()}posts as posts
-                where threads.id = posts.threadid 
-            ) as t
-			where t.rn = 1
-            order by t.postsid desc
-            limit 20 offset ${offset - 20}`, (err, resp) =>{
+                select count(id) as count, threadid
+                from hikingposts
+                group by threadid
+            ) as a
+            where threads.id = posts.threadid and a.threadid = posts.threadid
+        ) as t
+        where t.rn = 1
+        order by t.postsid desc
+        limit 20 offset ${offset - 20};`, (err, resp) =>{
           
             obj.pageArray = [];
   
@@ -1228,48 +1349,45 @@ app.get(`/forums/([^/]+)`, (req, res) => {
                 }
 
                 let i = 0;
+                
                 function queryLoop () {
-
-                    pool.query(`select username as postuser, count(*) over() as full_count 
-                    from ${req.url.substring(8, req.url.lastIndexOf('_')).toLowerCase()}posts
-                    where threadid = ${resp.rows[i].id} order by id desc limit 1`, (error, response) => {
                         
-                        obj.view[i] = {
-                            thread: resp.rows[i].title,
-                            threadReplace: resp.rows[i].title.replace(/\s+/g, '-'),
-                            user: resp.rows[i].username,
-                            id: resp.rows[i].id,
-                            userPost: response.rows[0].postuser,
-                            postCount: response.rows[0].full_count
-                        }  
-                    
-                        if (i === resp.rows.length - 1 ) {
+                    obj.view[i] = {
+                        thread: resp.rows[i].title,
+                        threadReplace: resp.rows[i].title.replace(/\s+/g, '-'),
+                        user: resp.rows[i].username,
+                        id: resp.rows[i].id,
+                        userPost: resp.rows[i].postuser,
+                        postCount: resp.rows[i].count
+                    }  
+                
+                    if (i === resp.rows.length - 1 ) {
 
-                            if (!req.headers.cookie) {
-                                return res.render('threads',  {obj}); 
-
-                            } else {
-                               
-                                pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (erro, respo) => {
-                                    
-                                    i = 0;
-                                    if (erro || respo.rows.length === 0) {
-                                        res.render('threads',  {obj}); 
-                                        return;
-                                    } else {
-                                        obj.isLoggedIn = true;
-                                        obj.person = respo.rows[0].name;
-                                        res.render('threads',  {obj});
-                                        return;
-                                    }
-                                })
-                            }  
+                        if (!req.headers.cookie) {
+                            return res.render('threads',  {obj}); 
 
                         } else {
-                            i ++;
-                            queryLoop();
-                        }
-                    })
+                            
+                            pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (erro, respo) => {
+                                
+                                i = 0;
+                                if (erro || respo.rows.length === 0) {
+                                    res.render('threads',  {obj}); 
+                                    return;
+                                } else {
+                                    obj.isLoggedIn = true;
+                                    obj.person = respo.rows[0].name;
+                                    res.render('threads',  {obj});
+                                    return;
+                                }
+                            })
+                        }  
+
+                    } else {
+                        i ++;
+                        queryLoop();
+                    }
+                    
                 }
 
                 queryLoop();
