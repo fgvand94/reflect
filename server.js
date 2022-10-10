@@ -1301,7 +1301,7 @@ app.get(`/forums/([^/]+)`, (req, res) => {
             from ${req.url.substring(8, req.url.lastIndexOf('_')).toLowerCase()}threads as threads, ${req.url.substring(8, req.url.lastIndexOf('_')).toLowerCase()}posts as posts,
             (
                 select count(id) as count, threadid
-                from hikingposts
+                from ${req.url.substring(8, req.url.lastIndexOf('_')).toLowerCase()}posts
                 group by threadid
             ) as a
             where threads.id = posts.threadid and a.threadid = posts.threadid
@@ -1349,7 +1349,7 @@ app.get(`/forums/([^/]+)`, (req, res) => {
                 }
 
                 let i = 0;
-                
+
                 function queryLoop () {
                         
                     obj.view[i] = {
