@@ -532,7 +532,7 @@ app.get('/verify', (req, res) => {
 app.get('/user-*', (req, res) => {
 
     const obj = {
-        isLoggedIn: false, 
+        userMatch: false, 
         photos: {
 
         },
@@ -547,13 +547,16 @@ app.get('/user-*', (req, res) => {
     //Is used to control certian permissions on the page such as setting pictures
     //and sending or viewing personal messages. 
     if (!req.headers.cookie) {
-        obj.isLoggedIn = false;
+        obj.userMatch = false;
 
     } else {
 
         pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (e, re) => {
-            obj.isLoggedIn = true;
+            
+            if (re.rows[0].name === req.url.slice(6)) {
+            obj.userMatch = true;
             obj.person = re.rows[0].name;
+            }
         })
         
     };
@@ -647,19 +650,9 @@ app.get('/user-*', (req, res) => {
 
                         } else {
                             i = 0;
-                            console.log(i);
+                            return res.render('user-page', {obj});
 
-                            if (obj.isLoggedIn) {
-                                obj.userMatch = true;
-                                return res.render('user-page', {obj}); 
-                                    
-                            } else {
-                            obj.userMatch = false;
-                            return res.render('user-page', {obj}); 
-
-                            } 
                         } 
-                        
                         
                     }
 
