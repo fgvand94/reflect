@@ -37,13 +37,9 @@ for (let j = 0; j < 16; j++) {
 
 //Creating and setting up my postgreSQL ORM
 const pool = new Pool({
-    // connectionString: process.env.DATABASE_URL,
-    // ssl: { rejectUnauthorized: false }
-    user: 'postgres',
-    host: 'localhost',
-    database: 'reflect',
-    password: 'password',
-    port: 5432,
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false }
+
 });
 
 //Get route for the home page. 
