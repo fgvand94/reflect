@@ -718,28 +718,28 @@ app.post('/user-*', (req, res) => {
         const Buffer = require("buffer").Buffer;
         let base64buffer = Buffer.from(base64Pic, "base64");
 
-        console.log("1");
+        
         sharp(base64buffer).metadata().then(result => {
-            console.log(result);
+            
             let aspectRatio = result.width/result.height;
 
         
         //Use the sharp dependency to resize that buffer to 100 by 100 pixels
         //which is the size used in the thumbnails to increase page load speeds. 
             sharp(base64buffer).resize(100, 100).toBuffer().then(result => {
-                console.log(result);
+               
                 //Convert the resized base64 buffer back to string and create a data
                 //url to be stored in the database and rendered in html. 
                 let newBase64 = result.toString("base64");
                 let dataUrl = `data:image/png;base64,${newBase64}`;
                 sharp(base64buffer).resize(Math.floor(height * aspectRatio), height).toBuffer().then(result => {
                 
-                    console.log(result);
+                  
                     let newBase642 = result.toString("base64");
                     let dataUrl2 = `data:image/png;base64,${newBase642}`;
             
                     pool.query(`select id from pictures order by id desc limit 1`, (err, resp) => {
-                        console.log(resp.rows);
+                        
                         let id;
                        
             
@@ -750,10 +750,10 @@ app.post('/user-*', (req, res) => {
                             id = 1;
                             
                         };
-                        console.log("pool");
+                       
                         pool.query(`insert into pictures (id, photo, username, photo2, width) values ($1, $2, $3, $4, $5) `,
                         [id, dataUrl, req.url.slice(req.url.lastIndexOf('-') + 1), dataUrl2, Math.floor(height * aspectRatio)], (err, resp) => {
-                            console.log("insert");
+                            
                             if (err) {
                                 console.log(err);
                             }
