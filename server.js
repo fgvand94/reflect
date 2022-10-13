@@ -557,6 +557,7 @@ app.get('/user-*', (req, res) => {
             console.log(re.rows);
             if (re.rows[0].name === req.url.slice(6)) {
             obj.userMatch = true;
+            console.log(obj.userMatch);
             obj.person = re.rows[0].name;
             }
         })
