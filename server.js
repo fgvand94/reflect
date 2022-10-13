@@ -37,8 +37,13 @@ for (let j = 0; j < 16; j++) {
 
 //Creating and setting up my postgreSQL ORM
 const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: false }
+    // connectionString: process.env.DATABASE_URL,
+    // ssl: { rejectUnauthorized: false }
+    user: 'postgres',
+    host: 'localhost',
+    database: 'reflect',
+    password: 'password',
+    port: 5432,
 });
 
 //Get route for the home page. 
@@ -526,7 +531,7 @@ app.get('/verify', (req, res) => {
 
 //Get method for user pages. 
 app.get('/user-*', (req, res) => {
-  console.log(2.2 % 2);
+  console.log(req.headers.cookie);
     const obj = {
         userMatch: false, 
         photos: {
@@ -550,7 +555,10 @@ app.get('/user-*', (req, res) => {
         //IDK if it's faster to put the if statement in therer like that or if it's faster to query
         //for the match of the session and req.url.slice I'll have to check. 
         pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (e, re) => {
-            
+            if (e) {
+                console.log(e);
+            };
+            console.log(re.rows);
             if (re.rows[0].name === req.url.slice(6)) {
             obj.userMatch = true;
             obj.person = re.rows[0].name;
@@ -584,7 +592,6 @@ app.get('/user-*', (req, res) => {
            
             //Add all the users pictures the the obj.photos array to be rendered. 
             for (let i = 0; i < response.rows.length; i++) {
-                let modulo = (response.rows[i].id - .1) % 2
               
                
                 obj.photos[i] = {thumb: response.rows[i].photo, full:response.rows[i].photo2, width:response.rows[i].width};
@@ -706,11 +713,12 @@ app.post('/user-*', (req, res) => {
         });
 
     } else {
-        console.log(1 % .2);
+      
         column = 'photos';
         let height = Math.floor(req.body.height);
         //Takes the image file chosen by the user which was converted to a 
-        //dataurl in user-page.js and initialises a variable with that value. 
+        //dataurl in user-page.js and initialises a variable with the base64 part
+        //of that dataURL. 
         base64Pic = req.body.photos.slice(22);
         
         //Takes the data url and creates a buffer from that data url because
@@ -718,23 +726,26 @@ app.post('/user-*', (req, res) => {
         const Buffer = require("buffer").Buffer;
         let base64buffer = Buffer.from(base64Pic, "base64");
 
-        
+        //Get the aspect ratio of the input photo
         sharp(base64buffer).metadata().then(result => {
             
             let aspectRatio = result.width/result.height;
 
         
-        //Use the sharp dependency to resize that buffer to 100 by 100 pixels
-        //which is the size used in the thumbnails to increase page load speeds. 
+        //Use the sharp dependency to resize that buffer to 100 by 100 pixels 
+        //which is the size used in the thumbnails and to a smaller version 
+        //of the photo with the same aspect ratio it came in with
+        //to increase page load speeds. 
             sharp(base64buffer).resize(100, 100).toBuffer().then(result => {
                
                 //Convert the resized base64 buffer back to string and create a data
                 //url to be stored in the database and rendered in html. 
                 let newBase64 = result.toString("base64");
                 let dataUrl = `data:image/png;base64,${newBase64}`;
+
                 sharp(base64buffer).resize(Math.floor(height * aspectRatio), height).toBuffer().then(result => {
                 
-                  
+                    //Same as previous comment with the proper aspec ratio version. 
                     let newBase642 = result.toString("base64");
                     let dataUrl2 = `data:image/png;base64,${newBase642}`;
             
@@ -870,7 +881,8 @@ app.get('/conversation/*', (req, res) => {
 
         obj.pageArray = [];
         
-        //need to finish the page functionality here as it is in the threads page. 
+        //need to finish the page functionality here as it is in the threads page
+        //I haven't because I haven't made many conversations posts in my test site yet. 
         let postCount = resp.rows[0].full_count;
         let pageCount = Math.ceil(postCount/20);
        
@@ -883,9 +895,11 @@ app.get('/conversation/*', (req, res) => {
             }
         }
 
+        //Assign the conversation name and id to the handlebars object
         obj.conversationName = req.url.slice(req.url.lastIndexOf('/') +1, req.url.lastIndexOf('-'));
         obj.conversationId = req.url.slice(req.url.lastIndexOf('-') + 1, req.url.lastIndexOf('_'));
-   
+        
+        //Create several view objects that hold specific info fo each conversation
         for (let i = 0; i < resp.rows.length; i++) {
             obj.view[i] = {
                 content: resp.rows[i].content,
@@ -894,6 +908,10 @@ app.get('/conversation/*', (req, res) => {
             }
         };
         
+        //Check if there's a seesion to verify again if the user is logged
+        //in and set the person property of the object to the name of the session
+        //that matches in the database and set is logged in to true so that it
+        //will show in the top right of the page. 
         if (!req.headers.cookie) {
             return res.render('conversations', {obj});  
 
@@ -919,6 +937,7 @@ app.get('/conversation/*', (req, res) => {
 //Post method for adding new posts to an already existing conversation. 
 app.post('/conversation-add', (req, res) => {
 
+    //Get the id of the last post from conversations
     pool.query(`select id from conversationposts order by id desc limit 1`, (err, resp) => {
        
         if (err) {
@@ -941,6 +960,7 @@ app.post('/conversation-add', (req, res) => {
         //of doing a whole new query to get the username. I might change that and test speeds.
         pool.query (`select name from users where session = '${req.headers.cookie.slice(10)}'`, (er, re) => {
             
+            //Inser tnew post. 
             pool.query(`insert into conversationposts (id, convid, datecreated, content, username)
             values ($1, $2, $3, $4, $5)`, 
             [id, req.body.id, fullTime, req.body.content, re.rows[0].name], (error, response) => {
@@ -957,11 +977,13 @@ app.post('/conversation-add', (req, res) => {
 })
 
 
- 
+//Put request for changing user porfile picture 
 app.put('/updatePhoto', (req, res) => {
 
+    //Find the user from the session id
     pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (error, response) => {
        
+        //Update photo on that user name to the selected photo. 
         pool.query(`update users set photo = $1 where name = $2`, [req.body.data, response.rows[0].name], (err, resp) => {
             
             if (err) {
@@ -974,6 +996,7 @@ app.put('/updatePhoto', (req, res) => {
     })
 });
 
+//Get request for search results in a given forum. 
 app.get('/forums/([^/]+)/search-results', (req, res) => {
 
     let obj = {
@@ -987,12 +1010,18 @@ app.get('/forums/([^/]+)/search-results', (req, res) => {
         isSearch: true
     };
     
+    //Check if the keyword of one of the forums exists in the usrl where it should
+    //and use it to make quries if it does. 
     if (req.url.substring(8, req.url.lastIndexOf('/')).toLowerCase() === 'camping' || req.url.substring(8, req.url.lastIndexOf('/')).toLowerCase() === 'hiking' ||
     req.url.substring(8, req.url.lastIndexOf('/')).toLowerCase() === 'backpacking' || req.url.substring(8, req.url.lastIndexOf('/')).toLowerCase() === 'fish' ||
     req.url.substring(8, req.url.lastIndexOf('/')).toLowerCase() === 'mammals' || req.url.substring(8, req.url.lastIndexOf('/')).toLowerCase() === 'reptiles' ||
     req.url.substring(8, req.url.lastIndexOf('/')).toLowerCase() === 'trees' || req.url.substring(8, req.url.lastIndexOf('/')).toLowerCase() === 'vegitation' ||
     req.url.substring(8, req.url.lastIndexOf('/')).toLowerCase() === 'flowers' || req.url.substring(8, req.url.lastIndexOf('/')).toLowerCase() === 'mushrooms') {   
        
+        //The actual search consists of multiple levels of quries that get more
+        //broad as they go. It will try to match the input directly first with this query
+        //and then find less and less exact matches from there and order the results
+        //approprietly. 
         pool.query(`select * from ${req.url.substring(8, req.url.lastIndexOf('/')).toLowerCase()}threads where title like '${req.query.search}%'
         order by title asc`, (err, resp) => {
 
@@ -1002,16 +1031,22 @@ app.get('/forums/([^/]+)/search-results', (req, res) => {
             
             obj.category = req.url.substring(8, req.url.lastIndexOf('/')).toLowerCase();
 
+            //If there are results for the exact match...
             if (resp.rows.length !== 0) {
 
                 let k = 0;
                 let yada;
+
+                //Query for the kth result from the queries above and get the
+                //most recent post to be displayed with the thread title. 
                 function loop1 () {
                   
                     pool.query(`select *, count(*) over() as full_count 
                     from ${req.url.substring(8, req.url.lastIndexOf('/')).toLowerCase()}posts
                     where threadid = ${resp.rows[k].id} order by id desc limit 1`, (error, success) => {
-                    
+                        
+                        //Create a view object with the applicable info from this
+                        //and the above query
                         obj.view[k] = {
                             thread: resp.rows[k].title,
                             user: resp.rows[k].username,
@@ -1021,6 +1056,8 @@ app.get('/forums/([^/]+)/search-results', (req, res) => {
                             userPost: success.rows[0].username
                         }
 
+                        //If k represents the last entry set k back to zero
+                        //else iterate k and continue the loop. 
                         if (k === resp.rows.length - 1) {
                             k = 0;
                             yada = true;
@@ -1034,7 +1071,11 @@ app.get('/forums/([^/]+)/search-results', (req, res) => {
                 }
 
                 loop1();
-            
+                
+                //Create an array of each word and assaign a variable to 
+                //the phrase that represents the query for that each word by
+                //iterating and adding an or statement at the beggining of all
+                //beyond the first. 
                 let wordArray = req.query.search.split(' ');
                 let queryLike = `where title like '%${wordArray[0]}%'`;
 
@@ -1042,26 +1083,43 @@ app.get('/forums/([^/]+)/search-results', (req, res) => {
                     queryLike = queryLike + `or title like '%${wordArray[l]}%'`;
                 }
 
+                //Query for the above words. 
                 pool.query(`select * from ${req.url.substring(8, req.url.lastIndexOf('/')).toLowerCase()}threads ${queryLike}`, (error, response) => {
 
                     if (error) {
                         console.log(error);
                     }
 
-                    if (response.rows.length !== 0) {
+                    //If there are results do the below. 
+                   
 
                         let i  = resp.rows.length;
-                        let loopDone = false;
 
-                        function loop ()   {
-                
+                        //Loop through each result from the above query and query for the
+                        //most recent post of that thread. 
+                        function loop2 ()   {
+                            
+                            //query through each response for the more broad search. Starting
+                            //at response object 0. This 0 is based on i minus i's starting
+                            //value which is resp.rows.length so that it will be in terms of
+                            //i as it increases and start at 0.
                             pool.query(`select *, count(*) over() as full_count 
                             from ${req.url.substring(8, req.url.lastIndexOf('/')).toLowerCase()}posts
                             where threadid = ${response.rows[i - resp.rows.length].id} order by id desc limit 1`, (error, success) => {
                                 
                                 let j = 0;
+                                //for each result create a new loop. This loop essentially checks
+                                //for copies between the broad and exact search
                                 function innerLoop () {
-
+                                    console.log('inner');
+                                    //Add to the view object starting at i which
+                                    //is where the first query left off. it will do this
+                                    //if the current broad search isn't the same as the exact search
+                                    //and also if j is equal to the last index of the initial exact search.
+                                    //this is to made sure it's check for all possible repeats present from
+                                    //object.view[0] to obj.view[last index] and then makes one final check on
+                                    //the last index. If it's not a match on the last index it adds the result
+                                    //to the view object
                                     if (j === resp.rows.length - 1 && obj.view[j].thread !== response.rows[i - resp.rows.length].title) {
 
                                         obj.view[i] = {
@@ -1075,16 +1133,25 @@ app.get('/forums/([^/]+)/search-results', (req, res) => {
                                     
                                     }
 
+                                    //When theres a duplicate or if j reaches the last index of the
+                                    //exact result reset j back to 0.
                                     if (obj.view[j].thread === response.rows[i - resp.rows.length].title || j === resp.rows.length - 1) {
                                         
                                         j = 0;
 
+                                        //I needs to iteraate until it has gone through the last result
+                                        //from the broad search. Since I starts at the length of the strict
+                                        //search you add the two lengths. If it's not the last iteration increment
+                                        //I and loop again. 
                                         if (i !== resp.rows.length + response.rows.length - 1) {
                                             i ++;
-                                            loop();
+                                            loop2();
 
                                         } else {
 
+                                            //Check the name of the user based off the sessionid and set the account
+                                            //in the top right to their name. Then render the template with the obj
+                                            //object. 
                                             if (!req.headers.cookie) {
                                                 return res.render('threads', {obj});  
 
@@ -1115,24 +1182,24 @@ app.get('/forums/([^/]+)/search-results', (req, res) => {
 
                             })
                         }
-                     
-                        function loopWait () {
+
+                       
+                    //wait for loop1 to compleatly resolve before calling the loop2.
+                    function loopWait () {
                    
                             if (obj.view[resp.rows.length - 1] !== undefined) {
                                 console.log('if loop');
-                                loop();
+                                loop2();
                             } else {
                                 console.log('else loop');
                                 setTimeout(loopWait, 100);
                             }
                         }
 
-                        loopWait();
-                    
-                    }               
+                    loopWait();              
                 })              
             } else {
-                
+            //if the strict search doesn't match start on the broad search.
             let wordArray = req.query.search.split(' ');
             let queryLike = `where title like '%${wordArray[0]}%'`;
 
