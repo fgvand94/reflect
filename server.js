@@ -595,7 +595,7 @@ app.get('/user-*', (req, res) => {
        
         
             };
-          
+          console.log(obj.photos[0]);
             //Query the database for the conversations that have a primary or secondary
             //participant that is equal to the user for the given userpage. Sorted by the 
             //conversation with the most recent post. 
@@ -667,11 +667,7 @@ app.get('/user-*', (req, res) => {
                       
                 } else {
                     
-                    if (obj.isLoggedIn) {
-                        obj.userMatch = true;
-                    }  else {
-                        obj.userMatch = false;
-                    };
+         
 
                     return res.render('user-page', {obj});
 
