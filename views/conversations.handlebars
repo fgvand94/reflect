@@ -66,9 +66,9 @@
                         <img src="{{this.photo}}" class="user-photo">
                     </div>                      
                     <div class="post">
-                        <h4><a href="/user-{{this.name}}" class="post-user posts{{@index}}" data-id="{{@last}}">{{this.name}}</a></h4>                      
+                        <h4><a href="/user-{{this.name}}" class="post-user posts{{@index}}" data-id="{{@last}}">{{this.name}}</a></h4>
+                        <!--Forgot what the triple brackets were for. Look it up and add a comment here so I always remember. I think it had to do wiwth changing the scop of this or something like that -->                      
                         <pre><h4 class="content content{{@index}}">{{{this.content}}}</h4></pre>
-                     
                     </div>
                 </div>
                 {{/each}} 

@@ -112,7 +112,6 @@ a:hover {
     display: none;
     position: absolute;
     height: 60%;
-    width: 60%;
     top: 20%;
     left: 20%;
 }
@@ -130,7 +129,7 @@ a:hover {
 
 .set-picture {
     display: inline;
-    left: 82%;
+    right: 3%;
     top: 92%;
     filter: opacity(100%);
     position: absolute;
@@ -139,7 +138,7 @@ a:hover {
 }
 
 .exit {   
-    left: 98%;
+    right: 2%;
     top: 0%;
     position: absolute;
     z-index: 2; 
@@ -149,8 +148,6 @@ a:hover {
     left: 10%;
     top: 10%;
     position: absolute;
-    width: 80%;
-    height: 80%;
     z-index: 2;
 }
 

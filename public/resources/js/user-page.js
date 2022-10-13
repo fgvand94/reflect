@@ -22,6 +22,11 @@ let conversationUser = document.querySelector('.user');
 let conversationTitle = document.querySelector('.title');
 let conversationContent = document.querySelector('.message');
 
+let aspectRatio = window.innerWidth/window.innerHeight;
+let windowPhotoHeight = Math.floor(window.innerHeight * .48);
+
+let setPictureSrc;
+
 const showBioForm = (e) => {
     bioForm.style.display = 'block';
 }
@@ -69,7 +74,8 @@ photoCancel.addEventListener('click', () => {
 photoUpload.addEventListener('click', () => {
     
     let body = {
-        photos: ''
+        photos: '',
+        height: windowPhotoHeight
     }
 
     xhr = new XMLHttpRequest();
@@ -81,23 +87,31 @@ photoUpload.addEventListener('click', () => {
             location.reload();          
         }
     }
-    
+    console.log(photoInput.files[0]);
     const reader = new FileReader();
     reader.readAsDataURL(photoInput.files[0]);
     reader.onload = function() {
         body.photos = reader.result;
-        console.log(body.photos);
+        // console.log(body.photos);
         xhr.send(JSON.stringify(body));
     }
    
 })
 
 image.addEventListener('click', (e) => {
-    console.log('click');
+  
     if (e.target.className === 'photos') {
-    imageEnlarge.style.display = 'block';
-    enlargedImage.src = e.target.src;
-    
+        let borderWidth = e.target.dataset.width*1.12;
+        let borderLeft = (window.innerWidth - borderWidth)/2;
+        let imageLeft = (borderWidth - e.target.dataset.width)/2
+        imageEnlarge.style.display = 'block';
+        imageEnlarge.style.width = `${borderWidth}px`;
+        imageEnlarge.style.left = `${borderLeft}px`;
+        enlargedImage.src = e.target.dataset.full;
+        enlargedImage.style.height = `${windowPhotoHeight}px`;
+        enlargedImage.style.width = `${e.target.dataset.width}px`;
+        enlargedImage.style.left = `${imageLeft}px`;
+        setPictureSrc = e.target.src;
     }
 })
 
@@ -109,10 +123,10 @@ setPicture.addEventListener('click', () => {
   
     console.log('what');
     let body = {
-        data: enlargedImage.src
+        data: setPictureSrc,
     }
 
-   
+    setPictureSrc = "";
     let xhr = new XMLHttpRequest();
     xhr.open('PUT', '/updatePhoto');
     xhr.setRequestHeader('content-type', 'application/json');

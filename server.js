@@ -15,15 +15,11 @@ const app = express();
 
 //Define the render engine to be used for express. 
 app.engine('handlebars', hbs.engine);
-
 app.use(express.static('public'));
-
 app.set('view engine', 'handlebars');
 
 app.use(express.json({ limit: "50mb" }));
-
 app.use(express.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }));
-
 app.use(express.raw({ limit: "50mb" }));
 
 const alpha = Array.from(Array(26)).map((e, i) => i + 65);
@@ -530,11 +526,11 @@ app.get('/verify', (req, res) => {
 
 //Get method for user pages. 
 app.get('/user-*', (req, res) => {
-
+  console.log(2.2 % 2);
     const obj = {
         userMatch: false, 
         photos: {
-
+            
         },
         conversation: {
 
@@ -551,6 +547,8 @@ app.get('/user-*', (req, res) => {
 
     } else {
 
+        //IDK if it's faster to put the if statement in therer like that or if it's faster to query
+        //for the match of the session and req.url.slice I'll have to check. 
         pool.query(`select name from users where session = '${req.headers.cookie.slice(10)}'`, (e, re) => {
             
             if (re.rows[0].name === req.url.slice(6)) {
@@ -586,7 +584,12 @@ app.get('/user-*', (req, res) => {
            
             //Add all the users pictures the the obj.photos array to be rendered. 
             for (let i = 0; i < response.rows.length; i++) {
-                obj.photos[i] = response.rows[i].photo;
+                let modulo = (response.rows[i].id - .1) % 2
+              
+               
+                obj.photos[i] = {thumb: response.rows[i].photo, full:response.rows[i].photo2, width:response.rows[i].width};
+       
+        
             };
           
             //Query the database for the conversations that have a primary or secondary
@@ -703,9 +706,9 @@ app.post('/user-*', (req, res) => {
         });
 
     } else {
-
+        console.log(1 % .2);
         column = 'photos';
-
+        let height = Math.floor(req.body.height);
         //Takes the image file chosen by the user which was converted to a 
         //dataurl in user-page.js and initialises a variable with that value. 
         base64Pic = req.body.photos.slice(22);
@@ -714,36 +717,54 @@ app.post('/user-*', (req, res) => {
         //the sharp add on won't accept the string base64 as input. 
         const Buffer = require("buffer").Buffer;
         let base64buffer = Buffer.from(base64Pic, "base64");
+        let image = sharp(base64buffer);
+        let metadata = image.metadata();
+        console.log(metadata);
+        sharp(base64buffer).metadata().then(result => {
+            console.log(result);
+            let aspectRatio = result.width/result.height;
 
+        
         //Use the sharp dependency to resize that buffer to 100 by 100 pixels
         //which is the size used in the thumbnails to increase page load speeds. 
-        sharp(base64buffer).resize(100, 100).toBuffer().then(result => {
+            sharp(base64buffer).resize(100, 100).toBuffer().then(result => {
 
-            //Convert the resized base64 buffer back to string and create a data
-            //url to be stored in the database and rendered in html. 
-            let newBase64 = result.toString("base64");
-            let dataUrl = `data:image/png;base64,${newBase64}`;
-           
-            pool.query(`select id from pictures order by id desc limit 1`, (err, resp) => {
-    
-                let id;
-    
-                if (resp.rows.length !== 0) {
-                    id = resp.rows[0].id + 1;
-                } else {
-                    id = 1;
-                };
+                //Convert the resized base64 buffer back to string and create a data
+                //url to be stored in the database and rendered in html. 
+                let newBase64 = result.toString("base64");
+                let dataUrl = `data:image/png;base64,${newBase64}`;
+                sharp(base64buffer).resize(Math.floor(height * aspectRatio), height).toBuffer().then(result => {
                 
-                pool.query(`insert into pictures (id, photo, username) values ($1, $2, $3) `,
-                [id, dataUrl, req.url.slice(req.url.lastIndexOf('-') + 1)], (err, resp) => {
-                    if (err) {
-                        console.log(err);
-                    }
-                    res.send('success');
+                    console.log(result);
+                    let newBase642 = result.toString("base64");
+                    let dataUrl2 = `data:image/png;base64,${newBase642}`;
+            
+                    pool.query(`select id from pictures order by id desc limit 1`, (err, resp) => {
+            
+                        let id;
+                       
+            
+                        if (resp.rows.length !== 0) {
+                            id = resp.rows[0].id + 1;
+                           
+                        } else {
+                            id = 1;
+                            
+                        };
+                        console.log("pool");
+                        pool.query(`insert into pictures (id, photo, username, photo2, width) values ($1, $2, $3, $4, $5) `,
+                        [id, dataUrl, req.url.slice(req.url.lastIndexOf('-') + 1), dataUrl2, Math.floor(height * aspectRatio)], (err, resp) => {
+                            
+                            if (err) {
+                                console.log(err);
+                            }
+                            res.send('success');
+                        })
+                    }) 
                 })
-            }) 
-            return result;
-        });
+                return result;
+            });
+        })
 
     }
  
@@ -919,7 +940,6 @@ app.post('/conversation-add', (req, res) => {
     
         //I could just grab the user name from the drop down and send it over from the front end instead
         //of doing a whole new query to get the username. I might change that and test speeds.
-
         pool.query (`select name from users where session = '${req.headers.cookie.slice(10)}'`, (er, re) => {
             
             pool.query(`insert into conversationposts (id, convid, datecreated, content, username)
@@ -1651,25 +1671,16 @@ app.get('/forums/([^/]+)/([^/]+)/add-a-post', (req, res) => {
 app.post('/forums/([^/]+)/([^/]+)/add-a-post', (req, res) => {
  
     let date_ob = new Date();
-
     let date = ("0" + date_ob.getDate()).slice(-2);
-
     let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
-
     let year = date_ob.getFullYear();
-
     let hours = date_ob.getHours();
-    
     let minutes = date_ob.getMinutes();
-
     let seconds = date_ob.getSeconds();
-
     let fullTime = year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds;
 
     let threadEndI = req.url.indexOf('message') - 12;
-
     let threadEnd = req.url.slice(0, threadEndI);
-   
     let nextLastSlash = threadEnd.lastIndexOf('/');
    
     if (threadEnd.substring(8, nextLastSlash).toLowerCase() === 'camping' || threadEnd.substring(8, nextLastSlash).toLowerCase() === 'hiking' ||

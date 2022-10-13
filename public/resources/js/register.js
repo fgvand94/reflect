@@ -13,6 +13,7 @@ register.addEventListener('submit', (e) => {
         password: password.value,
         
     };
+    
     console.log(body);
     let xhr = new XMLHttpRequest();
     xhr.open('POST', '/register');

@@ -1,5 +1,4 @@
 let form = document.querySelector(".new-thread");
-
 let title = document.getElementById('thread');
 let message = document.getElementById("message");
 
