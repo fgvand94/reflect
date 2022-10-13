@@ -85,7 +85,7 @@
 			</div>
 			<div class="img-container">
 			{{#each obj.photos}}
-			<img src="{{this}}" class="photos">
+			<img src="{{this.thumb}}" data-full="{{this.full}}" data-width="{{this.width}}" class="photos">
 			{{/each}}
 		</div>
 		{{/if}}
