@@ -37,8 +37,13 @@ for (let j = 0; j < 16; j++) {
 
 //Creating and setting up my postgreSQL ORM
 const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: false }
+    // connectionString: process.env.DATABASE_URL,
+    // ssl: { rejectUnauthorized: false }
+    user: 'postgres',
+    host: 'localhost',
+    database: 'reflect',
+    password: 'password',
+    port: 5432,
 
 });
 
@@ -1289,7 +1294,7 @@ app.get('/forums', (req, res) => {
         }
     };
 
-    
+
     const threadArray = ['camping', 'hiking', 'backpacking', 'fish', 'mammals', 'reptiles', 'trees', 'vegitation', 'flowers', 'mushrooms'];
     let i = 0;
         
