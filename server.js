@@ -1016,7 +1016,7 @@ app.get('/forums/([^/]+)/search-results', (req, res) => {
         //broad as they go. It will try to match the input directly first with this query
         //and then find less and less exact matches from there and order the results
         //approprietly. 
-        pool.query(`select * from ${req.url.substring(8, req.url.lastIndexOf('/')).toLowerCase()}threads where title like '${req.query.search}%'
+        pool.query(`select * from ${req.url.substring(8, req.url.lastIndexOf('/')).toLowerCase()}threads where title like '${req.query.search.trim()}%'
         order by title asc`, (err, resp) => {
 
             if (err) {
@@ -1070,7 +1070,7 @@ app.get('/forums/([^/]+)/search-results', (req, res) => {
                 //the phrase that represents the query for that each word by
                 //iterating and adding an or statement at the beggining of all
                 //beyond the first. 
-                let wordArray = req.query.search.split(' ');
+                let wordArray = req.query.search.split(' ').trim();
                 let queryLike = `where title like '%${wordArray[0]}%'`;
 
                 for (let l = 1; l < wordArray.length; l++) {
@@ -1194,7 +1194,7 @@ app.get('/forums/([^/]+)/search-results', (req, res) => {
                 })              
             } else {
             //if the strict search doesn't match start on the broad search.
-            let wordArray = req.query.search.split(' ');
+            let wordArray = req.query.search.split(' ').trim();
             let queryLike = `where title like '%${wordArray[0]}%'`;
 
             for (let i = 1; i < wordArray.length; i++) {
