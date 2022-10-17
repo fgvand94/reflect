@@ -97,9 +97,9 @@ photoUpload.addEventListener('click', () => {
     }
    
 })
-console.log("bloooop");
+
 image.addEventListener('click', (e) => {
-  console.log("bloop");
+
     if (e.target.className === 'photos') {
         let borderWidth = e.target.dataset.width*1.12;
         let borderLeft = (window.innerWidth - borderWidth)/2;

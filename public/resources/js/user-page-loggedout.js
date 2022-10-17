@@ -2,9 +2,10 @@ let image = document.querySelector('.img-container');
 let imageEnlarge = document.querySelector(".image-enlarge");
 let exit = document.querySelector('.exit');
 let enlargedImage = document.querySelector('.enlarged-image');
+let windowPhotoHeight = Math.floor(window.innerHeight * .48);
 
 image.addEventListener('click', (e) => {
-    console.log("bloop");
+
       if (e.target.className === 'photos') {
           let borderWidth = e.target.dataset.width*1.12;
           let borderLeft = (window.innerWidth - borderWidth)/2;
@@ -16,7 +17,7 @@ image.addEventListener('click', (e) => {
           enlargedImage.style.height = `${windowPhotoHeight}px`;
           enlargedImage.style.width = `${e.target.dataset.width}px`;
           enlargedImage.style.left = `${imageLeft}px`;
-          setPictureSrc = e.target.src;
+        
       }
   })
   
