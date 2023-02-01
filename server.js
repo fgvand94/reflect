@@ -386,12 +386,11 @@ app.post('/register', (req, res) => {
                    return console.log(err);
                 } 
               
-                var alph;
-                var alphabet;
+           
     
                 
-                alpha = Array.from(Array(26)).map((e, i) => i + 65);
-                alphabet = alpha.map((x) => String.fromCharCode(x));
+                const alpha = Array.from(Array(26)).map((e, i) => i + 65);
+                const alphabet = alpha.map((x) => String.fromCharCode(x));
 
                 //Create two randomely generated arrays of characters. One for
                 //the passwords salt and one to create the verification token
