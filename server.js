@@ -58,6 +58,9 @@ app.get('/', (req, res) => {
     //not a user is logged in. If there isn't it renders the page normally. If there
     //Is it checks the database for a match in the session cookie and then gets the
     //username based on that sessionID and sets person to that user and isLoggedIn to true
+        console.log(req.headers.cookie);
+        console.log(req.headers.cookie.index('sessionid'));
+
     if (!req.headers.cookie) {
         return res.render('index', {obj});  
 
