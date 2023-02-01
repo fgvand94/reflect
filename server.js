@@ -385,10 +385,17 @@ app.post('/register', (req, res) => {
                 if (err) {
                    return console.log(err);
                 } 
- 
-                const id = resp.rows[0].id + 1;
-                const alpha = Array.from(Array(26)).map((e, i) => i + 65);
-                const alphabet = alpha.map((x) => String.fromCharCode(x));
+                var id;
+                var alph;
+                var alphabet;
+                if (resp.rows.length === 0) {
+                    id = 0;
+                } else {
+                    id = resp.rows[0].id + 1;
+                }
+                
+                alpha = Array.from(Array(26)).map((e, i) => i + 65);
+                alphabet = alpha.map((x) => String.fromCharCode(x));
 
                 //Create two randomely generated arrays of characters. One for
                 //the passwords salt and one to create the verification token
@@ -574,6 +581,9 @@ app.get('/user-*', (req, res) => {
             return;
         } 
 
+        if (resp.rows.length === 0) {
+            res.send("User doesn't exist");
+        }
         //Set the appropriet obj properties to the users name, profile picture and
         //biography to be rendered on the page. 
         obj.person = resp.rows[0].name;
@@ -1393,6 +1403,9 @@ app.get(`/forums/([^/]+)`, (req, res) => {
         limit 20 offset ${offset - 20};`, (err, resp) =>{
           
             obj.pageArray = [];
+            if (resp.rows.length === 0) {
+                return res.render('threads',  {obj});                
+            }
   
             let threadCount = resp.rows[0].full_count;
             let pageCount = Math.ceil(threadCount/20);
@@ -1560,6 +1573,10 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
                 console.log(err);
                 return;
             };
+
+            if (resp.rows.length === 0) {
+                return res.render('threads',  {obj}); 
+            }
            
             obj.pageArray = [];
             obj.category = req.url.substring(8, lastSlash).toLowerCase();
