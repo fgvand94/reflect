@@ -53,15 +53,15 @@ app.get('/', (req, res) => {
         person: ""
     }
 
-    let i = 0;
-    let cookieIndex = 0;
-    while (i < req.headers.cookie.length) {
-        if (req.headers.cookie[i].includes("sessionId")){
-            cookieIndex = i;
-            break;
-        }
-        i++;
-    }
+    // let i = 0;
+
+    // while (i < req.headers.cookie.length) {
+    //     if (req.headers.cookie[i].includes("sessionId")){
+    //         cookieIndex = i;
+    //         break;
+    //     }
+    //     i++;
+    // }
     //Checks if there is any cookies. My site doesn't have any cookies if a user
     //is not logged in. So checking if there are cookies at all indicates whether or
     //not a user is logged in. If there isn't it renders the page normally. If there
