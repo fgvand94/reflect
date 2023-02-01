@@ -54,7 +54,7 @@ app.get('/', (req, res) => {
     }
 
     let i = 0;
-    let cookieIndex;
+    let cookieIndex = 0;
     while (i < req.headers.cookie.length) {
         if (req.headers.cookie[i].includes("sessionId")){
             cookieIndex = i;
