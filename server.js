@@ -70,14 +70,14 @@ app.get('/', (req, res) => {
         console.log(typeof req.headers.cookie);
         console.log(req.headers.cookie.indexOf('sessionId'));
         const cookieIndex = req.headers.cookie.indexOf('sessionId');
-        console.log(req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 136));
+        console.log(req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138));
 
     if (!req.headers.cookie) {
         return res.render('index', {obj});  
 
     } else { 
         
-        pool.query(`select * from users where session = '${req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 136)}'`, (err, resp) => {
+        pool.query(`select * from users where session = '${req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138)}'`, (err, resp) => {
 
         if (err || resp.rows.length !== 1) {
             console.log('auth failed');
