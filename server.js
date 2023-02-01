@@ -380,19 +380,15 @@ app.post('/register', (req, res) => {
             
             //If the user doesn't exists get the highest id for the user so it can
             //be incremented. I don't need this. The email acts as the primary key.
-            pool.query(`select id from users order by id desc`,  (err, resp) => {
+          
 
                 if (err) {
                    return console.log(err);
                 } 
-                var id;
+              
                 var alph;
                 var alphabet;
-                if (resp.rows.length === 0) {
-                    id = 0;
-                } else {
-                    id = resp.rows[0].id + 1;
-                }
+    
                 
                 alpha = Array.from(Array(26)).map((e, i) => i + 65);
                 alphabet = alpha.map((x) => String.fromCharCode(x));
@@ -461,8 +457,8 @@ app.post('/register', (req, res) => {
                     //If the email sends without error create a new row in the user table and add all
                     //the column values. The only reason the email would fail to send is if the user 
                     //input an invalid email. So I only create the account if a valid email is used. 
-                    pool.query(`insert into users (id, name, email, password, salt, verified, verificationtoken)
-                    values ($1, $2, $3, $4, $5, $6, $7)`, [id, userName, email, value, key, false, value2], (error, response) => {
+                    pool.query(`insert into users (email, name, password, salt, verified, verificationtoken)
+                    values ($1, $2, $3, $4, $5, $6)`, [email, userName, value, key, false, value2], (error, response) => {
                        
                         if (error) {
                             res.send(error);
@@ -476,7 +472,7 @@ app.post('/register', (req, res) => {
 
                 });
         
-            }); 
+       
             
         });
 
