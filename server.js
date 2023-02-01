@@ -185,6 +185,7 @@ app.post('/login', (req, res) => {
 
             } else {
                 res.setHeader('Set-Cookie', `sessionId=${resp.rows[0].session}`);
+                res.setHeader('Set-Cookie', `something=somethingelse`);
             }
 
             res.send('success');
