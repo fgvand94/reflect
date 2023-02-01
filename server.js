@@ -61,7 +61,7 @@ app.get('/', (req, res) => {
         console.log(req.headers.cookie);
         console.log(req.headers.cookie.indexOf('sessionid'));
         const cookieIndex = req.headers.cookie.indexOf('sessionid') + 11;
-        console.log(req.headers.cookie.slice(cookieIndex));
+        console.log(req.headers.cookie.slice(cookieIndex, req.headers.cookie.slice(cookieIndex, + 126)));
 
     if (!req.headers.cookie) {
         return res.render('index', {obj});  
