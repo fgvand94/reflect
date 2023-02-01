@@ -1302,6 +1302,7 @@ app.get('/forums', (req, res) => {
         from ${threadArray[i]}threads, ${threadArray[i]}posts where ${threadArray[i]}threads.id = ${threadArray[i]}posts.threadid order by postid desc limit 1`, (err, resp) =>{
             
             if (err) {
+                res.send("Currently transfering database. Should be up shortly");
                 return console.log(err);
             }
 
