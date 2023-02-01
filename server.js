@@ -68,8 +68,9 @@ app.get('/', (req, res) => {
     //Is it checks the database for a match in the session cookie and then gets the
     //username based on that sessionID and sets person to that user and isLoggedIn to true
         console.log(typeof req.headers.cookie);
-        console.log(req.headers.cookie.indexOf('sessionid'));
-        console.log(req.headers.cookie.slice(cookieIndex, req.headers.cookie.slice(cookieIndex, + 126)));
+        console.log(req.headers.cookie.indexOf('sessionId'));
+        const cookieIndex = req.headers.cookie.indexOf('sessionId');
+        console.log(req.headers.cookie.slice(cookieIndex, req.headers.cookie.slice(cookieIndex, + 127)));
 
     if (!req.headers.cookie) {
         return res.render('index', {obj});  
