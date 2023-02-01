@@ -53,14 +53,22 @@ app.get('/', (req, res) => {
         person: ""
     }
 
+    let i = 0;
+    let cookieIndex;
+    while (i < req.headers.cookie.length) {
+        if (req.header.cookie.includes("sessionId")){
+            cookie index = i;
+            break;
+        }
+        i++;
+    }
     //Checks if there is any cookies. My site doesn't have any cookies if a user
     //is not logged in. So checking if there are cookies at all indicates whether or
     //not a user is logged in. If there isn't it renders the page normally. If there
     //Is it checks the database for a match in the session cookie and then gets the
     //username based on that sessionID and sets person to that user and isLoggedIn to true
-        console.log(req.headers.cookie);
+        console.log(req.headers.cookie[cookieIndex].slice(10));
         console.log(req.headers.cookie.indexOf('sessionid'));
-        const cookieIndex = req.headers.cookie.indexOf('sessionid') + 11;
         console.log(req.headers.cookie.slice(cookieIndex, req.headers.cookie.slice(cookieIndex, + 126)));
 
     if (!req.headers.cookie) {
@@ -68,7 +76,7 @@ app.get('/', (req, res) => {
 
     } else { 
         
-        pool.query(`select * from users where session = '${req.headers.cookie.slice(cookieIndex, req.headers.cookie.slice(cookieIndex, + 127) )}'`, (err, resp) => {
+        pool.query(`select * from users where session = '${req.headers.cookie[cookieIndex].slice(10)}'`, (err, resp) => {
 
         if (err || resp.rows.length !== 1) {
             console.log('auth failed');
