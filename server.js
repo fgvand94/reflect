@@ -1307,6 +1307,11 @@ app.get('/forums', (req, res) => {
                 return console.log(err);
             }
 
+            if (!resp.rows[0].title) {
+                console.log("error");
+                res.send("error");
+            }
+
             obj.recentthreads[threadArray[i]] = {
                 title: resp.rows[0].title,
                 id: resp.rows[0].id,
