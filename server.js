@@ -1295,12 +1295,13 @@ app.get('/forums', (req, res) => {
 
     const threadArray = ['camping', 'hiking', 'backpacking', 'fish', 'mammals', 'reptiles', 'trees', 'vegitation', 'flowers', 'mushrooms'];
     let i = 0;
+    console.log("forums");
         
     function loop() {
         
         pool.query(`select ${threadArray[i]}threads.title, ${threadArray[i]}threads.id, ${threadArray[i]}posts.id as postid
         from ${threadArray[i]}threads, ${threadArray[i]}posts where ${threadArray[i]}threads.id = ${threadArray[i]}posts.threadid order by postid desc limit 1`, (err, resp) =>{
-            
+            console.log("query");
             if (err) {
                 res.send("Currently transfering database. Should be up shortly");
                 return console.log(err);
