@@ -61,14 +61,14 @@ app.get('/', (req, res) => {
         console.log(req.headers.cookie);
         console.log(req.headers.cookie.indexOf('sessionid'));
         const cookieIndex = req.headers.cookie.indexOf('sessionid') + 11;
-        console.log(req.headers.cookie.slice(cookieIndex) + 123);
+        console.log(req.headers.cookie.slice(cookieIndex));
 
     if (!req.headers.cookie) {
         return res.render('index', {obj});  
 
     } else { 
         
-        pool.query(`select * from users where session = '${req.headers.cookie.slice(cookieIndex), req.headers.cookie.slice(cookieIndex) + 123}'`, (err, resp) => {
+        pool.query(`select * from users where session = '${req.headers.cookie.slice(cookieIndex, req.headers.cookie.slice(cookieIndex, + 127) )}'`, (err, resp) => {
 
         if (err || resp.rows.length !== 1) {
             console.log('auth failed');
@@ -707,7 +707,7 @@ app.post('/user-*', (req, res) => {
         column = 'bio';
         data = req.body.bio;
 
-        pool.query(`update users set ${column} = $1 where session = $2`, [data, req.headers.cookie.slice(cookieIndex), req.headers.cookie.slice(cookieIndex) + 123], (err, resp) =>{
+        pool.query(`update users set ${column} = $1 where session = $2`, [data, req.headers.cookie.slice(cookieIndex)], (err, resp) =>{
             
             if (err) {
                 console.log(err);
