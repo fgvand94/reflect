@@ -26,8 +26,6 @@ forum.innerHTML = categoryUpper;
 forum.href = `/forums/${category}_pg1`;
 
 
-
-
 allPosts.addEventListener('click', (e) => {
 
     if (e.target.className.slice(0, 11) === 'update-post') {
