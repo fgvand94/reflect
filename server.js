@@ -1551,7 +1551,7 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
 
             } else {
 
-                pool.query(`select name from users where session = '${}'`, (error, response) => {
+                pool.query(`select name from users where session = '${session}'`, (error, response) => {
                     
                     if (error || response.rows.length === 0) {
                         res.render('posts', {obj});
@@ -1574,7 +1574,7 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
 
             } else {
 
-                pool.query(`select name from users where session = '${req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138)}'`, (error, response) => {
+                pool.query(`select name from users where session = '${session}'`, (error, response) => {
                     console.log("consolelog");
                     if (error || response.rows.length === 0) {
                         res.render('new-thread', {obj});
