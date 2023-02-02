@@ -650,7 +650,7 @@ const cookieIndex = req.headers.cookie.indexOf('sessionid');
             ) as t
             where t.user1name = '${req.url.slice(6)}' and t.rn = 1
             or t.user2name = '${req.url.slice(6)}' and t.rn = 1
-            order by t.id desc;`,  function (error, response) {
+            order by t.postid desc;`,  function (error, response) {
               
                 if(error) {
                     return console.log(error);
