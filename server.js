@@ -1322,7 +1322,9 @@ app.get('/forums', (req, res) => {
 
         }
     };
-        const cookieIndex = req.headers.cookie.indexOf('sessionid');
+    const cookieIndex = req.headers.cookie.indexOf('sessionid');
+    const cookie = req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138);
+    console.log(cookie);
 
 
     const threadArray = ['camping', 'hiking', 'backpacking', 'fish', 'mammals', 'reptiles', 'trees', 'vegitation', 'flowers', 'mushrooms'];
@@ -1361,7 +1363,7 @@ app.get('/forums', (req, res) => {
 
                 } else {                  
                     
-                    pool.query(`select * from users where session = '${req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138)}'`, (err, resp) => {
+                    pool.query(`select * from users where session = '${}'`, (err, resp) => {
                 
                         if (err || resp.rows.length !== 1) {
                             res.render('forum-home', {obj});
@@ -1537,7 +1539,7 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
     let title = req.url.substring(lastSlash + 1, threadid).replaceAll('-', ' ');
    
     const offset = Math.ceil(req.url.slice(req.url.lastIndexOf('_') +3) * 20);
-
+    console.log(req.url.substring(8, underscore).toLowerCase());
     if (req.url.substring(8, underscore).toLowerCase() === 'camping' || req.url.substring(8, underscore).toLowerCase() === 'hiking' ||
     req.url.substring(8, underscore).toLowerCase() === 'backpacking' || req.url.substring(8, underscore).toLowerCase() === 'fish' ||
     req.url.substring(8, underscore).toLowerCase() === 'mammals' || req.url.substring(8, underscore).toLowerCase() === 'reptiles' ||
