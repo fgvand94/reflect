@@ -67,19 +67,12 @@ app.get('/', (req, res) => {
     //not a user is logged in. If there isn't it renders the page normally. If there
     //Is it checks the database for a match in the session cookie and then gets the
     //username based on that sessionID and sets person to that user and isLoggedIn to true
-        console.log(typeof req.headers.cookie);
-        console.log(req.headers.cookie.indexOf('sessionId'));
+      
         const cookieIndex = req.headers.cookie.indexOf('sessionId');
-        console.log(req.headers.cookie.slice(cookieIndex + 11, cookieIndex + 139));
 
-    if (!req.headers.cookie) {
-        return res.render('index', {obj});  
-
-    } else { 
-        
         pool.query(`select * from users where session = '${req.headers.cookie.slice(cookieIndex + 11, cookieIndex + 139)}'`, (err, resp) => {
 
-        if (err || req.rows.length === 0) {
+        if (err || resp.rows.length === 0) {
             console.log('auth failed');
             return res.render('index', {obj});
             
@@ -92,7 +85,7 @@ app.get('/', (req, res) => {
             
                             
         })
-    }
+    
     
 });
 
