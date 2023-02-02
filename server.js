@@ -1322,6 +1322,7 @@ app.get('/forums', (req, res) => {
 
         }
     };
+
     const cookieIndex = req.headers.cookie.indexOf('sessionid');
     const cookie = req.headers.cookie.slice(cookieIndex + 11, cookieIndex + 139);
     //No idea why it consol logged console log???
@@ -1359,28 +1360,25 @@ app.get('/forums', (req, res) => {
 
             } else {
         
-                if (!req.headers.cookie) {
-                    return res.render('forum-home', {obj});  
-
-                } else {                  
-                    
-                    pool.query(`select * from users where session = '${cookie}'`, (err, resp) => {
                 
-                        if (err || resp.rows.length !== 1) {
-                            console.log("error");
-                            res.render('forum-home', {obj});
-                            return;
-
-                        } 
-
-                        obj.isLoggedIn = true;
-                        obj.person = resp.rows[0].name;
-                        console.log(obj.person);
+                    
+                pool.query(`select * from users where session = '${cookie}'`, (err, resp) => {
+            
+                    if (err || resp.rows.length !== 1) {
+                        console.log("error");
                         res.render('forum-home', {obj});
-                        return;       
+                        return;
 
-                    });
-                }
+                    } 
+
+                    obj.isLoggedIn = true;
+                    obj.person = resp.rows[0].name;
+                    console.log(obj.person);
+                    res.render('forum-home', {obj});
+                    return;       
+
+                });
+                
             
             }
         })
@@ -1402,7 +1400,7 @@ app.get(`/forums/([^/]+)`, (req, res) => {
         pageTotal:"",
         isSearch: false   
     }
-        const cookieIndex = req.headers.cookie.indexOf('sessionid');
+    const cookieIndex = req.headers.cookie.indexOf('sessionid');
 
     const offset = Math.ceil(req.url.slice(req.url.lastIndexOf('_') +3) * 20); 
 
@@ -1532,7 +1530,7 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
     }
     
     const sessionIndex = req.headers.cookie.indexOf('sessionid');
-    const session = req.headers.cookie.slice(sessionIndex + 10, sessionIndex + 138);
+    const session = req.headers.cookie.slice(sessionIndex + 11, sessionIndex + 139);
 
     console.log(session);
 
@@ -1551,48 +1549,42 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
  
         if (req.url.substring(lastSlash + 1) === 'Introduce-yourself') {
 
-            if (!req.headers.cookie) {
-                return res.render('posts', {obj}); 
 
-            } else {
 
-                pool.query(`select name from users where session = '${session}'`, (error, response) => {
-                    
-                    if (error || response.rows.length === 0) {
-                        res.render('posts', {obj});
-                        return;
-                    } 
-
-                    obj.isLoggedIn = true;
-                    obj.person = response.rows[0].name;
+            pool.query(`select name from users where session = '${session}'`, (error, response) => {
+                
+                if (error || response.rows.length === 0) {
                     res.render('posts', {obj});
                     return;
-                    
-                }); 
-            }     
+                } 
+
+                obj.isLoggedIn = true;
+                obj.person = response.rows[0].name;
+                res.render('posts', {obj});
+                return;
+                
+            }); 
+                 
         };
 
         if (req.url.substring(lastSlash + 1) === 'new-thread') {
 
-            if (!req.headers.cookie) {
-                return res.render('new-thread', {obj});
 
-            } else {
 
-                pool.query(`select name from users where session = '${session}'`, (error, response) => {
-                    console.log("consolelog");
-                    if (error || response.rows.length === 0) {
-                        res.render('new-thread', {obj});
-                        return;
-                    } 
-
-                    obj.isLoggedIn = true;
-                    obj.person = response.rows[0].name;
+            pool.query(`select name from users where session = '${session}'`, (error, response) => {
+                console.log("consolelog");
+                if (error || response.rows.length === 0) {
                     res.render('new-thread', {obj});
                     return;
-                    
-                }); 
-            } 
+                } 
+
+                obj.isLoggedIn = true;
+                obj.person = response.rows[0].name;
+                res.render('new-thread', {obj});
+                return;
+                
+            }); 
+            
           return;
         }
 
@@ -1632,7 +1624,7 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
                         obj.pageArray.push(j+1);
                     }
 
-                    if (!req.headers.cookie) {
+                    if (!req.headers.cookie.indexOf('sessionid' === - 1)) {
                         for (let i = 0; i < resp.rows.length; i++) {
                       
                             obj.view[i] = {
@@ -1650,7 +1642,7 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
 
                     } else {
                         
-                        pool.query(`select name from users where session = '${req.headers.cookie.slice(cookieIndex + 11, cookieIndex + 139) || null}'`, (error, response) => {
+                        pool.query(`select name from users where session = '${req.headers.cookie.slice(cookieIndex + 11, cookieIndex + 139)}'`, (error, response) => {
                         
                             
                                 for (let i = 0; i < resp.rows.length; i++) {
