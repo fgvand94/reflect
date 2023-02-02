@@ -1526,7 +1526,10 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
         view: {},
     }
     
-    const cookieIndex = req.headers.cookie.indexOf('sessionid');
+    const sessionIndex = req.headers.cookie.indexOf('sessionid');
+    const session = req.headers.cookie.slice(sessionIndex + 10, sessionIndex + 138);
+
+    console.log(session);
 
     let lastSlash = req.url.lastIndexOf('/');
     let underscore = req.url.lastIndexOf('_');
@@ -1548,7 +1551,7 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
 
             } else {
 
-                pool.query(`select name from users where session = '${req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138)}'`, (error, response) => {
+                pool.query(`select name from users where session = '${}'`, (error, response) => {
                     
                     if (error || response.rows.length === 0) {
                         res.render('posts', {obj});
