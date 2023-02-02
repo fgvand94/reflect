@@ -12,6 +12,8 @@ if (post === 'new-thread' || post === 'Introduce-yourself') {
     navPost.innerHTML = post.replaceAll('-', ' ');
 } else {
     navPost.innerHTML = post.substring(0, threadid).replaceAll('-', ' ');
+    newPost.href = windowFull + '/add-a-post';
+    console.log(newPost.href);
 }
 
 console.log(post);
@@ -23,8 +25,7 @@ let categoryUpper = category.charAt(0).toUpperCase() + category.slice(1);
 forum.innerHTML = categoryUpper;
 forum.href = `/forums/${category}_pg1`;
 
-newPost.href = windowFull + '/add-a-post';
-console.log(newPost.href);
+
 
 
 allPosts.addEventListener('click', (e) => {
