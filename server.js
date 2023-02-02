@@ -1427,9 +1427,9 @@ app.get(`/forums/([^/]+)`, (req, res) => {
         limit 20 offset ${offset - 20};`, (err, resp) =>{
           
             obj.pageArray = [];
-            if (resp.rows.length === 0) {
-                return res.render('threads',  {obj});                
-            }
+            if (resp.rows.length !== 0) {
+                           
+            
   
             let threadCount = resp.rows[0].full_count;
             let pageCount = Math.ceil(threadCount/20);
@@ -1482,26 +1482,22 @@ app.get(`/forums/([^/]+)`, (req, res) => {
                 
                     if (i === resp.rows.length - 1 ) {
 
-                        if (!req.headers.cookie) {
-                            return res.render('threads',  {obj}); 
-
-                        } else {
                             
-                            pool.query(`select name from users where session = '${req.headers.cookie.slice(cookieIndex + 11, cookieIndex + 139)}'`, (erro, respo) => {
-                                
-                                i = 0;
-                                if (erro || respo.rows.length === 0) {
-                                    res.render('threads',  {obj}); 
-                                    return;
-                                } 
-
-                                obj.isLoggedIn = true;
-                                obj.person = respo.rows[0].name;
-                                res.render('threads',  {obj});
+                        pool.query(`select name from users where session = '${req.headers.cookie.slice(cookieIndex + 11, cookieIndex + 139)}'`, (erro, respo) => {
+                            
+                            i = 0;
+                            if (erro || respo.rows.length === 0) {
+                                res.render('threads',  {obj}); 
                                 return;
-                                
-                            })
-                        }  
+                            } 
+
+                            obj.isLoggedIn = true;
+                            obj.person = respo.rows[0].name;
+                            res.render('threads',  {obj});
+                            return;
+                            
+                        })
+                          
 
                     } else {
                         i ++;
@@ -1512,6 +1508,9 @@ app.get(`/forums/([^/]+)`, (req, res) => {
 
                 queryLoop();
 
+            }
+            } else {
+               return res.render('threads',  {obj}); 
             }
         
         }); 
@@ -1602,9 +1601,9 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
                 return;
             };
 
-            if (resp.rows.length === 0) {
-                return res.render('threads',  {obj}); 
-            }
+            if (resp.rows.length !== 0) {
+                 
+            
            
             obj.pageArray = [];
             obj.category = req.url.substring(8, lastSlash).toLowerCase();
@@ -1680,6 +1679,9 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
                 }
                
             }
+        } else {
+            return res.render('threads',  {obj});
+        }
 
         });
     }
