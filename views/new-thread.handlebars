@@ -18,12 +18,17 @@
         <div class="navleft">	
             <a href="/"><h3>Reflect</h3></a>
         </div>
-        <div class="navright">	
+        <div class="navright">  
             <a href="/forums"><h3>Community</h3></a>
             <div class="drop-down">
-                <a href=""><h3>Account</h3></a>
+                <h3><a href="">Account</a></h3>
                 <div class="drop-down-content">
-                    <a href="/login" class="login"><button class="button">Login</button></a>
+                {{#if obj.isLoggedIn}}
+                <h3><a href="/user-{{obj.person}}" class="user">{{obj.person}}</a></h3>
+                <h3><a href="/logout">Logout</a></h3>
+                {{else}}
+                <a href="/login" class="login"><button class="button">Login</button></a>
+                {{/if}}
                 </div>
             </div>
         </div>
