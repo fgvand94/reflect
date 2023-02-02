@@ -638,7 +638,7 @@ const cookieIndex = req.headers.cookie.indexOf('sessionid');
             from 
             (
                 select row_number() over (partition by conversation.id order by posts.id desc) as rn
-                , a.count, posts.id as postsid, conversation.id as conversationid, posts.convid, conversation.user1name, conversation.user2name,
+                , a.count, posts.id as postid, conversation.id as conversationid, posts.convid, conversation.user1name, conversation.user2name,
                 conversation.title, conversation.datecreated, posts.datecreated as date, posts.username, person.photo
                 from conversationposts as posts, conversations as conversation, users as person,
                 (
