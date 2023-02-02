@@ -563,10 +563,7 @@ const cookieIndex = req.headers.cookie.indexOf('sessionid');
     //the database-each would be unique-set the user logged in state to true. This
     //Is used to control certian permissions on the page such as setting pictures
     //and sending or viewing personal messages. 
-    if (!req.headers.cookie) {
-        obj.userMatch = false;
 
-    } else {
 
 
         //IDK if it's faster to put the if statement in therer like that or if it's faster to query
@@ -586,7 +583,7 @@ const cookieIndex = req.headers.cookie.indexOf('sessionid');
             }
         })
         
-    };
+    
     
     //Query the database for the user with the name givin in the url after user. 
     pool.query(`select * from users where name = '${req.url.slice(6)}'`, (err, resp) => {
@@ -614,14 +611,16 @@ const cookieIndex = req.headers.cookie.indexOf('sessionid');
                 return console.log(err);
             };
            
-            //Add all the users pictures the the obj.photos array to be rendered. 
-            for (let i = 0; i < response.rows.length; i++) {
-              
-               
-                obj.photos[i] = {thumb: response.rows[i].photo, full:response.rows[i].photo2, width:response.rows[i].width};
-       
-        
-            };
+            //Add all the users pictures the the obj.photos array to be rendered.
+            if (response.rows !== 0)  {
+                for (let i = 0; i < response.rows.length; i++) {
+                  
+                   
+                    obj.photos[i] = {thumb: response.rows[i].photo, full:response.rows[i].photo2, width:response.rows[i].width};
+           
+            
+                };
+            }
           console.log(obj.photos[0]);
             //Query the database for the conversations that have a primary or secondary
             //participant that is equal to the user for the given userpage. Sorted by the 

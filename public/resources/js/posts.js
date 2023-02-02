@@ -20,7 +20,7 @@ console.log(post);
 
 let nav = windowFull.replace("https://reflect-forum.herokuapp.com/forums/", "");
 let pgStart = nav.indexOf("pg");
-let category = nav.substring(0, pgStart - 2);
+let category = nav.substring(0, pgStart - 1);
 let categoryUpper = category.charAt(0).toUpperCase() + category.slice(1);
 
 forum.innerHTML = category;
