@@ -73,6 +73,7 @@ app.get('/', (req, res) => {
         pool.query(`select * from users where session = '${req.headers.cookie.slice(cookieIndex + 11, cookieIndex + 139)}'`, (err, resp) => {
 
         if (err || resp.rows.length === 0) {
+            console.log(err);
             console.log('auth failed');
             return res.render('index', {obj});
             
