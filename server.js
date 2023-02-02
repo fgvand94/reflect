@@ -1527,16 +1527,17 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
     const cookieIndex = req.headers.cookie.indexOf('sessionid');
 
     let lastSlash = req.url.lastIndexOf('/');
+    let underscore = req.url.lastIndexOf('_');
     let threadid = req.url.lastIndexOf('-');
     let title = req.url.substring(lastSlash + 1, threadid).replaceAll('-', ' ');
    
     const offset = Math.ceil(req.url.slice(req.url.lastIndexOf('_') +3) * 20);
-   
-    if (req.url.substring(8, lastSlash).toLowerCase() === 'camping' || req.url.substring(8, lastSlash).toLowerCase() === 'hiking' ||
-    req.url.substring(8, lastSlash).toLowerCase() === 'backpacking' || req.url.substring(8, lastSlash).toLowerCase() === 'fish' ||
-    req.url.substring(8, lastSlash).toLowerCase() === 'mammals' || req.url.substring(8, lastSlash).toLowerCase() === 'reptiles' ||
-    req.url.substring(8, lastSlash).toLowerCase() === 'trees' || req.url.substring(8, lastSlash).toLowerCase() === 'vegitation' ||
-    req.url.substring(8, lastSlash).toLowerCase() === 'flowers' || req.url.substring(8, lastSlash).toLowerCase() === 'mushrooms') {
+   console.log(req.url.)
+    if (req.url.substring(8, underscore).toLowerCase() === 'camping' || req.url.substring(8, underscore).toLowerCase() === 'hiking' ||
+    req.url.substring(8, underscore).toLowerCase() === 'backpacking' || req.url.substring(8, underscore).toLowerCase() === 'fish' ||
+    req.url.substring(8, underscore).toLowerCase() === 'mammals' || req.url.substring(8, underscore).toLowerCase() === 'reptiles' ||
+    req.url.substring(8, underscore).toLowerCase() === 'trees' || req.url.substring(8, underscore).toLowerCase() === 'vegitation' ||
+    req.url.substring(8, underscore).toLowerCase() === 'flowers' || req.url.substring(8, underscore).toLowerCase() === 'mushrooms') {
  
         if (req.url.substring(lastSlash + 1) === 'Introduce-yourself') {
 
