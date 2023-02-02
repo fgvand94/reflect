@@ -19,10 +19,11 @@ if (post === 'new-thread' || post === 'Introduce-yourself') {
 console.log(post);
 
 let nav = windowFull.replace("https://reflect-forum.herokuapp.com/forums/", "");
-let category = nav.substring(0, nav.lastIndexOf('/'));
+let pgStart = nav.indexOf("pg");
+let category = nav.substring(0, pgStart - 2);
 let categoryUpper = category.charAt(0).toUpperCase() + category.slice(1);
 
-forum.innerHTML = categoryUpper;
+forum.innerHTML = category;
 forum.href = `/forums/${category}_pg1`;
 
 
