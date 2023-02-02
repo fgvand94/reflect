@@ -638,7 +638,7 @@ const cookieIndex = req.headers.cookie.indexOf('sessionid');
             from 
             (
                 select row_number() over (partition by conversation.id order by posts.id desc) as rn
-                , a.count, posts.id, conversation.id as conversationid, posts.convid, conversation.user1name, conversation.user2name,
+                , a.count, posts.id as postsid, conversation.id as conversationid, posts.convid, conversation.user1name, conversation.user2name,
                 conversation.title, conversation.datecreated, posts.datecreated as date, posts.username, person.photo
                 from conversationposts as posts, conversations as conversation, users as person,
                 (
@@ -646,7 +646,7 @@ const cookieIndex = req.headers.cookie.indexOf('sessionid');
                     from conversationposts
                     group by convid
                 ) as a
-                where posts.convid = conversation.conversationid and person.name = conversation.user1name and a.convid = posts.convid	
+                where posts.convid = conversation.id and person.name = conversation.user1name and a.convid = posts.convid	
             ) as t
             where t.user1name = '${req.url.slice(6)}' and t.rn = 1
             or t.user2name = '${req.url.slice(6)}' and t.rn = 1
