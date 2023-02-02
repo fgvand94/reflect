@@ -1366,6 +1366,7 @@ app.get('/forums', (req, res) => {
                     pool.query(`select * from users where session = '${cookie}'`, (err, resp) => {
                 
                         if (err || resp.rows.length !== 1) {
+                            console.log("error");
                             res.render('forum-home', {obj});
                             return;
 
@@ -1373,6 +1374,7 @@ app.get('/forums', (req, res) => {
 
                         obj.isLoggedIn = true;
                         obj.person = resp.rows[0].name;
+                        console.log(obj.person);
                         res.render('forum-home', {obj});
                         return;       
 
