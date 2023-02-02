@@ -646,7 +646,7 @@ const cookieIndex = req.headers.cookie.indexOf('sessionid');
                     from conversationposts
                     group by convid
                 ) as a
-                where posts.convid = conversation.conversationid and person.name = conversation.user1name and a.convid = posts.convid	
+                where posts.convid = conversationid and person.name = conversation.user1name and a.convid = posts.convid	
             ) as t
             where t.user1name = '${req.url.slice(6)}' and t.rn = 1
             or t.user2name = '${req.url.slice(6)}' and t.rn = 1
