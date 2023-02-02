@@ -1343,15 +1343,14 @@ app.get('/forums', (req, res) => {
                 return console.log(err);
             }
 
-            if (resp.rows.length === 0) {
+                
+            if (resp.rows.length !== 0) {
 
-                return loop(); 
-            }
-
-            obj.recentthreads[threadArray[i]] = {
-                title: resp.rows[0].title,
-                id: resp.rows[0].id,
-                titleReplace: resp.rows[0].title.replace(/\s+/g, '-')
+                obj.recentthreads[threadArray[i]] = {
+                    title: resp.rows[0].title,
+                    id: resp.rows[0].id,
+                    titleReplace: resp.rows[0].title.replace(/\s+/g, '-')
+                }
             }
         
             if (i < threadArray.length - 1)  {
