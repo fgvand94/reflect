@@ -70,7 +70,7 @@ app.get('/', (req, res) => {
       
         const cookieIndex = req.headers.cookie.indexOf('sessionId');
 
-        pool.query(`select * from users where session = '${req.headers.cookie.slice(cookieIndex + 11, cookieIndex + 139)}'`, (err, resp) => {
+        pool.query(`select name from users where session = '${req.headers.cookie.slice(cookieIndex + 11, cookieIndex + 139)}'`, (err, resp) => {
 
         if (err || resp.rows.length === 0) {
             console.log(err);
@@ -80,9 +80,9 @@ app.get('/', (req, res) => {
         } 
 
 
-                obj.isLoggedIn = true;
-                obj.person = resp.rows[0].name;
-                return res.render('index', {obj});       
+        obj.isLoggedIn = true;
+        obj.person = resp.rows[0].name;
+        return res.render('index', {obj});       
             
                             
         })
