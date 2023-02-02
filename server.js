@@ -1323,7 +1323,8 @@ app.get('/forums', (req, res) => {
         }
     };
     const cookieIndex = req.headers.cookie.indexOf('sessionid');
-    const cookie = req.headers.cookie.slice(cookieIndex + 11, cookieIndex + 138);
+    const cookie = req.headers.cookie.slice(cookieIndex + 11, cookieIndex + 139);
+    //No idea why it consol logged console log???
     console.log(cookie);
 
 
