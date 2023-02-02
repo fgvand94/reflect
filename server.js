@@ -1323,7 +1323,7 @@ app.get('/forums', (req, res) => {
         }
     };
     const cookieIndex = req.headers.cookie.indexOf('sessionid');
-    const cookie = req.headers.cookie.slice(cookieIndex + 11, cookieIndex + 139);
+    const cookie = req.headers.cookie.slice(cookieIndex + 11, cookieIndex + 138);
     console.log(cookie);
 
 
