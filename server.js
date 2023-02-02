@@ -79,15 +79,17 @@ app.get('/', (req, res) => {
         
         pool.query(`select * from users where session = '${req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138)}'`, (err, resp) => {
 
-        if (err || resp.rows.length !== 1) {
+        if (err || req.rows.length === 0) {
             console.log('auth failed');
             return res.render('index', {obj});
             
-        } else {
+        } 
+
+
                 obj.isLoggedIn = true;
                 obj.person = resp.rows[0].name;
                 return res.render('index', {obj});       
-            };
+            
                             
         })
     }
@@ -1532,7 +1534,7 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
     let title = req.url.substring(lastSlash + 1, threadid).replaceAll('-', ' ');
    
     const offset = Math.ceil(req.url.slice(req.url.lastIndexOf('_') +3) * 20);
-   console.log(req.url.)
+
     if (req.url.substring(8, underscore).toLowerCase() === 'camping' || req.url.substring(8, underscore).toLowerCase() === 'hiking' ||
     req.url.substring(8, underscore).toLowerCase() === 'backpacking' || req.url.substring(8, underscore).toLowerCase() === 'fish' ||
     req.url.substring(8, underscore).toLowerCase() === 'mammals' || req.url.substring(8, underscore).toLowerCase() === 'reptiles' ||
