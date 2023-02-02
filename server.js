@@ -1510,7 +1510,21 @@ app.get(`/forums/([^/]+)`, (req, res) => {
 
             }
             } else {
-               return res.render('threads',  {obj}); 
+                pool.query(`select name from users where session = '${req.headers.cookie.slice(cookieIndex + 11, cookieIndex + 139)}'`, (erro, respo) => {
+                    
+                    i = 0;
+                    if (erro || respo.rows.length === 0) {
+                        res.render('threads',  {obj}); 
+                        return;
+                    } 
+
+                    obj.isLoggedIn = true;
+                    obj.person = respo.rows[0].name;
+                    res.render('threads',  {obj});
+                    return;
+                    
+                })
+              
             }
         
         }); 
@@ -1680,7 +1694,21 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
                
             }
         } else {
-            return res.render('threads',  {obj});
+            pool.query(`select name from users where session = '${req.headers.cookie.slice(cookieIndex + 11, cookieIndex + 139)}'`, (erro, respo) => {
+                
+                i = 0;
+                if (erro || respo.rows.length === 0) {
+                    res.render('threads',  {obj}); 
+                    return;
+                } 
+
+                obj.isLoggedIn = true;
+                obj.person = respo.rows[0].name;
+                res.render('threads',  {obj});
+                return;
+                
+            })
+           
         }
 
         });
@@ -1766,10 +1794,7 @@ app.get('/forums/([^/]+)/([^/]+)/add-a-post', (req, res) => {
     }
         const cookieIndex = req.headers.cookie.indexOf('sessionid');
 
-    if (!req.headers.cookie) {
-        return res.render('new-post', {obj}); 
 
-    } else {
 
         pool.query(`select name from users where session = '${req.headers.cookie.slice(cookieIndex + 11, cookieIndex + 139)}'`, (error, response) => {
             
@@ -1783,7 +1808,7 @@ app.get('/forums/([^/]+)/([^/]+)/add-a-post', (req, res) => {
             return;
             
         });
-    }
+    
 });
 
 app.post('/forums/([^/]+)/([^/]+)/add-a-post', (req, res) => {
