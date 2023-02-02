@@ -1345,7 +1345,7 @@ app.get('/forums', (req, res) => {
 
             if (resp.rows.length === 0) {
 
-                return res.render('forum-home', {obj}); 
+                return loop(); 
             }
 
             obj.recentthreads[threadArray[i]] = {
