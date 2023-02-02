@@ -1363,7 +1363,7 @@ app.get('/forums', (req, res) => {
 
                 } else {                  
                     
-                    pool.query(`select * from users where session = '${}'`, (err, resp) => {
+                    pool.query(`select * from users where session = '${cookie}'`, (err, resp) => {
                 
                         if (err || resp.rows.length !== 1) {
                             res.render('forum-home', {obj});
