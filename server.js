@@ -1425,7 +1425,7 @@ app.get(`/forums/([^/]+)`, (req, res) => {
             if (resp.rows.length !== 0) {
                            
             
-  
+            console.log(resp.rows);
             let threadCount = resp.rows[0].full_count;
             let pageCount = Math.ceil(threadCount/20);
             if (req.url.slice(req.url.lastIndexOf('_') + 3) > 0 && req.url.slice(req.url.lastIndexOf('_') + 3) <= pageCount) {
@@ -1540,7 +1540,7 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
         const cookie = req.headers.cookie ? req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138) : "0";
 
     let lastSlash = req.url.lastIndexOf('/');
-    let underscore = req.url.lastIndexOf('_');
+    let underscore = req.url.indexOf('pg') - 1;
     let threadid = req.url.lastIndexOf('-');
     let title = req.url.substring(lastSlash + 1, threadid).replaceAll('-', ' ');
    
@@ -1593,14 +1593,14 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
           return;
         }
 
-        pool.query(`select users.name, users.photo, ${req.url.substring(8, lastSlash).toLowerCase()}posts.content, ${req.url.substring(8, lastSlash).toLowerCase()}threads.title,
-        ${req.url.substring(8, lastSlash).toLowerCase()}posts.id, count(*) over() as full_count
-        from ${req.url.substring(8, lastSlash).toLowerCase()}posts, ${req.url.substring(8, lastSlash).toLowerCase()}threads, users 
-        where ${req.url.substring(8, lastSlash).toLowerCase()}posts.threadid = '${req.url.slice(threadid + 1, req.url.lastIndexOf('_'))}' 
-        and ${req.url.substring(8, lastSlash).toLowerCase()}posts.username = users.name
-        and ${req.url.substring(8, lastSlash).toLowerCase()}threads.title = '${title}'
-        and ${req.url.substring(8, lastSlash).toLowerCase()}threads.id = '${req.url.slice(threadid + 1, req.url.lastIndexOf('_'))}'
-        order by ${req.url.substring(8, lastSlash).toLowerCase()}posts.id asc
+        pool.query(`select users.name, users.photo, ${req.url.substring(8, underscore).toLowerCase()}posts.content, ${req.url.substring(8, underscore).toLowerCase()}threads.title,
+        ${req.url.substring(8, underscore).toLowerCase()}posts.id, count(*) over() as full_count
+        from ${req.url.substring(8, underscore).toLowerCase()}posts, ${req.url.substring(8, underscore).toLowerCase()}threads, users 
+        where ${req.url.substring(8, underscore).toLowerCase()}posts.threadid = '${req.url.slice(threadid + 1, req.url.lastIndexOf('_'))}' 
+        and ${req.url.substring(8, underscore).toLowerCase()}posts.username = users.name
+        and ${req.url.substring(8, underscore).toLowerCase()}threads.title = '${title}'
+        and ${req.url.substring(8, underscore).toLowerCase()}threads.id = '${req.url.slice(threadid + 1, req.url.lastIndexOf('_'))}'
+        order by ${req.url.substring(8, underscore).toLowerCase()}posts.id asc
         limit 20 offset ${offset - 20}`, (err, resp) => {
             
             if (err) {
@@ -1613,7 +1613,7 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
             
            
             obj.pageArray = [];
-            obj.category = req.url.substring(8, lastSlash).toLowerCase();
+            obj.category = req.url.substring(8, underscore).toLowerCase();
             obj.threadName = req.url.slice(lastSlash + 1, req.url.lastIndexOf('-'));
             obj.threadId = req.url.slice(threadid + 1, req.url.lastIndexOf('_'));
         
@@ -1743,29 +1743,29 @@ app.post('/forums/([^/]+)/new-thread', (req, res) => {
 
     let fullTime = year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds;
   
-    let lastSlash = req.url.lastIndexOf('/');
+    let underscore = req.url.lastIndexOf('_');
     
-    if (req.url.substring(8, lastSlash).toLowerCase() === 'camping' || req.url.substring(8, lastSlash).toLowerCase() === 'hiking' ||
-    req.url.substring(8, lastSlash).toLowerCase() === 'backpacking' || req.url.substring(8, lastSlash).toLowerCase() === 'fish' ||
-    req.url.substring(8, lastSlash).toLowerCase() === 'mammals' || req.url.substring(8, lastSlash).toLowerCase() === 'reptiles' ||
-    req.url.substring(8, lastSlash).toLowerCase() === 'trees' || req.url.substring(8, lastSlash).toLowerCase() === 'vegitation' ||
-    req.url.substring(8, lastSlash).toLowerCase() === 'flowers' || req.url.substring(8, lastSlash).toLowerCase() === 'mushrooms') {
+    if (req.url.substring(8, underscore).toLowerCase() === 'camping' || req.url.substring(8, underscore).toLowerCase() === 'hiking' ||
+    req.url.substring(8, underscore).toLowerCase() === 'backpacking' || req.url.substring(8, underscore).toLowerCase() === 'fish' ||
+    req.url.substring(8, underscore).toLowerCase() === 'mammals' || req.url.substring(8, underscore).toLowerCase() === 'reptiles' ||
+    req.url.substring(8, underscore).toLowerCase() === 'trees' || req.url.substring(8, underscore).toLowerCase() === 'vegitation' ||
+    req.url.substring(8, underscore).toLowerCase() === 'flowers' || req.url.substring(8, underscore).toLowerCase() === 'mushrooms') {
         
         let threadid;
 
-        pool.query(`select * from ${req.url.substring(8, lastSlash)}threads order by id desc`, (err, resp) => {
+        pool.query(`select * from ${req.url.substring(8, underscore)}threads order by id desc`, (err, resp) => {
             threadid = resp.rows[0].id + 1;
             
             pool.query(`select name from users where session = '${cookie}'`, (error, response) => {
                 
-                pool.query(`insert into ${req.url.substring(8, lastSlash).toLowerCase()}threads (id, title, time, username)
+                pool.query(`insert into ${req.url.substring(8, underscore).toLowerCase()}threads (id, title, time, username)
                 values ($1, $2, $3, $4)`, [threadid, req.query.thread, fullTime, response.rows[0].name], (er, re) => {
                     
-                    pool.query(`select * from ${req.url.substring(8, lastSlash)}posts order by id desc`, (err, respon) => {
+                    pool.query(`select * from ${req.url.substring(8, underscore)}posts order by id desc`, (err, respon) => {
                        
                         let id = respon.rows[0].id + 1;
                         
-                        pool.query(`insert into ${req.url.substring(8, lastSlash).toLowerCase()}posts (id, threadid, content, username) 
+                        pool.query(`insert into ${req.url.substring(8, underscore).toLowerCase()}posts (id, threadid, content, username) 
                         values ($1, $2, $3, $4)`, [id, threadid, req.query.message, response.rows[0].name], (er, re) => {
                             
                             if (er) {
