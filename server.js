@@ -68,7 +68,7 @@ app.get('/', (req, res) => {
     //Is it checks the database for a match in the session cookie and then gets the
     //username based on that sessionID and sets person to that user and isLoggedIn to true
       
-        const cookieIndex = req.headers.cookie.indexOf('sessionId');
+        const cookieIndex = req.headers.cookie ? req.headers.cookie.indexOf('sessionId') : 0;
 
         pool.query(`select name from users where session = '${req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138)}'`, (err, resp) => {
 
