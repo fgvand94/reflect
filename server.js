@@ -163,7 +163,7 @@ app.post('/login', (req, res) => {
                             
             var hash = crypto.createHmac('sha512', key);
             hash.update(text);
-            var value = hash.digest('hex');
+            value = hash.digest('hex');
             
             //Set sessionID to the created session id and store it in the database
             //if there is no session currently in the database. If there is a session
@@ -182,7 +182,9 @@ app.post('/login', (req, res) => {
 
             } else {
                 res.setHeader('Set-Cookie', `sessionId=${resp.rows[0].session}`);
+                console.log(req.headers.cookie);
                 res.setHeader('Set-Cookie', `something=somethingelse`);
+                console.log(req.headers.cookie);
             }
 
             res.send('success');
