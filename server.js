@@ -1607,7 +1607,7 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
                 console.log(err);
                 return;
             };
-            
+
             if (resp.rows.length !== 0) {
                  
             
@@ -1744,28 +1744,32 @@ app.post('/forums/([^/]+)/new-thread', (req, res) => {
     let fullTime = year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds;
   
     let underscore = req.url.lastIndexOf('_');
+    let lastSlash = req.url.lastIndexOf('/');
+    console.log(req.url);
+    console.log(req.url.substring(8, lastSlash).toLowerCase());
+   
     
-    if (req.url.substring(8, underscore).toLowerCase() === 'camping' || req.url.substring(8, underscore).toLowerCase() === 'hiking' ||
-    req.url.substring(8, underscore).toLowerCase() === 'backpacking' || req.url.substring(8, underscore).toLowerCase() === 'fish' ||
-    req.url.substring(8, underscore).toLowerCase() === 'mammals' || req.url.substring(8, underscore).toLowerCase() === 'reptiles' ||
-    req.url.substring(8, underscore).toLowerCase() === 'trees' || req.url.substring(8, underscore).toLowerCase() === 'vegitation' ||
-    req.url.substring(8, underscore).toLowerCase() === 'flowers' || req.url.substring(8, underscore).toLowerCase() === 'mushrooms') {
+    if (req.url.substring(8, lastSlash).toLowerCase() === 'camping' || req.url.substring(8, lastSlash).toLowerCase() === 'hiking' ||
+    req.url.substring(8, lastSlash).toLowerCase() === 'backpacking' || req.url.substring(8, lastSlash).toLowerCase() === 'fish' ||
+    req.url.substring(8, lastSlash).toLowerCase() === 'mammals' || req.url.substring(8, lastSlash).toLowerCase() === 'reptiles' ||
+    req.url.substring(8, lastSlash).toLowerCase() === 'trees' || req.url.substring(8, lastSlash).toLowerCase() === 'vegitation' ||
+    req.url.substring(8, lastSlash).toLowerCase() === 'flowers' || req.url.substring(8, lastSlash).toLowerCase() === 'mushrooms') {
         
         let threadid;
 
-        pool.query(`select * from ${req.url.substring(8, underscore)}threads order by id desc`, (err, resp) => {
+        pool.query(`select * from ${req.url.substring(8, lastSlash)}threads order by id desc`, (err, resp) => {
             threadid = resp.rows[0].id + 1;
             
             pool.query(`select name from users where session = '${cookie}'`, (error, response) => {
                 
-                pool.query(`insert into ${req.url.substring(8, underscore).toLowerCase()}threads (id, title, time, username)
+                pool.query(`insert into ${req.url.substring(8, lastSlash).toLowerCase()}threads (id, title, time, username)
                 values ($1, $2, $3, $4)`, [threadid, req.query.thread, fullTime, response.rows[0].name], (er, re) => {
                     
-                    pool.query(`select * from ${req.url.substring(8, underscore)}posts order by id desc`, (err, respon) => {
+                    pool.query(`select * from ${req.url.substring(8, lastSlash)}posts order by id desc`, (err, respon) => {
                        
                         let id = respon.rows[0].id + 1;
                         
-                        pool.query(`insert into ${req.url.substring(8, underscore).toLowerCase()}posts (id, threadid, content, username) 
+                        pool.query(`insert into ${req.url.substring(8, lastSlash).toLowerCase()}posts (id, threadid, content, username) 
                         values ($1, $2, $3, $4)`, [id, threadid, req.query.message, response.rows[0].name], (er, re) => {
                             
                             if (er) {
