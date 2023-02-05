@@ -21,11 +21,12 @@ console.log(post);
 let nav = windowFull.replace("https://reflect-forum.herokuapp.com/forums/", "");
 let nextSlash = nav.indexOf('/');
 let indexStart = nav.lastIndexOf("-");
-let category = nav.substring(nextSlash + 1, indexStart);
-// let categoryUpper = category.charAt(0).toUpperCase() + category.slice(1);
 
-forum.innerHTML = category;
-forum.href = `/forums/${category}_pg1`;
+let category = nav.substring(0, nextSlash);
+let categoryUpper = category.charAt(0).toUpperCase() + category.slice(1);
+
+forum.innerHTML = categoryUpper;
+forum.href = `/forums/${categoryUpper}_pg1`;
 
 
 allPosts.addEventListener('click', (e) => {
