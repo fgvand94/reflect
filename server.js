@@ -181,9 +181,9 @@ app.post('/login', (req, res) => {
             });
 
             } else {
-                res.setHeader('Set-Cookie', `sessionId=${resp.rows[0].session}`);
+                res.setHeader('Set-Cookie', `sessionId=${resp.rows[0].session}, something=somethingelse`);
                 console.log(req.headers.cookie);
-                res.setHeader('Set-Cookie', `something=somethingelse`);
+                // res.setHeader('Set-Cookie', `something=somethingelse`);
                 console.log(req.headers.cookie);
             }
 
