@@ -52,21 +52,6 @@ app.get('/', (req, res) => {
         isLoggedIn: false,
         person: ""
     }
-
-    // let i = 0;
-
-    // while (i < req.headers.cookie.length) {
-    //     if (req.headers.cookie[i].includes("sessionId")){
-    //         cookieIndex = i;
-    //         break;
-    //     }
-    //     i++;
-    // }
-    //Checks if there is any cookies. My site doesn't have any cookies if a user
-    //is not logged in. So checking if there are cookies at all indicates whether or
-    //not a user is logged in. If there isn't it renders the page normally. If there
-    //Is it checks the database for a match in the session cookie and then gets the
-    //username based on that sessionID and sets person to that user and isLoggedIn to true
       
         const cookieIndex = req.headers.cookie ? req.headers.cookie.indexOf('sessionId') : "0";
         const cookie = req.headers.cookie ? req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138) : "0";
@@ -1553,8 +1538,6 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
     
         const cookieIndex = req.headers.cookie ? req.headers.cookie.indexOf('sessionId') : "0";
         const cookie = req.headers.cookie ? req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138) : "0";
-
-    console.log(session);
 
     let lastSlash = req.url.lastIndexOf('/');
     let underscore = req.url.lastIndexOf('_');
