@@ -555,7 +555,7 @@ app.get('/user-*', (req, res) => {
         }
             
     };
-const cookieIndex = req.headers.cookie.indexOf('sessionid');
+const cookieIndex = req.headers.cookie.indexOf('sessionId');
     //Check if there is a sessionID. if there is and it matches a session ID in 
     //the database-each would be unique-set the user logged in state to true. This
     //Is used to control certian permissions on the page such as setting pictures
@@ -1027,7 +1027,7 @@ app.get('/forums/([^/]+)/search-results', (req, res) => {
         search: req.query.search,
         isSearch: true
     };
-            const cookieIndex = req.headers.cookie.indexOf('sessionid');
+            const cookieIndex = req.headers.cookie.indexOf('sessionId');
 
     let trim = req.query.search.trim();
     
@@ -1319,7 +1319,7 @@ app.get('/forums', (req, res) => {
         }
     };
 
-    const cookieIndex = req.headers.cookie.indexOf('sessionid');
+    const cookieIndex = req.headers.cookie.indexOf('sessionId');
     const cookie = req.headers.cookie.slice(cookieIndex + 11, cookieIndex + 139);
     //No idea why it consol logged console log???
     console.log(req.headers.cookie);
@@ -1397,7 +1397,7 @@ app.get(`/forums/([^/]+)`, (req, res) => {
         pageTotal:"",
         isSearch: false   
     }
-    const cookieIndex = req.headers.cookie.indexOf('sessionid');
+    const cookieIndex = req.headers.cookie.indexOf('sessionId');
 
     const offset = Math.ceil(req.url.slice(req.url.lastIndexOf('_') +3) * 20); 
 
@@ -1539,7 +1539,7 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
         view: {},
     }
     
-    const sessionIndex = req.headers.cookie.indexOf('sessionid');
+    const sessionIndex = req.headers.cookie.indexOf('sessionId');
     const session = req.headers.cookie.slice(sessionIndex + 11, sessionIndex + 139);
 
     console.log(session);
@@ -1634,7 +1634,7 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
                         obj.pageArray.push(j+1);
                     }
 
-                    if (!req.headers.cookie.indexOf('sessionid' === - 1)) {
+                    if (!req.headers.cookie.indexOf('sessionId' === - 1)) {
                         for (let i = 0; i < resp.rows.length; i++) {
                       
                             obj.view[i] = {
@@ -1790,7 +1790,7 @@ app.get('/forums/([^/]+)/([^/]+)/add-a-post', (req, res) => {
     const obj = {
         isLoggedIn: false
     }
-        const cookieIndex = req.headers.cookie.indexOf('sessionid');
+        const cookieIndex = req.headers.cookie.indexOf('sessionId');
 
 
 
