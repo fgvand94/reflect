@@ -68,9 +68,10 @@ app.get('/', (req, res) => {
     //Is it checks the database for a match in the session cookie and then gets the
     //username based on that sessionID and sets person to that user and isLoggedIn to true
       
-        const cookieIndex = req.headers.cookie ? req.headers.cookie.indexOf('sessionId') : 0;
+        const cookieIndex = req.headers.cookie ? req.headers.cookie.indexOf('sessionId') : "0";
+        const cookie = req.headers.cookie ? req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138) : "0";
 
-        pool.query(`select name from users where session = '${req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138)}'`, (err, resp) => {
+        pool.query(`select name from users where session = '${cookie}'`, (err, resp) => {
 
         if (err || resp.rows.length === 0) {
             console.log(err);
@@ -557,7 +558,8 @@ app.get('/user-*', (req, res) => {
         }
             
     };
-const cookieIndex = req.headers.cookie.indexOf('sessionId');
+        const cookieIndex = req.headers.cookie ? req.headers.cookie.indexOf('sessionId') : "0";
+        const cookie = req.headers.cookie ? req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138) : "0";
     //Check if there is a sessionID. if there is and it matches a session ID in 
     //the database-each would be unique-set the user logged in state to true. This
     //Is used to control certian permissions on the page such as setting pictures
@@ -567,7 +569,7 @@ const cookieIndex = req.headers.cookie.indexOf('sessionId');
 
         //IDK if it's faster to put the if statement in therer like that or if it's faster to query
         //for the match of the session and req.url.slice I'll have to check. 
-        pool.query(`select name from users where session = '${req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138)}'`, (e, re) => {
+        pool.query(`select name from users where session = '${cookie}'`, (e, re) => {
             if (e) {
                 console.log(e);
             };
@@ -883,7 +885,8 @@ app.get('/conversation/*', (req, res) => {
         person: '',
         view: {}
     }
-        const cookieIndex = req.headers.cookie.indexOf('sessionid');
+        const cookieIndex = req.headers.cookie ? req.headers.cookie.indexOf('sessionId') : "0";
+        const cookie = req.headers.cookie ? req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138) : "0";
 
     //Query the database for the posts and user photos for each post for the given
     //conversation. 
@@ -936,7 +939,7 @@ app.get('/conversation/*', (req, res) => {
 
         } else {
 
-            pool.query(`select name from users where session = '${req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138)}'`, (error, response) => {
+            pool.query(`select name from users where session = '${cookie}'`, (error, response) => {
                 if (error || response.rows.length === 0) {
                     res.render('conversations', {obj});
                     return;
@@ -975,10 +978,13 @@ app.post('/conversation-add', (req, res) => {
         let year = date_ob.getFullYear();
     
         let fullTime = year + "-" + month + "-" + date;
+
+                const cookieIndex = req.headers.cookie ? req.headers.cookie.indexOf('sessionId') : "0";
+        const cookie = req.headers.cookie ? req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138) : "0";
     
         //I could just grab the user name from the drop down and send it over from the front end instead
         //of doing a whole new query to get the username. I might change that and test speeds.
-        pool.query (`select name from users where session = '${req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138)}'`, (er, re) => {
+        pool.query (`select name from users where session = '${cookie}'`, (er, re) => {
             
             //Insert new post. 
             pool.query(`insert into conversationposts (id, convid, datecreated, content, username)
@@ -1000,8 +1006,11 @@ app.post('/conversation-add', (req, res) => {
 //Put request for changing user porfile picture 
 app.put('/updatePhoto', (req, res) => {
 
+        const cookieIndex = req.headers.cookie ? req.headers.cookie.indexOf('sessionId') : "0";
+        const cookie = req.headers.cookie ? req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138) : "0";
+
     //Find the user from the session id
-    pool.query(`select name from users where session = '${req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138)}'`, (error, response) => {
+    pool.query(`select name from users where session = '${cookie}'`, (error, response) => {
        
         //Update photo on that user name to the selected photo. 
         pool.query(`update users set photo = $1 where name = $2`, [req.body.data, response.rows[0].name], (err, resp) => {
@@ -1029,8 +1038,8 @@ app.get('/forums/([^/]+)/search-results', (req, res) => {
         search: req.query.search,
         isSearch: true
     };
-            const cookieIndex = req.headers.cookie.indexOf('sessionId');
-
+        const cookieIndex = req.headers.cookie ? req.headers.cookie.indexOf('sessionId') : "0";
+        const cookie = req.headers.cookie ? req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138) : "0";
     let trim = req.query.search.trim();
     
     //Check if the keyword of one of the forums exists in the usrl where it should
@@ -1180,7 +1189,7 @@ app.get('/forums/([^/]+)/search-results', (req, res) => {
 
                                             } else {
                                                 const cookieIndex = req.headers.cookie.indexOf('sessionid');
-                                                pool.query(`select name from users where session = '${req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138)}'`, (error, response) => {
+                                                pool.query(`select name from users where session = '${cookie}'`, (error, response) => {
                                                     
                                                     if (error || response.rows.length === 0) {
                                                         res.render('threads', {obj});
@@ -1261,7 +1270,7 @@ app.get('/forums/([^/]+)/search-results', (req, res) => {
 
                                 } else {
 
-                                    pool.query(`select name from users where session = '${req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138)}'`, (error, response) => {
+                                    pool.query(`select name from users where session = '${cookie}'`, (error, response) => {
                                         if (error || response.rows.length === 0) {
                                             res.render('threads', {obj});
                                             return;
@@ -1290,7 +1299,7 @@ app.get('/forums/([^/]+)/search-results', (req, res) => {
 
                     } else {
                         const cookieIndex = req.headers.cookie.indexOf('sessionid');
-                        pool.query(`select name from users where session = '${req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138)}'`, (error, response) => {
+                        pool.query(`select name from users where session = '${cookie}'`, (error, response) => {
                             
                             if (error || response.rows.length === 0) {
                                 res.render('threads', {obj});
@@ -1321,8 +1330,8 @@ app.get('/forums', (req, res) => {
         }
     };
 
-    const cookieIndex = req.headers.cookie.indexOf('sessionId');
-    const cookie = req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138);
+        const cookieIndex = req.headers.cookie ? req.headers.cookie.indexOf('sessionId') : "0";
+        const cookie = req.headers.cookie ? req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138) : "0";
     //No idea why it consol logged console log???
     console.log(req.headers.cookie);
     console.log(cookieIndex);
@@ -1399,7 +1408,8 @@ app.get(`/forums/([^/]+)`, (req, res) => {
         pageTotal:"",
         isSearch: false   
     }
-    const cookieIndex = req.headers.cookie.indexOf('sessionId');
+        const cookieIndex = req.headers.cookie ? req.headers.cookie.indexOf('sessionId') : "0";
+        const cookie = req.headers.cookie ? req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138) : "0";
 
     const offset = Math.ceil(req.url.slice(req.url.lastIndexOf('_') +3) * 20); 
 
@@ -1483,7 +1493,7 @@ app.get(`/forums/([^/]+)`, (req, res) => {
                     if (i === resp.rows.length - 1 ) {
 
                             
-                        pool.query(`select name from users where session = '${req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138)}'`, (erro, respo) => {
+                        pool.query(`select name from users where session = '${cookie}'`, (erro, respo) => {
                             
                             i = 0;
                             if (erro || respo.rows.length === 0) {
@@ -1510,7 +1520,7 @@ app.get(`/forums/([^/]+)`, (req, res) => {
 
             }
             } else {
-                pool.query(`select name from users where session = '${req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138)}'`, (erro, respo) => {
+                pool.query(`select name from users where session = '${cookie}'`, (erro, respo) => {
                     
                     i = 0;
                     if (erro || respo.rows.length === 0) {
@@ -1541,8 +1551,8 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
         view: {},
     }
     
-    const sessionIndex = req.headers.cookie.indexOf('sessionId');
-    const session = req.headers.cookie.slice(sessionIndex + 11, sessionIndex + 139);
+        const cookieIndex = req.headers.cookie ? req.headers.cookie.indexOf('sessionId') : "0";
+        const cookie = req.headers.cookie ? req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138) : "0";
 
     console.log(session);
 
@@ -1563,7 +1573,7 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
 
 
 
-            pool.query(`select name from users where session = '${session}'`, (error, response) => {
+            pool.query(`select name from users where session = '${cookie}'`, (error, response) => {
                 
                 if (error || response.rows.length === 0) {
                     res.render('posts', {obj});
@@ -1583,7 +1593,7 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
 
 
 
-            pool.query(`select name from users where session = '${session}'`, (error, response) => {
+            pool.query(`select name from users where session = '${cookie}'`, (error, response) => {
                 console.log("consolelog");
                 if (error || response.rows.length === 0) {
                     res.render('new-thread', {obj});
@@ -1654,7 +1664,7 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
 
                     } else {
                         
-                        pool.query(`select name from users where session = '${req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138)}'`, (error, response) => {
+                        pool.query(`select name from users where session = '${cookie}'`, (error, response) => {
                         
                             
                                 for (let i = 0; i < resp.rows.length; i++) {
@@ -1694,7 +1704,7 @@ app.get('/forums/([^/]+)/([^/]+)', (req, res) => {
                
             }
         } else {
-            pool.query(`select name from users where session = '${req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138)}'`, (erro, respo) => {
+            pool.query(`select name from users where session = '${cookie}'`, (erro, respo) => {
                 
                 i = 0;
                 if (erro || respo.rows.length === 0) {
@@ -1730,6 +1740,9 @@ app.put('/update-post', (req, res) => {
 })
 
 app.post('/forums/([^/]+)/new-thread', (req, res) => {
+
+        const cookieIndex = req.headers.cookie ? req.headers.cookie.indexOf('sessionId') : "0";
+        const cookie = req.headers.cookie ? req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138) : "0";
     
     let date_ob = new Date();
 
@@ -1760,7 +1773,7 @@ app.post('/forums/([^/]+)/new-thread', (req, res) => {
         pool.query(`select * from ${req.url.substring(8, lastSlash)}threads order by id desc`, (err, resp) => {
             threadid = resp.rows[0].id + 1;
             
-            pool.query(`select name from users where session = '${req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138)}'`, (error, response) => {
+            pool.query(`select name from users where session = '${cookie}'`, (error, response) => {
                 
                 pool.query(`insert into ${req.url.substring(8, lastSlash).toLowerCase()}threads (id, title, time, username)
                 values ($1, $2, $3, $4)`, [threadid, req.query.thread, fullTime, response.rows[0].name], (er, re) => {
@@ -1792,11 +1805,12 @@ app.get('/forums/([^/]+)/([^/]+)/add-a-post', (req, res) => {
     const obj = {
         isLoggedIn: false
     }
-        const cookieIndex = req.headers.cookie.indexOf('sessionId');
+        const cookieIndex = req.headers.cookie ? req.headers.cookie.indexOf('sessionId') : "0";
+        const cookie = req.headers.cookie ? req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138) : "0";
 
 
 
-        pool.query(`select name from users where session = '${req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138)}'`, (error, response) => {
+        pool.query(`select name from users where session = '${cookie}'`, (error, response) => {
             
             if (error || response.rows.length === 0) {
                 res.render('new-post', {obj});
@@ -1812,6 +1826,9 @@ app.get('/forums/([^/]+)/([^/]+)/add-a-post', (req, res) => {
 });
 
 app.post('/forums/([^/]+)/([^/]+)/add-a-post', (req, res) => {
+
+            const cookieIndex = req.headers.cookie ? req.headers.cookie.indexOf('sessionId') : "0";
+        const cookie = req.headers.cookie ? req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138) : "0";
  
     let date_ob = new Date();
     let date = ("0" + date_ob.getDate()).slice(-2);
@@ -1836,7 +1853,7 @@ app.post('/forums/([^/]+)/([^/]+)/add-a-post', (req, res) => {
            
             let id = resp.rows[0].id + 1;
 
-            pool.query(`select name from users where session = '${req.headers.cookie.slice(cookieIndex + 10, cookieIndex + 138)}'`, (error, response) => {
+            pool.query(`select name from users where session = '${cookie}'`, (error, response) => {
                 
                 pool.query(`insert into ${threadEnd.substring(8, nextLastSlash)}posts (id, threadid, content, username)
                 values ($1, $2, $3, $4)`, [id, req.body.threadId, req.query.message, response.rows[0].name], (err, re) => {
