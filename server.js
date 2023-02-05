@@ -367,6 +367,9 @@ app.get('/register', (req, res) => {
     res.sendFile(__dirname + "/public/register.html");
 });
 
+//How do I handle photos if someone deletes their account? Do I just keep them in the database
+//but but a deactivated feild in the database? I still need to access all their posts and things
+//so they don't just get removed from all the threads and stuff they were on. 
 //Post method for the register user page. 
 app.post('/register', (req, res) => {
 
@@ -1319,6 +1322,8 @@ app.get('/forums', (req, res) => {
     const cookieIndex = req.headers.cookie.indexOf('sessionid');
     const cookie = req.headers.cookie.slice(cookieIndex + 11, cookieIndex + 139);
     //No idea why it consol logged console log???
+    console.log(req.headers.cookie);
+    console.log(cookieIndex);
     console.log(cookie);
 
 
